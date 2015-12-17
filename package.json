@@ -1,0 +1,25 @@
+{
+  "name": "graphql_test",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^6.3.13",
+    "express": "^4.13.3"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.3.13",
+    "body-parser": "^1.14.1",
+    "change-case": "^2.3.0",
+    "morgan": "^1.6.1",
+    "path": "^0.12.7",
+    "sequelize": "^3.14.2",
+    "winston": "^2.1.1"
+  }
+}
