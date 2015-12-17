@@ -1,20 +1,16 @@
 import changeCase from 'change-case';
 import express from 'express';
 
-const routes = {'users': 'users'} // Need to glob import all routes in here...
+// User routes
+import usersRoute from './users.js';
 
 const initRouter = function(app) {
+  // Initialize route
+  const router = express.Router();
+  usersRoute(router);
 
-  // Initialize routes
-  Object.keys(routes).forEach( function(routeName) {
-
-    // Initialize route
-    let router = express.Router();
-    require('./' + routeName + '.js')(router);
-
-    // Set app to use routes
-    app.use('/' + changeCase.paramCase(routeName), router);
-  });
-}
+  // Set app to use routes
+  app.use('/' + changeCase.paramCase('users'), router);
+};
 
 export default initRouter;

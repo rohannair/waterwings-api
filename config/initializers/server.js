@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import express from 'express';
 import path from 'path';
 
 import bodyParser from 'body-parser';
@@ -10,8 +10,8 @@ const server = function(port = '3000', cb) {
   const app = express();
 
   app.use(morgan('common'));
-  app.use(bodyParser.urlencoded({extended: true}));
-  app.use(bodyParser.json({type: '*/*'}));
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.json({ type: '*/*' }));
 
   try {
     winston.info('[SERVER] Initializating routes');
@@ -23,11 +23,11 @@ const server = function(port = '3000', cb) {
   app.use(express.static(path.join(__dirname, 'public')));
 
   // Error handler
-  app.use( (err, req, res, next) => {
+  app.use((err, req, res, next) => {
     res.state(err.status || 500);
     res.json({
       message: err.message,
-      error: (app.get('env') === 'development' ? err : 'Error!')
+      error: (app.get('env') === 'development' ? err : 'Error!'),
     });
 
     next();

@@ -1,14 +1,12 @@
-const route = function(router) {
-
+const usersRoute = function(router) {
   router.route('/')
-  .get( function(req, res, next) {
-    console.log('Method: GET');
+  .get(function(req, res, next) {
+    console.log('Hi');
     next();
   })
-  .post( function(req, res, next) {
-    console.log('Method: POST');
+  .post(function(req, res, next) {
     next();
   });
-}
+};
 
-export default route;
+export default usersRoute;

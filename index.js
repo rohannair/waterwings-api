@@ -10,4 +10,4 @@ async.series([
   function(err) {
     if (err) return winston.error('[SERVER] initialization failed:', err);
   }
-)
+);
