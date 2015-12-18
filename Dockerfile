@@ -37,7 +37,10 @@ RUN mkdir -p /var/www/app/current
 
 ADD package.json ./
 RUN npm i --production --no-spin
+RUN npm install -g nodemon
 
 ADD . /var/www/app/current
 
 EXPOSE 4500
+
+CMD ["./start.sh"]
