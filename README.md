@@ -5,10 +5,10 @@
 docker build -t dev ./
 
 # To run it interactively
-run -it test dev
+docker run -it dev
 
 # To run it backgrounded
 docker run -d dev
 
 # To run it interactively, but run bash instead of start.sh
-run -it test dev bash
+docker run -it dev bash
