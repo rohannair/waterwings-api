@@ -5,6 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "db:migrate": "echo \"Error: migration script doesn't exist\" && exit 1",
     "babel-node": "babel-node --ignore='node_modules'",
     "dev": "nodemon --exec npm run babel-node -- index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
