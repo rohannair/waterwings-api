@@ -1,16 +1,12 @@
-import changeCase from 'change-case';
-import express from 'express';
+// Controllers
+const usersController = require('../controllers/usersController')();
+module.exports = function configure(router) {
 
-// User routes
-import usersRoute from './users.js';
-
-const initRouter = function(app) {
-  // Initialize route
-  const router = express.Router();
-  usersRoute(router);
-
-  // Set app to use routes
-  app.use('/' + changeCase.paramCase('users'), router);
+  // Users
+  router
+    .get('/users', usersController.GET)
+    .post('/users', usersController.POST)
+    .put('/users', usersController.PUT)
+    .delete('/users', usersController.DELETE);
 };
 
-export default initRouter;
