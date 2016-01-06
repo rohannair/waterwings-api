@@ -2,42 +2,67 @@
 const chalk   = require('chalk');
 const parse   = require('co-body');
 const R       = require('ramda');
+const User    = require('../models/Users.js');
 
 // Methods
 const usersController = function() {
 
   function* GET() {
-    const result = yield this.pg.db.client.query_('SELECT id, first_name, last_name, email, phone_number, company_id, package_id, is_admin FROM users');
-    this.body = result.rows;
+    let self = this;
+
+    yield User
+    .query()
+    .where(this.query)
+    .select(
+      'id', 'email', 'first_name', 'last_name',
+      'phone_number', 'is_admin', 'company_id', 'package_id'
+    )
+    .then(function(resp) {
+      console.log(chalk.green.bold('--- GET', JSON.stringify(resp, null, 4)));
+      self.body = resp;
+    });
   }
 
   function* POST() {
-    // Parse payload
-    let payload = yield parse(this.req);
+    let self = this;
 
-    // Build response
-    console.log(payload);
+    let request = yield parse(this.req);
+    let payload = R.merge(request, returnDate());
 
-    // Return response
-    this.body = 'POST Users';
+    yield User
+    .query()
+    .insert(payload)
+    .then(function(model) {
+      console.log(chalk.green.bold('--- POST', JSON.stringify(model, null, 4)));
+
+      self.status = 201;
+      self.body = {
+        id: model.id,
+        email: model.email,
+      };
+    });
   }
 
-  // Create a new user
   function* PUT() {
+    let self = this;
 
-    // Parse payload
-    let payload = yield parse(this.req);
+    let request = yield parse(this.req);
+    let payload = R.merge(request, returnDate());
 
+    yield User
+    .query()
+    .patch(payload)
+    .where({ id: parseInt(this.params.id) })
+    .then(function(model) {
+      console.log(chalk.green.bold('--- PUT', JSON.stringify(model, null, 4)));
+      self.body = model;
+    });
 
-
-    console.log(chalk.blue(this.vals));
-    // DB.dosomething
-    this.body = 'PUT Users';
   }
 
   function* DELETE() {
     this.status = 401;
-    this.body = 'DELETE Users';
+    this.body = 'Not allowed to DELETE User';
   }
 
   return {
@@ -50,17 +75,10 @@ const usersController = function() {
 
 module.exports = usersController;
 
-function validateFields(required, payload) {
-  let response = {};
-
-  required.forEach(function(requiredValue) {
-    if (!R.has(requiredValue)(payload)) {
-      response = {
-        error: true,
-        message: requiredValue + ' is a required field'
-      };
-    }
-  });
-
-  return response;
+function returnDate() {
+  // Parse payload
+  return {
+    created_at: new Date,
+    updated_at: new Date
+  };
 }

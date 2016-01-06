@@ -1,52 +1,36 @@
-import Sequelize from 'sequelize';
+// User model
+const db = require('../db');
 
-const Users = function(sequelize) {
-  const User = sequelize.define('User', {
+function User() {
+  db.apply(this, arguments);
+}
 
-    firstName: {
-      type: Sequelize.STRING,
-      field: 'first_name',
+db.extend(User);
+User.tableName = 'users';
+
+User.jsonSchema = {
+  type: 'object',
+  require: ['email', 'password'],
+
+  properties: {
+    id          : { type: 'integer' },
+    first_name  : { type: 'string' },
+    last_name   : { type: 'string' },
+    email       : { type: 'string' },
+    password    : {
+      type: 'string',
+      minLength: 6
     },
-
-    lastName: {
-      type: Sequelize.STRING
-    },
-
-    email: {
-      type: Sequelize.STRING
-    },
-
-    phoneNumber: {
-      type: Sequelize.BIGINT
-    },
-
-    isAdmin: {
-      type: Sequelize.BOOLEAN
-    },
-
-    companyID: {
-      type: Sequelize.INTEGER,
-
-      references: {
-        model: 'Companies',
-        key: 'id',
-        deferrable: Sequelize.Deferrable.INITIALLY_DEFERRED
-      }
-    },
-
-    packageID: {
-      type: Sequelize.INTEGER,
-
-      references: {
-        model: 'Packages',
-        key: 'id',
-        deferrable: Sequelize.Deferrable.INITIALLY_DEFERRED
-      }
-    },
-
-  });
-
-  return User;
+    phone_number: { type: 'big_int' },
+    is_admin    : { type: 'boolean' },
+    company_id  : { type: 'integer' },
+    package_id  : { type: 'integer' },
+    work_email  : { type: 'string' },
+    created_at  : { },
+    updated_at  : { },
+  }
 };
 
-export default Users;
+User.relationMappings = {};
+
+module.exports = User;

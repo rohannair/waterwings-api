@@ -3,7 +3,6 @@ const chalk  = require('chalk');
 const koa     = require('koa');
 const logger  = require('koa-logger');
 const Router  = require('koa-router');
-const koaPg   = require('koa-pg');
 const bouncer = require('koa-bouncer');
 
 // Instantiate app
@@ -17,7 +16,7 @@ const router  = new Router({
 });
 
 // Configure DBs
-app.use(koaPg('postgress://root@localhost:5432/waterwings'));
+app.context.db = require('./db.js');
 
 // Add routes to router
 const configureRoutes = require('./routes/');
@@ -34,7 +33,6 @@ app.use(logger());
 router.use(logger());
 
 // Other middleware
-// app.use(bouncer.middleware());
 router.use(bouncer.middleware());
 
 // Error Handling
