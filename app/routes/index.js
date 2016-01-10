@@ -1,5 +1,5 @@
 // Controllers
-const usersController = require('../controllers/usersController')();
+const usersController = require('../controllers/usersController');
 const loginController = require('../controllers/loginController');
 
 module.exports = function configure(router) {
@@ -12,6 +12,7 @@ module.exports = function configure(router) {
   .delete('/users/:id', usersController.DELETE)
 
   // Login
+  .put('/register', loginController.PUT)
   .post('/login', loginController.POST);
 };
 

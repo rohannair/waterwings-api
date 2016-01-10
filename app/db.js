@@ -4,6 +4,7 @@ const knex = require('knex')({
   connection: {
     host     : 'localhost',
     user     : 'root',
+    password : 'password',
     database : 'waterwings',
     charset  : 'utf8'
   },
@@ -13,6 +14,7 @@ const knex = require('knex')({
   },
   debug: true,
 });
+
 const Model = require('objection').Model;
 Model.knex(knex);
 

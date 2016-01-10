@@ -1,21 +1,22 @@
 // Deps
-const chalk   = require('chalk');
-const parse   = require('co-body');
-const R       = require('ramda');
-const User    = require('../models/Users.js');
+const chalk = require('chalk');
+const parse = require('co-body');
+const R     = require('ramda');
 
-// Methods
-const usersController = function() {
+// Models
+const User  = require('../models/Users.js');
+
+// Controller
+const usersController = (function() {
 
   function* GET() {
-    let self = this;
+    const self = this;
 
     yield User
     .query()
     .where(this.query)
     .select(
-      'id', 'email', 'first_name', 'last_name',
-      'phone_number', 'is_admin', 'company_id', 'package_id'
+      'id', 'email', 'first_name', 'last_name', 'isAdmin', 'company_id'
     )
     .then(function(resp) {
       console.log(chalk.green.bold('--- GET', JSON.stringify(resp, null, 4)));
@@ -23,11 +24,27 @@ const usersController = function() {
     });
   }
 
-  function* POST() {
-    let self = this;
+  function* PUT() {
+    const self = this;
 
-    let request = yield parse(this.req);
-    let payload = R.merge(request, returnDate());
+    const request = yield parse(this.req);
+    const payload = R.merge(request, returnDate());
+
+    yield User
+    .query()
+    .patch(payload)
+    .where({ id: parseInt(this.params.id) })
+    .then(function(model) {
+      console.log(chalk.green.bold('--- PUT', JSON.stringify(model, null, 4)));
+      self.body = model;
+    });
+  }
+
+  function* POST() {
+    const self = this;
+
+    const request = yield parse(this.req);
+    const payload = R.merge(request, returnDate());
 
     yield User
     .query()
@@ -43,22 +60,6 @@ const usersController = function() {
     });
   }
 
-  function* PUT() {
-    let self = this;
-
-    let request = yield parse(this.req);
-    let payload = R.merge(request, returnDate());
-
-    yield User
-    .query()
-    .patch(payload)
-    .where({ id: parseInt(this.params.id) })
-    .then(function(model) {
-      console.log(chalk.green.bold('--- PUT', JSON.stringify(model, null, 4)));
-      self.body = model;
-    });
-
-  }
 
   function* DELETE() {
     this.status = 401;
@@ -71,7 +72,7 @@ const usersController = function() {
     PUT: PUT,
     DELETE: DELETE
   };
-};
+})();
 
 module.exports = usersController;
 

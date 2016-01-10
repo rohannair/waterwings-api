@@ -1,9 +1,11 @@
 // Dependencies
-const chalk  = require('chalk');
+const chalk   = require('chalk');
 const koa     = require('koa');
 const logger  = require('koa-logger');
 const Router  = require('koa-router');
 const bouncer = require('koa-bouncer');
+const jwt     = require('koa-jwt');
+const unless  = require('koa-unless');
 
 // Instantiate app
 const app     = module.exports = koa();
@@ -40,11 +42,20 @@ router.use(function* (next) {
   try {
     yield* next;
   } catch (err) {
+
+    if (err.status === 401) {
+      this.status = 401;
+      this.body = this.path + '- Protected resource, use Authorization header to get access\n';
+    } else {
+      this.response.status = this.status || 500;
+      this.response.body = err;
+    }
     console.error(chalk.red.bold('--- ' + err));
-    this.response.status = this.status || 500;
-    this.response.body = err;
   }
 });
+
+// JWT auth needed for API routes
+router.use(jwt({ secret: 'shared' }).unless({path: [/^\/api\/v1\/login|register/]}));
 
 // Generic Response
 app.use(function* (next) {

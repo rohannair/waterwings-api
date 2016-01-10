@@ -10,18 +10,13 @@ User.tableName = 'users';
 
 User.jsonSchema = {
   type: 'object',
-  require: ['email', 'password'],
+  require: ['email'],
 
   properties: {
     id          : { type: 'integer' },
     first_name  : { type: 'string' },
     last_name   : { type: 'string' },
     email       : { type: 'string' },
-    password    : {
-      type: 'string',
-      minLength: 6
-    },
-    phone_number: { type: 'big_int' },
     is_admin    : { type: 'boolean' },
     company_id  : { type: 'integer' },
     package_id  : { type: 'integer' },
