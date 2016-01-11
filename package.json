@@ -4,6 +4,9 @@
   "private": true,
   "description": "",
   "main": "index.js",
+  "engines" : {
+    "node": "4.2.3"
+  },
   "scripts": {
     "db:migrate": "knex migrate:latest",
     "db:createMigration": "knex migrate:make",
