@@ -1,5 +1,6 @@
 // Dependencies
 const chalk   = require('chalk');
+const cors    = require('koa-cors');
 const koa     = require('koa');
 const logger  = require('koa-logger');
 const Router  = require('koa-router');
@@ -11,6 +12,9 @@ const unless  = require('koa-unless');
 const app     = module.exports = koa();
 const appPort = process.argv[2] || 3000;
 app.poweredBy = false;
+app.use(cors({
+  origin: '*'
+}));
 
 // Configure router
 const router  = new Router({

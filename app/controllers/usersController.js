@@ -16,8 +16,12 @@ const usersController = (function() {
     .query()
     .where(this.query)
     .select(
-      'id', 'email', 'first_name', 'last_name', 'isAdmin', 'company_id'
+      'users.id', 'users.email', 'users.first_name', 'users.last_name', 'users.isAdmin', 'c.name as company_name', 'd.name as department_name'
     )
+    .leftJoin('companies as c', 'users.company_id', 'c.id')
+    .where({'c.id': 1})
+    .leftJoin('departments as d', 'users.department_id', 'd.id')
+    .where({'d.company_id': 1})
     .then(function(resp) {
       console.log(chalk.green.bold('--- GET', JSON.stringify(resp, null, 4)));
       self.body = resp;
