@@ -49,7 +49,9 @@ router.use(function* (next) {
 
     if (err.status === 401) {
       this.status = 401;
-      this.body = this.path + '- Protected resource, use Authorization header to get access\n';
+      this.body = {
+        message: this.path + '- Protected resource, use Authorization header to get access\n'
+      };
     } else {
       this.response.status = this.status || 500;
       this.response.body = err;
