@@ -1,6 +1,7 @@
 // Controllers
-const usersController = require('../controllers/usersController');
-const loginController = require('../controllers/loginController');
+const usersController  = require('../controllers/usersController');
+const loginController  = require('../controllers/loginController');
+const surveyController = require('../controllers/surveyController');
 
 module.exports = function configure(router) {
 
@@ -13,8 +14,14 @@ module.exports = function configure(router) {
 
   // Login
   .put('/register', loginController.PUT)
-  .post('/login', loginController.POST);
+  .post('/login', loginController.POST)
+
+  // Surveys
+  .get('/surveys', surveyController.GET)
+  .get('/surveys/:id', surveyController.GET_ONE)
+  .post('/surveys/:id', surveyController.POST)
+  .put('/surveys', surveyController.PUT)
+
+  // Survey Results
+  .post('/submitSurvey', usersController.PUT_RESULT);
 };
-
-
-

@@ -13,16 +13,17 @@ User.jsonSchema = {
   require: ['email'],
 
   properties: {
-    id          : { type: 'integer' },
-    first_name  : { type: 'string' },
-    last_name   : { type: 'string' },
-    email       : { type: 'string' },
-    is_admin    : { type: 'boolean' },
-    company_id  : { type: 'integer' },
-    package_id  : { type: 'integer' },
-    work_email  : { type: 'string' },
-    created_at  : { },
-    updated_at  : { },
+    id            : { type: 'integer' },
+    first_name    : { type: 'string' },
+    last_name     : { type: 'string' },
+    email         : { type: 'string' },
+    is_admin      : { type: 'boolean' },
+    company_id    : { type: 'integer' },
+    package_id    : { type: 'integer' },
+    work_email    : { type: 'string' },
+    created_at    : { },
+    updated_at    : { },
+    survey_results: { }
   }
 };
 

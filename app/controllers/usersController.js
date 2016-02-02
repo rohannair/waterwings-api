@@ -16,7 +16,7 @@ const usersController = (function() {
     .query()
     .where(this.query)
     .select(
-      'users.id', 'users.email', 'users.first_name', 'users.last_name', 'users.isAdmin', 'c.name as company_name', 'd.name as department_name'
+      'users.id', 'users.email', 'users.first_name', 'users.last_name', 'users.isAdmin', 'c.name as company_name', 'd.name as department_name', 'users.survey_results'
     )
     .leftJoin('companies as c', 'users.company_id', 'c.id')
     .where({'c.id': 1})
@@ -70,17 +70,48 @@ const usersController = (function() {
     this.body = 'Not allowed to DELETE User';
   }
 
+  function* PUT_RESULT() {
+    const self = this;
+    const body = yield parse(this.req);
+    const payload = R.merge(
+      {
+        survey_results: JSON.parse(JSON.stringify(body.survey_results)),
+      },
+      returnDate(true)
+    );
+
+    console.log(chalk.cyan.bold('body:\n', JSON.stringify(payload, null, 4)), chalk.bgCyan('ID', body.id));
+
+    yield User
+    .query()
+    .patchAndFetchById(body.id, payload)
+    .then(function(model) {
+      console.log(chalk.green.bold('--- POST', JSON.stringify(model, null, 4)));
+      self.body = {
+        message: model
+      };
+    });
+
+  }
+
   return {
-    GET: GET,
-    POST: POST,
-    PUT: PUT,
-    DELETE: DELETE
+    GET       : GET,
+    POST      : POST,
+    PUT       : PUT,
+    DELETE    : DELETE,
+    PUT_RESULT: PUT_RESULT
   };
 })();
 
 module.exports = usersController;
 
-function returnDate() {
+function returnDate(update) {
+  if (update) {
+    return {
+      updated_at: new Date,
+    };
+  }
+
   // Parse payload
   return {
     created_at: new Date,
