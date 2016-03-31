@@ -72,6 +72,7 @@ const surveysController = (function() {
     const self = this;
 
     const request = yield parse(this.req);
+    console.log(chalk.blue.bold(JSON.stringify(request, null, 4)));
     const payload = R.merge(
       returnDate(),
       {

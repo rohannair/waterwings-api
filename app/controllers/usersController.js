@@ -16,7 +16,7 @@ const usersController = (function() {
     .query()
     .where(this.query)
     .select(
-      'users.id', 'users.email', 'users.first_name', 'users.last_name', 'users.isAdmin', 'c.name as company_name', 'd.name as department_name', 'users.survey_results'
+      'users.id', 'users.email', 'users.first_name', 'users.last_name', 'users.isAdmin', 'c.name as company_name', 'd.name as department_name'
     )
     .leftJoin('companies as c', 'users.company_id', 'c.id')
     .where({'c.id': 1})

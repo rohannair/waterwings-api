@@ -1,7 +1,7 @@
 // Dependencies
 const chalk   = require('chalk');
 const cors    = require('koa-cors');
-const koa     = require('koa');
+const Koa     = require('koa');
 const logger  = require('koa-logger');
 const Router  = require('koa-router');
 const bouncer = require('koa-bouncer');
@@ -9,7 +9,7 @@ const jwt     = require('koa-jwt');
 const unless  = require('koa-unless');
 
 // Instantiate app
-const app     = module.exports = koa();
+const app     = module.exports = Koa();
 const appPort = process.argv[2] || 3000;
 app.poweredBy = false;
 app.use(cors({
@@ -61,7 +61,7 @@ router.use(function* (next) {
 });
 
 // JWT auth needed for API routes
-router.use(jwt({ secret: 'shared' }).unless({path: [/^\/api\/v1\/login|register|surveys|submitSurvey/]}));
+// router.use(jwt({ secret: 'shared' }).unless({path: [/^\/api\/v1\/login|register|surveys|submitSurvey/]}));
 
 // Generic Response
 app.use(function* (next) {
