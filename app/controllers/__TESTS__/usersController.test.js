@@ -13,7 +13,9 @@ const setup = () => {
 
     },
     request: {
+
     }
+
   };
   return fixtures;
 };
@@ -28,7 +30,22 @@ test('before', (t) => {
   t.end();
 });
 
-// Test #1: Make a GET request to the users controller
+// Test #1a: Make a GET request to the users controller
+test('usersController GET request', (t) => {
+  // Here i need to call setup to create the users functions and mock request
+  // var this = setup()
+  // t.equal(usersController.GET,)
+  // t.end();
+});
+
+
+// We send in some params to /users and then the user with all those params are
+// returned
+// I need to see what params are collected and then create an entered user with those params
+// This request will then return a request with the actual users
+// I may need to create a user in the database to simulate the controller actually looking
+// for and then returning the correct users
+// I could also just stub the
 
 // Test #2: Make a POST request to the users controller
 
