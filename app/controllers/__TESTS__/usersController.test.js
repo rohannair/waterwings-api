@@ -2,6 +2,7 @@
 const test = require('tape');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
+const app = require('../../index.js');
 const User = require('../../models/Users');
 const usersController  = require('../usersController');
 
@@ -15,7 +16,6 @@ const setup = () => {
     request: {
 
     }
-
   };
   return fixtures;
 };
@@ -35,7 +35,8 @@ test('usersController GET request', (t) => {
   // Here i need to call setup to create the users functions and mock request
   // var this = setup()
   // t.equal(usersController.GET,)
-  // t.end();
+  // t.pass(usersController.GET, 'yo');
+  t.end();
 });
 
 
@@ -52,6 +53,14 @@ test('usersController GET request', (t) => {
 // Test #3: Make a PUT request to the users controller
 
 // Test #4: Make a DELETE request to the users controller
+
+test('usersController DELETE request', (t) => {
+  var response = usersController.DELETE;
+
+  console.log(response);
+    // t.equal(this.status, 401);
+    // t.equal(this.body, 'Not allowed to DELETE User')
+});
 
 // Test #5: Make a PUT_RESULT request to the users controller
 

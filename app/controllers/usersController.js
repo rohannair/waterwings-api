@@ -16,19 +16,11 @@ const usersController = (function() {
   }
 
   function* PUT() {
-    const self = this;
-
     const request = yield parse(this.req);
     const payload = R.merge(request, returnDate());
-
-    yield User
-    .query()
-    .patch(payload)
-    .where({ id: parseInt(this.params.id) })
-    .then(function(model) {
-      console.log(chalk.green.bold('--- PUT', JSON.stringify(model, null, 4)));
-      self.body = model;
-    });
+    const model = yield putUser(payload, parseInt(this.params.id));
+    console.log(chalk.green.bold('--- PUT', JSON.stringify(model, null, 4)));
+    this.body = model;
   }
 
   function* POST() {
@@ -117,4 +109,11 @@ function getUser(queryData) {
           .where({'c.id': 1})
           .leftJoin('departments as d', 'users.department_id', 'd.id')
           .where({'d.company_id': 1})
+}
+
+function putUser(payload, userId) {
+  return User
+          .query()
+          .patch(payload)
+          .where({ id: userId })
 }
