@@ -43,7 +43,6 @@ const usersController = (function() {
     });
   }
 
-
   function* DELETE() {
     this.status = 401;
     this.body = 'Not allowed to DELETE User';

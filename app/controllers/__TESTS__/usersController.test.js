@@ -1,10 +1,9 @@
-// Users controller tests
+// Deps
+const app = require('./../../index.js');
+const request = require('supertest')(app.listen());
 const test = require('tape');
-const sinon = require('sinon');
-const proxyquire = require('proxyquire');
-const app = require('../../index.js');
-const User = require('../../models/Users');
-const usersController  = require('../usersController');
+// const sinon = require('sinon');
+// const proxyquire = require('proxyquire');
 
 // Setup function used to create objects for test.
 const setup = () => {
@@ -24,18 +23,31 @@ const teardown = (fixtures) => {
   // Dispose of fixtures here
 };
 
-test('before', (t) => {
-  // Do anything before the tests here
-  t.pass('Start of the tests!');
-  t.end();
-});
+// Do anything before the tests here
+// test('before', (t) => {
+
+//   t.end();
+// });
 
 // Test #1a: Make a GET request to the users controller
 test('usersController GET request', (t) => {
-  // Here i need to call setup to create the users functions and mock request
-  // var this = setup()
-  // t.equal(usersController.GET,)
-  // t.pass(usersController.GET, 'yo');
+  // request
+  //   .get('/api/v1/users')
+  //   .query({first_name: 'Rohan' })
+  //   .expect(200)
+  //   .expect({
+  //     id: "1",
+  //     email: "r@rohannair.ca",
+  //     first_name: "Rohan",
+  //     last_name: "Nair",
+  //     isAdmin: true,
+  //     company_name: "QRTRMSTR",
+  //     department_name: "Executive"
+  //     })
+  //   .end((err, res) => {
+  //     if(err) t.fail('GET request test failed');
+  //     t.pass('Get request passed');
+  //   });
   t.end();
 });
 
@@ -53,19 +65,19 @@ test('usersController GET request', (t) => {
 // Test #3: Make a PUT request to the users controller
 
 // Test #4: Make a DELETE request to the users controller
-
 test('usersController DELETE request', (t) => {
-  var response = usersController.DELETE;
-
-  console.log(response);
-    // t.equal(this.status, 401);
-    // t.equal(this.body, 'Not allowed to DELETE User')
+  t.ok(request
+    .delete('/api/v1/users/1')
+    .expect(401)
+    .expect('Not allowed to DELETE User')
+    .end(), 'DELETE request passed');
+    t.end();
 });
 
 // Test #5: Make a PUT_RESULT request to the users controller
 
-test('after', (t) => {
-  // Do anything after the tests here
-  t.pass('End of Tests!');
-  t.end();
-});
+// Do anything after the tests here
+// test('after', (t) => {
+
+//   t.end();
+// });
