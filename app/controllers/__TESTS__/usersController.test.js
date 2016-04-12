@@ -8,7 +8,6 @@ const test = require('tape');
 // Import User Model
 const User = require('./../../models/Users.js');
 
-
 // Setup function used to create objects for test.
 // const setup = () => {
 //   return {

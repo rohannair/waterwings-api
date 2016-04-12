@@ -24,23 +24,12 @@ const usersController = (function() {
   }
 
   function* POST() {
-    const self = this;
-
     const request = yield parse(this.req);
     const payload = R.merge(request, returnDate());
-
-    yield User
-    .query()
-    .insert(payload)
-    .then(function(model) {
-      console.log(chalk.green.bold('--- POST', JSON.stringify(model, null, 4)));
-
-      self.status = 201;
-      self.body = {
-        id: model.id,
-        email: model.email,
-      };
-    });
+    const result = yield postUser(payload);
+    console.log(chalk.green.bold('--- POST', JSON.stringify(result, null, 4)));
+    this.status = 201;
+    this.body = result;
   }
 
   function* DELETE() {
@@ -117,4 +106,15 @@ function putUser(payload, userId) {
           .query()
           .patch(payload)
           .where({ id: userId })
+}
+
+function postUser(payload) {
+  return User
+          .query()
+          .insert(payload)
+          .then((model) => { return ({ message: 'User has been added'}) } )
+          .catch((err) => {
+            console.error(err);
+            return { message: 'An Error has occured please try to add user again'};
+          });
 }
