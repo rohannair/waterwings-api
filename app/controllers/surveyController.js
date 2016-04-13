@@ -31,7 +31,10 @@ const surveysController = (function() {
     .query()
     .where({id: self.params.id})
     .then(function(resp) {
-      self.body = resp;
+
+      // TODO: Fix this. Why would there be more than 1 returned?
+      // If there are more than 1 ids, this would be an error
+      self.body = resp.length > 1 ? resp : resp[0];
     });
   }
 
