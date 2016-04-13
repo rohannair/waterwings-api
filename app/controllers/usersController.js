@@ -1,66 +1,116 @@
 // Deps
-const chalk   = require('chalk');
-const parse   = require('co-body');
-const R       = require('ramda');
+const chalk = require('chalk');
+const parse = require('co-body');
+const R     = require('ramda');
 
-// Methods
-const usersController = function() {
+// Models
+const User  = require('../models/Users.js');
+
+// Controller
+const usersController = (function() {
 
   function* GET() {
-    const result = yield this.pg.db.client.query_('SELECT id, first_name, last_name, email, phone_number, company_id, package_id, is_admin FROM users');
-    this.body = result.rows;
+    const self = this;
+
+    yield User
+    .query()
+    .where(this.query)
+    .select(
+      'users.id', 'users.email', 'users.first_name', 'users.last_name', 'users.isAdmin',
+    )
+    .then(function(resp) {
+      console.log(chalk.green.bold('--- GET', JSON.stringify(resp, null, 4)));
+      self.body = resp;
+    });
+  }
+
+  function* PUT() {
+    const self = this;
+
+    const request = yield parse(this.req);
+    const payload = R.merge(request, returnDate());
+
+    yield User
+    .query()
+    .patch(payload)
+    .where({ id: parseInt(this.params.id) })
+    .then(function(model) {
+      console.log(chalk.green.bold('--- PUT', JSON.stringify(model, null, 4)));
+      self.body = model;
+    });
   }
 
   function* POST() {
-    // Parse payload
-    let payload = yield parse(this.req);
+    const self = this;
 
-    // Build response
-    console.log(payload);
+    const request = yield parse(this.req);
+    const payload = R.merge(request, returnDate());
 
-    // Return response
-    this.body = 'POST Users';
+    yield User
+    .query()
+    .insert(payload)
+    .then(function(model) {
+      console.log(chalk.green.bold('--- POST', JSON.stringify(model, null, 4)));
+
+      self.status = 201;
+      self.body = {
+        id: model.id,
+        email: model.email,
+      };
+    });
   }
 
-  // Create a new user
-  function* PUT() {
-
-    // Parse payload
-    let payload = yield parse(this.req);
-
-
-
-    console.log(chalk.blue(this.vals));
-    // DB.dosomething
-    this.body = 'PUT Users';
-  }
 
   function* DELETE() {
     this.status = 401;
-    this.body = 'DELETE Users';
+    this.body = 'Not allowed to DELETE User';
+  }
+
+  function* PUT_RESULT() {
+    const self = this;
+    const body = yield parse(this.req);
+    const payload = R.merge(
+      {
+        survey_results: JSON.parse(JSON.stringify(body.survey_results)),
+      },
+      returnDate(true)
+    );
+
+    console.log(chalk.cyan.bold('body:\n', JSON.stringify(payload, null, 4)), chalk.bgCyan('ID', body.id));
+
+    yield User
+    .query()
+    .patchAndFetchById(body.id, payload)
+    .then(function(model) {
+      console.log(chalk.green.bold('--- POST', JSON.stringify(model, null, 4)));
+      self.body = {
+        message: model
+      };
+    });
+
   }
 
   return {
-    GET: GET,
-    POST: POST,
-    PUT: PUT,
-    DELETE: DELETE
+    GET       : GET,
+    POST      : POST,
+    PUT       : PUT,
+    DELETE    : DELETE,
+    PUT_RESULT: PUT_RESULT
   };
-};
+})();
 
 module.exports = usersController;
 
-function validateFields(required, payload) {
-  let response = {};
+function returnDate(update) {
+  if (update) {
+    return {
+      updated_at: new Date,
+    };
+  }
 
-  required.forEach(function(requiredValue) {
-    if (!R.has(requiredValue)(payload)) {
-      response = {
-        error: true,
-        message: requiredValue + ' is a required field'
-      };
-    }
-  });
-
-  return response;
+  // Parse payload
+  return {
+    created_at: new Date,
+    updated_at: new Date
+  };
 }

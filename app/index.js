@@ -1,15 +1,20 @@
 // Dependencies
-const chalk  = require('chalk');
-const koa     = require('koa');
+const chalk   = require('chalk');
+const cors    = require('koa-cors');
+const Koa     = require('koa');
 const logger  = require('koa-logger');
 const Router  = require('koa-router');
-const koaPg   = require('koa-pg');
 const bouncer = require('koa-bouncer');
+const jwt     = require('koa-jwt');
+const unless  = require('koa-unless');
 
 // Instantiate app
-const app     = module.exports = koa();
+const app     = module.exports = Koa();
 const appPort = process.argv[2] || 3000;
 app.poweredBy = false;
+app.use(cors({
+  origin: '*'
+}));
 
 // Configure router
 const router  = new Router({
@@ -17,7 +22,7 @@ const router  = new Router({
 });
 
 // Configure DBs
-app.use(koaPg('postgress://root@localhost:5432/waterwings'));
+app.context.db = require('./db.js');
 
 // Add routes to router
 const configureRoutes = require('./routes/');
@@ -34,7 +39,6 @@ app.use(logger());
 router.use(logger());
 
 // Other middleware
-// app.use(bouncer.middleware());
 router.use(bouncer.middleware());
 
 // Error Handling
@@ -42,11 +46,22 @@ router.use(function* (next) {
   try {
     yield* next;
   } catch (err) {
+
+    if (err.status === 401) {
+      this.status = 401;
+      this.body = {
+        message: this.path + '- Protected resource, use Authorization header to get access\n'
+      };
+    } else {
+      this.response.status = this.status || 500;
+      this.response.body = err;
+    }
     console.error(chalk.red.bold('--- ' + err));
-    this.response.status = this.status || 500;
-    this.response.body = err;
   }
 });
+
+// JWT auth needed for API routes
+// router.use(jwt({ secret: 'shared' }).unless({path: [/^\/api\/v1\/login|register|surveys|submitSurvey/]}));
 
 // Generic Response
 app.use(function* (next) {
