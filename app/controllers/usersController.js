@@ -49,13 +49,12 @@ const usersController = (function() {
     yield User
     .query()
     .insert(payload)
-    .then(function(model) {
-      console.log(chalk.green.bold('--- POST', JSON.stringify(model, null, 4)));
+    .then(function(user) {
+      console.log(chalk.green.bold('--- POST', JSON.stringify(user, null, 4)));
 
       self.status = 201;
       self.body = {
-        id: model.id,
-        email: model.email,
+        ...user
       };
     });
   }
