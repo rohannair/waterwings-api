@@ -11,7 +11,8 @@
     "db:migrate": "knex migrate:latest",
     "db:createMigration": "knex migrate:make",
     "babel-node": "babel-node --ignore='node_modules'",
-    "start": "nodemon --exec npm run babel-node -- ./app/index.js",
+    "start": "NODE_ENV=production nodemon --exec npm run babel-node -- ./app/index.js",
+    "dev": "nodemon --exec npm run babel-node -- ./app/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Rohan Nair",
