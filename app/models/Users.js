@@ -24,12 +24,12 @@ User.jsonSchema = {
 
   properties: {
     id             : { type: 'string' },
-    username       : { type: 'string' },
-    password       : { type: 'string' },
+    username       : { type: 'string', minLength: 1, maxLength: 50 },
+    password       : { type: 'string', minLength: 6, maxLength: 50 },
     is_admin       : { type: 'boolean' },
-    first_name     : { type: 'string', minLength: 1, maxLength: 50},
-    last_name      : { type: 'string', minLength: 1, maxLength: 50},
-    personal_email : { type: 'string', minLength: 1, maxLength: 50},
+    first_name     : { type: 'string', minLength: 1, maxLength: 50 },
+    last_name      : { type: 'string', minLength: 1, maxLength: 50 },
+    personal_email : { type: 'string', minLength: 1, maxLength: 50 },
     profile_img    : { type: 'string' },
     bio            : { type: 'string' },
     social_media   : {

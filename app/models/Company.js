@@ -46,7 +46,7 @@ Company.jsonSchema = {
                             },
                             {
                               // Direction
-                              type: 'string', minLength: 1, maxLength: 2}
+                              type: 'string', minLength: 0, maxLength: 2}
                             }
                           ]
                         },
