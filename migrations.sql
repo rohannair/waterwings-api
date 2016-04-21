@@ -4,84 +4,67 @@
 -- Command to run to set up the database
 -- psql -f migrations.sql DATABASE-NAME;
 
--- CREATE DATABASE qtest;
-
--- Companies Table
+-- companies Table
 CREATE TABLE companies (
   id serial PRIMARY KEY,
-  name varchar(255),
+  name varchar(255) UNIQUE NOT NULL,
   address_1 varchar(255),
   address_2 varchar(255),
-  postal_code char(6),
+  postal_code varchar(10),
   province char(2) DEFAULT 'CA',
   country char(2) DEFAULT 'ON',
-  -- table.enum('province', ['AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'ON', 'PE', 'QC', 'SK']).defaultTo('ON');
-  -- table.enum('country', ['CA']).defaultTo('CA');
   created_at timestamptz DEFAULT now(),
-  updated_at timestamptz
+  updated_at timestamptz DEFAULT now()
 );
 
-CREATE INDEX ON companies ( id );
-
--- Departments table
+-- departments table
 CREATE TABLE departments (
   id bigserial PRIMARY KEY,
-  name varchar(100),
+  name varchar(100) NOT NULL,
   description varchar(100),
   company_id integer REFERENCES companies ON DELETE CASCADE,
   created_at timestamptz DEFAULT now(),
-  updated_at timestamptz
+  updated_at timestamptz DEFAULT now()
 );
 
-CREATE INDEX ON departments ( id );
-
--- Playbooks table
-CREATE TABLE playbooks (
+-- surveys table
+CREATE TABLE surveys (
   id bigserial PRIMARY KEY,
   name varchar(100),
   description varchar(255),
-  data jsonb,
   company_id integer REFERENCES companies,
+  doc jsonb,
   created_at timestamptz DEFAULT now(),
-  updated_at timestamptz
+  updated_at timestamptz DEFAULT now()
 );
 
-CREATE INDEX ON playbooks ( id );
-CREATE INDEX ON playbooks USING GIN (data);
+CREATE INDEX ON surveys USING GIN (data);
 
--- Users table
+-- users table
 CREATE TABLE users (
   id bigserial PRIMARY KEY,
   first_name varchar(50) NOT NULL,
   last_name varchar(50) NOT NULL,
   email varchar(50) UNIQUE NOT NULL,
+  password varchar(20),
   work_email varchar(50) UNIQUE NOT NULL,
   is_admin boolean,
   company_id integer REFERENCES companies ON DELETE CASCADE,
   department_id integer REFERENCES departments ON DELETE CASCADE,
   created_at timestamptz DEFAULT now(),
-  updated_at timestamptz
+  updated_at timestamptz DEFAULT now()
 );
 
-CREATE INDEX ON users ( id );
 
--- Members table
-CREATE TABLE members (
+-- completed_surveys table
+CREATE TABLE completed_surveys (
   id bigserial PRIMARY KEY,
-  email varchar(50),
-  password varchar(50),
-  token varchar(255)
-);
-
--- Completed_Playbooks table
-CREATE TABLE completed_playbooks (
-  id bigserial PRIMARY KEY,
-  playbook_id integer REFERENCES playbooks,
+  survey_id integer REFERENCES surveys,
   user_id integer REFERENCES users,
-  data jsonb,
+  company_id integer REFERENCES companies,
+  doc jsonb,
   created_at timestamptz DEFAULT now(),
-  updated_at timestamptz
+  updated_at timestamptz DEFAULT now()
 );
 
-CREATE INDEX ON completed_playbooks ( id );
-CREATE INDEX ON playbooks USING GIN (data);
+CREATE INDEX ON completed_surveys USING GIN (data);

@@ -1,0 +1,38 @@
+-- CREATE TRIGGER update_user_timestamp
+--   AFTER UPDATE ON users
+--   FOR EACH ROW
+--   EXECUTE PROCEDURE update_timestamp(users.updated_at);
+--
+-- CREATE FUNCTION update_timestamp(column) RETURNS
+
+
+-- table.enum('province', ['AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'ON', 'PE', 'QC', 'SK']).defaultTo('ON');
+-- table.enum('country', ['CA']).defaultTo('CA');
+
+
+-- Notes: Do Surveys should both belong to a company but at the same time
+-- Other companies should be able to browse public surveys for ideas
+-- But companies should be able to have private Playbooks
+-- Potential source of revenue is how many Playbooks a company can have,
+-- Starts of public and then they are allowed a certain number of private playbooks
+
+
+
+-- we should also look at randomly creating id's for thing as opposed to auto increment
+
+
+alter table users add column department_id uuid;
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+
+Questions for Rohan This morning:
+
+Do we really need uuid's even though the core postgres database has no native suppport for them
+and ORM's do not like them, I think we should be fine with big int
+
+What are we doing with the database repo, should I move all database migrations into the database repo
+and then run things from there
+
+Think about how to do department names better as currently we will have a lot of duplicates
+ex everyone has an Account Manager Position

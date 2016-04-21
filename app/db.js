@@ -5,7 +5,7 @@ const knex = require('knex')({
     host     : 'localhost',
     user     : 'root',
     password : 'password',
-    database : 'waterwings',
+    database : 'quartermaster-staging_01',
     charset  : 'utf8'
   },
   pool: {
@@ -19,4 +19,3 @@ const Model = require('objection').Model;
 Model.knex(knex);
 
 module.exports = Model;
-
