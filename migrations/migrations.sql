@@ -1,9 +1,5 @@
 -- Main File to set schema of database
 
--- Need to create a database and then run theis file on the database
--- Command to run to set up the database
--- psql -f migrations.sql DATABASE-NAME;
-
 -- companies Table
 CREATE TABLE companies (
   id varchar(50) PRIMARY KEY,
@@ -60,7 +56,6 @@ CREATE TABLE users (
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );
-
 
 -- completed_surveys table
 CREATE TABLE completed_surveys (
