@@ -8,8 +8,16 @@ function RoleName() {
 db.extend(RoleName);
 RoleName.tableName = 'role_names';
 
-// This is not used to create the database schema
-// This is only used for validation. Whenever a model instance is created it is checked against this schema.
+RoleName.prototype.$beforeInsert = function () {
+  this.created_at = new Date().toISOString();
+};
+
+RoleName.prototype.$beforeUpdate = function () {
+  this.updated_at = new Date().toISOString();
+};
+
+// This is not used to create the database schema it is only used for validation.
+// Whenever a model instance is created it is checked against this schema.
 RoleName.jsonSchema = {
   type: 'object',
   require: ['name'],

@@ -8,6 +8,16 @@ function Survey() {
 db.extend(Survey);
 Survey.tableName = 'surveys';
 
+Survey.prototype.$beforeInsert = function () {
+  this.created_at = new Date().toISOString();
+};
+
+Survey.prototype.$beforeUpdate = function () {
+  this.updated_at = new Date().toISOString();
+};
+
+// This is not used to create the database schema it is only used for validation.
+// Whenever a model instance is created it is checked against this schema.
 Survey.jsonSchema = {
   type: 'object',
   require: ['doc'],
@@ -20,8 +30,8 @@ Survey.jsonSchema = {
     role_id     : {type: 'integer' },
     doc         : {
                     type: 'object',
-                      properties: {
-                        name: 'string'
+                    properties: {
+                      body: 'string'
                     },
                     additionalProperties: true
                   },
@@ -47,6 +57,13 @@ Survey.relationMappings = {
       from: 'surveys.role_id',
       to: 'roles.id'
     }
+  },
+
+  completed_surveys: {
+    realtion: Model.OneToManyRelation,
+    modelClass: __dirname + '/CompletedSurvey',
+    join: 'surveys.id',
+    to: 'completed_surveys.survey_id'
   }
 };
 

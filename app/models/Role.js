@@ -8,8 +8,16 @@ function Role() {
 db.extend(Role);
 Department.tableName = 'roles';
 
-// This is not used to create the database schema
-// This is only used for validation. Whenever a model instance is created it is checked against this schema.
+Role.prototype.$beforeInsert = function () {
+  this.created_at = new Date().toISOString();
+};
+
+Role.prototype.$beforeUpdate = function () {
+  this.updated_at = new Date().toISOString();
+};
+
+// This is not used to create the database schema it is only used for validation.
+// Whenever a model instance is created it is checked against this schema.
 Role.jsonSchema = {
   type: 'object',
   require: [],
@@ -59,7 +67,6 @@ Role.relationMappings = {
       to: 'companies.id'
     }
   }
-
 };
 
 module.exports = Role;

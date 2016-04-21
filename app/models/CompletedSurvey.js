@@ -1,4 +1,4 @@
-// CompleteSurveys model
+// Completed Surveys model
 const db = require('../db');
 
 function CompletedSurvey() {
@@ -6,25 +6,63 @@ function CompletedSurvey() {
 }
 
 db.extend(CompletedSurvey);
-CompleteSurvey.tableName = 'completed_surveys';
+CompletedSurvey.tableName = 'completed_surveys';
+
+CompletedSurvey.prototype.$beforeInsert = function () {
+  this.created_at = new Date().toISOString();
+};
+
+CompletedSurvey.prototype.$beforeUpdate = function () {
+  this.updated_at = new Date().toISOString();
+};
 
 CompletedSurvey.jsonSchema = {
   type: 'object',
   require: ['doc'],
 
   properties: {
-    id          : { type: 'integer' },
-    survey_id   : { type: 'integer' },
-    user_id     : { type: 'integer' },
+    id          : { type: 'string' },
+    survey_id   : { type: 'string' },
+    user_id     : { type: 'string' },
     company_id  : { type: 'integer' },
-    doc         : {
+    results     : {
                     type: 'object',
-                      properties: {
-                        name: 'string'
-                    }
+                    properties: {
+                      body: 'string'
+                    },
+                    additionalProperties: true
                   },
     created_at  : { type: 'string' },
     updated_at  : { type: 'string' }
+  }
+};
+
+CompletedSurvey.relationMappings = {
+  survey: {
+    relation: Model.OneToOneRelation,
+    modelClass: __dirname + '/Survey',
+    join: {
+      from: 'completed_surveys.survey_id',
+      to: 'surveys.id'
+    }
+  },
+
+  company: {
+    relation: Model.OneToOneRelation,
+    modelClass: __dirname + '/Company',
+    join: {
+      from: 'completed_surveys.company_id',
+      to: 'companies.id'
+    }
+  },
+
+  user: {
+    relation: Model.OneToOneRelation,
+    modelClass: __dirname + '/User',
+    join: {
+      from: 'completed_surveys.user_id',
+      to: 'users.id'
+    }
   }
 };
 

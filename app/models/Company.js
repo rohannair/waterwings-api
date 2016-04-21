@@ -8,8 +8,16 @@ function Company() {
 db.extend(Company);
 Company.tableName = 'companies';
 
-// This is not used to create the database schema
-// This is only used for validation. Whenever a model instance is created it is checked against this schema.
+Company.prototype.$beforeInsert = function () {
+  this.created_at = new Date().toISOString();
+};
+
+Company.prototype.$beforeUpdate = function () {
+  this.updated_at = new Date().toISOString();
+};
+
+// This is not used to create the database schema it is only used for validation.
+// Whenever a model instance is created it is checked against this schema.
 Company.jsonSchema = {
   type: 'object',
   require: ['name'],
@@ -78,6 +86,13 @@ Company.relationMappings = {
     modelClass: __dirname + '/Survey',
     join: 'companies.id',
     to: 'surveys.company_id'
+  },
+
+  completed_surveys: {
+    realtion: Model.OneToManyRelation,
+    modelClass: __dirname + '/CompletedSurvey',
+    join: 'companies.id',
+    to: 'completed_surveys.company_id'
   }
 };
 

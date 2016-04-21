@@ -8,11 +8,19 @@ function User() {
 db.extend(User);
 User.tableName = 'users';
 
-// This is not used to create the database schema
-// This is only used for validation. Whenever a model instance is created it is checked against this schema.
+User.prototype.$beforeInsert = function () {
+  this.created_at = new Date().toISOString();
+};
+
+User.prototype.$beforeUpdate = function () {
+  this.updated_at = new Date().toISOString();
+};
+
+// This is not used to create the database schema it is only used for validation.
+// Whenever a model instance is created it is checked against this schema.
 User.jsonSchema = {
   type: 'object',
-  required: ['first_name, last_name, email, work_email'],
+  required: ['username, password'],
 
   properties: {
     id             : { type: 'string' },
@@ -57,6 +65,13 @@ User.relationMappings = {
       from: 'users.role_id',
       to: 'roles.id'
     }
+  },
+
+  completed_surveys: {
+    realtion: Model.OneToManyRelation,
+    modelClass: __dirname + '/CompletedSurvey',
+    join: 'users.id',
+    to: 'completed_surveys.user_id'
   }
 };
 
