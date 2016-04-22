@@ -4,19 +4,19 @@ const parse = require('co-body');
 const R     = require('ramda');
 
 // Models
-const User  = require('../models/Users.js');
+const User  = require('../models/User.js');
 
 // Controller
 const usersController = (function() {
 
   function* GET() {
     const self = this;
-
+    console.log(this.query);
     yield User
     .query()
     .where(this.query)
     .select(
-      'users.id', 'users.email', 'users.first_name', 'users.last_name', 'users.isAdmin',
+      'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin',
     )
     .then(function(resp) {
       console.log(chalk.green.bold('--- GET', JSON.stringify(resp, null, 4)));
@@ -33,7 +33,7 @@ const usersController = (function() {
     yield User
     .query()
     .patch(payload)
-    .where({ id: parseInt(this.params.id) })
+    .where({ id: this.params.id })
     .then(function(model) {
       console.log(chalk.green.bold('--- PUT', JSON.stringify(model, null, 4)));
       self.body = model;
@@ -55,7 +55,7 @@ const usersController = (function() {
       self.status = 201;
       self.body = {
         id: model.id,
-        email: model.email,
+        username: model.username,
       };
     });
   }
