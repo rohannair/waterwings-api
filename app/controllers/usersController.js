@@ -4,7 +4,7 @@ const parse = require('co-body');
 const R     = require('ramda');
 
 // Models
-const User  = require('../models/Users.js');
+const User  = require('../models/User.js');
 
 // Controller
 const usersController = (function() {
@@ -16,7 +16,7 @@ const usersController = (function() {
     .query()
     .where(this.query)
     .select(
-      'users.id', 'users.email', 'users.first_name', 'users.last_name', 'users.isAdmin',
+      'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin',
     )
     .then(function(resp) {
       console.log(chalk.green.bold('--- GET', JSON.stringify(resp, null, 4)));

@@ -32,7 +32,7 @@ RoleName.jsonSchema = {
 
 RoleName.relationMappings = {
   roles: {
-    relation: Model.OneToManyRelation,
+    relation: db.OneToManyRelation,
     modelClass: __dirname + '/Role',
     join: {
       from: 'role_names.id',

@@ -7,7 +7,7 @@ const updateDate = require('../utils').updateDate;
 const UUID       = require('uuid-js');
 
 // Models
-const Survey     = require('../models/Surveys');
+const Survey     = require('../models/Survey');
 
 // Controller
 const surveysController = (function() {

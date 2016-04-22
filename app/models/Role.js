@@ -42,7 +42,7 @@ Role.relationMappings = {
   },
 
   names: {
-    relation: Model.OneToOneRelation,
+    relation: db.OneToOneRelation,
     modelClass: __dirname + '/RoleName',
     join: {
       from: 'roles.role_name_id',
@@ -51,7 +51,7 @@ Role.relationMappings = {
   },
 
   surveys: {
-    relation: Model.OneToManyRelation,
+    relation: db.OneToManyRelation,
     modelClass: __dirname + '/Survey',
     join: {
       from: 'roles.id',
@@ -60,7 +60,7 @@ Role.relationMappings = {
   },
 
   company: {
-    relation: Model.OneToOneRelation,
+    relation: db.OneToOneRelation,
     modelClass: __dirname + '/Company',
     join: {
       from: 'roles.company_id',

@@ -64,7 +64,7 @@ Company.jsonSchema = {
 
 Company.relationMappings = {
   employees: {
-    relation: Model.OneToManyRelation,
+    relation: db.OneToManyRelation,
     modelClass: __dirname + '/User',
     join: {
       from: 'companies.id',
@@ -73,7 +73,7 @@ Company.relationMappings = {
   },
 
   roles: {
-    relation: Model.OneToManyRelation,
+    relation: db.OneToManyRelation,
     modelClass: __dirname + '/Role',
     join: {
       from: 'companies.id',
@@ -82,14 +82,14 @@ Company.relationMappings = {
   },
 
   surveys: {
-    realtion: Model.OneToManyRelation,
+    realtion: db.OneToManyRelation,
     modelClass: __dirname + '/Survey',
     join: 'companies.id',
     to: 'surveys.company_id'
   },
 
   completed_surveys: {
-    realtion: Model.OneToManyRelation,
+    realtion: db.OneToManyRelation,
     modelClass: __dirname + '/CompletedSurvey',
     join: 'companies.id',
     to: 'completed_surveys.company_id'

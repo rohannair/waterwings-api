@@ -8,7 +8,7 @@ const parse    = require('co-body');
 const R        = require('ramda');
 
 // Models
-const Member   = require('../models/Members');
+// const Member   = require('../models/Members');
 
 // Controller
 const loginController = (function() {

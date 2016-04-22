@@ -39,7 +39,7 @@ CompletedSurvey.jsonSchema = {
 
 CompletedSurvey.relationMappings = {
   survey: {
-    relation: Model.OneToOneRelation,
+    relation: db.OneToOneRelation,
     modelClass: __dirname + '/Survey',
     join: {
       from: 'completed_surveys.survey_id',
@@ -48,7 +48,7 @@ CompletedSurvey.relationMappings = {
   },
 
   company: {
-    relation: Model.OneToOneRelation,
+    relation: db.OneToOneRelation,
     modelClass: __dirname + '/Company',
     join: {
       from: 'completed_surveys.company_id',
@@ -57,7 +57,7 @@ CompletedSurvey.relationMappings = {
   },
 
   user: {
-    relation: Model.OneToOneRelation,
+    relation: db.OneToOneRelation,
     modelClass: __dirname + '/User',
     join: {
       from: 'completed_surveys.user_id',
