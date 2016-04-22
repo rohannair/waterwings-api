@@ -4,20 +4,24 @@ const parse = require('co-body');
 const R     = require('ramda');
 
 // Models
-const User  = require('../models/Users.js');
+const User  = require('../models/User.js');
 
 // Controller
 const usersController = (function() {
 
   function* GET() {
     const self = this;
-
+    console.log(this.query);
     yield User
     .query()
     .where(this.query)
     .select(
-      'users.id', 'users.email', 'users.first_name', 'users.last_name', 'users.isAdmin',
+      'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin',
     )
+    // .leftJoin('companies as c', 'users.company_id', 'c.id')
+    // .where({'c.id': 1})
+    // .leftJoin('departments as d', 'users.department_id', 'd.id')
+    // .where({'d.company_id': 1})
     .then(function(resp) {
       console.log(chalk.green.bold('--- GET', JSON.stringify(resp, null, 4)));
       self.body = resp;
@@ -33,7 +37,7 @@ const usersController = (function() {
     yield User
     .query()
     .patch(payload)
-    .where({ id: parseInt(this.params.id) })
+    .where({ id: this.params.id })
     .then(function(model) {
       console.log(chalk.green.bold('--- PUT', JSON.stringify(model, null, 4)));
       self.body = model;
@@ -54,8 +58,12 @@ const usersController = (function() {
 
       self.status = 201;
       self.body = {
+<<<<<<< HEAD
+        ...model
+=======
         id: model.id,
-        email: model.email,
+        username: model.username,
+>>>>>>> accfb3c53c8526b65a3f91853b15ccd311d331d9
       };
     });
   }

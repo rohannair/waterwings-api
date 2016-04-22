@@ -19,8 +19,8 @@ module.exports = function configure(router) {
   // Surveys
   .get('/surveys', surveyController.GET)
   .get('/surveys/:id', surveyController.GET_ONE)
-  .post('/surveys/:id', surveyController.POST)
-  .put('/surveys', surveyController.PUT)
+  .post('/surveys', surveyController.POST)
+  .put('/surveys/:id', surveyController.PUT)
 
   // Survey Results
   .post('/submitSurvey', usersController.PUT_RESULT);
