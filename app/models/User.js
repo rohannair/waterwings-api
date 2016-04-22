@@ -9,18 +9,18 @@ db.extend(User);
 User.tableName = 'users';
 
 User.prototype.$beforeInsert = function () {
-  this.created_at = new Date().toISOString();
+  this.created_at = new Date().toUTCString();
 };
 
 User.prototype.$beforeUpdate = function () {
-  this.updated_at = new Date().toISOString();
+  this.updated_at = new Date().toUTCString();
 };
 
 // This is not used to create the database schema it is only used for validation.
 // Whenever a model instance is created it is checked against this schema.
 User.jsonSchema = {
   type: 'object',
-  required: ['username, password'],
+  required: ['username', 'password'],
 
   properties: {
     id             : { type: 'string' },
@@ -41,17 +41,17 @@ User.jsonSchema = {
                         },
                         additionalProperties: true
                       },
-    company_id     : { type: 'integer' },
+    company_id     : { type: 'string' },
     role_id        : { type: 'integer' },
-    created_at     : { type: 'string' },
-    updated_at     : { type: 'string' }
+    created_at     : { type: 'object' },
+    updated_at     : { type: 'object' }
   }
 };
 
 User.relationMappings = {
   company: {
     relation: db.OneToOneRelation,
-    modelClass: __dirname + '/Company',
+    modelClass: require('./Company.js'),
     join: {
       from: 'users.company_id',
       to: 'companies.id'
@@ -60,7 +60,7 @@ User.relationMappings = {
 
   role: {
     relation: db.OneToOneRelation,
-    modelClass: __dirname + '/Role',
+    modelClass: require('./Role.js'),
     join: {
       from: 'users.role_id',
       to: 'roles.id'
@@ -68,10 +68,12 @@ User.relationMappings = {
   },
 
   completed_surveys: {
-    realtion: db.OneToManyRelation,
-    modelClass: __dirname + '/CompletedSurvey',
-    join: 'users.id',
-    to: 'completed_surveys.user_id'
+    relation: db.OneToManyRelation,
+    modelClass: require('./CompletedSurvey.js'),
+    join: {
+      from: 'users.id',
+      to: 'completed_surveys.user_id'
+    }
   }
 };
 

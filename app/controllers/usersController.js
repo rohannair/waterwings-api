@@ -11,7 +11,7 @@ const usersController = (function() {
 
   function* GET() {
     const self = this;
-
+    console.log(this.query);
     yield User
     .query()
     .where(this.query)
@@ -33,7 +33,7 @@ const usersController = (function() {
     yield User
     .query()
     .patch(payload)
-    .where({ id: parseInt(this.params.id) })
+    .where({ id: this.params.id })
     .then(function(model) {
       console.log(chalk.green.bold('--- PUT', JSON.stringify(model, null, 4)));
       self.body = model;
@@ -55,7 +55,7 @@ const usersController = (function() {
       self.status = 201;
       self.body = {
         id: model.id,
-        email: model.email,
+        username: model.username,
       };
     });
   }

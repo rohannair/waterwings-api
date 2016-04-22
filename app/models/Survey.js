@@ -9,11 +9,11 @@ db.extend(Survey);
 Survey.tableName = 'surveys';
 
 Survey.prototype.$beforeInsert = function () {
-  this.created_at = new Date().toISOString();
+  this.created_at = new Date().toUTCString();
 };
 
 Survey.prototype.$beforeUpdate = function () {
-  this.updated_at = new Date().toISOString();
+  this.updated_at = new Date().toUTCString();
 };
 
 // This is not used to create the database schema it is only used for validation.
@@ -35,15 +35,15 @@ Survey.jsonSchema = {
                     },
                     additionalProperties: true
                   },
-    created_at  : { type: 'string' },
-    updated_at  : { type: 'string' }
+    created_at  : { type: 'object' },
+    updated_at  : { type: 'object' }
   }
 };
 
 Survey.relationMappings = {
   company: {
     relation: db.OneToOneRelation,
-    modelClass: __dirname + '/Company',
+    modelClass: require('./Company.js'),
     join: {
       from: 'surveys.company_id',
       to: 'companies.id'
@@ -52,7 +52,7 @@ Survey.relationMappings = {
 
   role: {
     relation: db.OneToOneRelation,
-    modelClass: __dirname + '/Role',
+    modelClass: require('./Role.js'),
     join: {
       from: 'surveys.role_id',
       to: 'roles.id'
@@ -60,10 +60,12 @@ Survey.relationMappings = {
   },
 
   completed_surveys: {
-    realtion: db.OneToManyRelation,
-    modelClass: __dirname + '/CompletedSurvey',
-    join: 'surveys.id',
-    to: 'completed_surveys.survey_id'
+    relation: db.OneToManyRelation,
+    modelClass: require('./CompletedSurvey.js'),
+    join: {
+      from: 'surveys.id',
+      to: 'completed_surveys.survey_id'
+    }
   }
 };
 

@@ -9,13 +9,15 @@ db.extend(CompletedSurvey);
 CompletedSurvey.tableName = 'completed_surveys';
 
 CompletedSurvey.prototype.$beforeInsert = function () {
-  this.created_at = new Date().toISOString();
+  this.created_at = new Date().toUTCString();
 };
 
 CompletedSurvey.prototype.$beforeUpdate = function () {
-  this.updated_at = new Date().toISOString();
+  this.updated_at = new Date().toUTCString();
 };
 
+// This is not used to create the database schema it is only used for validation.
+// Whenever a model instance is created it is checked against this schema.
 CompletedSurvey.jsonSchema = {
   type: 'object',
   require: ['doc'],
@@ -32,15 +34,15 @@ CompletedSurvey.jsonSchema = {
                     },
                     additionalProperties: true
                   },
-    created_at  : { type: 'string' },
-    updated_at  : { type: 'string' }
+    created_at    : { type: 'object' },
+    updated_at    : { type: 'object' }
   }
 };
 
 CompletedSurvey.relationMappings = {
   survey: {
     relation: db.OneToOneRelation,
-    modelClass: __dirname + '/Survey',
+    modelClass: require('./Survey.js'),
     join: {
       from: 'completed_surveys.survey_id',
       to: 'surveys.id'
@@ -49,7 +51,7 @@ CompletedSurvey.relationMappings = {
 
   company: {
     relation: db.OneToOneRelation,
-    modelClass: __dirname + '/Company',
+    modelClass: require('./Company.js'),
     join: {
       from: 'completed_surveys.company_id',
       to: 'companies.id'
@@ -58,7 +60,7 @@ CompletedSurvey.relationMappings = {
 
   user: {
     relation: db.OneToOneRelation,
-    modelClass: __dirname + '/User',
+    modelClass: require('./User.js'),
     join: {
       from: 'completed_surveys.user_id',
       to: 'users.id'

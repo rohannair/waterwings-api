@@ -6,14 +6,14 @@ function Role() {
 }
 
 db.extend(Role);
-Department.tableName = 'roles';
+Role.tableName = 'roles';
 
 Role.prototype.$beforeInsert = function () {
-  this.created_at = new Date().toISOString();
+  this.created_at = new Date().toUTCString();
 };
 
 Role.prototype.$beforeUpdate = function () {
-  this.updated_at = new Date().toISOString();
+  this.updated_at = new Date().toUTCString();
 };
 
 // This is not used to create the database schema it is only used for validation.
@@ -26,15 +26,15 @@ Role.jsonSchema = {
     id            : { type: 'integer' },
     role_name_id  : { type: 'integer' },
     company_id    : { type: 'string' },
-    created_at    : { type: 'string' },
-    updated_at    : { type: 'string' }
+    created_at    : { type: 'object' },
+    updated_at    : { type: 'object' }
   }
 };
 
 Role.relationMappings = {
   employees: {
-    relation: Model.OneToManyRelation,
-    modelClass: __dirname + '/User',
+    relation: db.OneToManyRelation,
+    modelClass: require('./User.js'),
     join: {
       from: 'roles.id',
       to: 'users.role_id'
@@ -43,7 +43,7 @@ Role.relationMappings = {
 
   names: {
     relation: db.OneToOneRelation,
-    modelClass: __dirname + '/RoleName',
+    modelClass: require('./RoleName.js'),
     join: {
       from: 'roles.role_name_id',
       to: 'role_names.id'
@@ -52,7 +52,7 @@ Role.relationMappings = {
 
   surveys: {
     relation: db.OneToManyRelation,
-    modelClass: __dirname + '/Survey',
+    modelClass: require('./Survey.js'),
     join: {
       from: 'roles.id',
       to: 'surveys.role_id'
@@ -61,7 +61,7 @@ Role.relationMappings = {
 
   company: {
     relation: db.OneToOneRelation,
-    modelClass: __dirname + '/Company',
+    modelClass: require('./Company.js'),
     join: {
       from: 'roles.company_id',
       to: 'companies.id'

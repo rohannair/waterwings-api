@@ -9,11 +9,11 @@ db.extend(Company);
 Company.tableName = 'companies';
 
 Company.prototype.$beforeInsert = function () {
-  this.created_at = new Date().toISOString();
+  this.created_at = new Date().toUTCString();
 };
 
 Company.prototype.$beforeUpdate = function () {
-  this.updated_at = new Date().toISOString();
+  this.updated_at = new Date().toUTCString();
 };
 
 // This is not used to create the database schema it is only used for validation.
@@ -46,7 +46,7 @@ Company.jsonSchema = {
                             },
                             {
                               // Direction
-                              type: 'string', minLength: 0, maxLength: 2}
+                              type: 'string', minLength: 0, maxLength: 2
                             }
                           ]
                         },
@@ -57,15 +57,15 @@ Company.jsonSchema = {
                       },
                       additionalProperties: true
                     },
-    created_at    : { type: 'string' },
-    updated_at    : { type: 'string' }
+    created_at    : { type: 'object' },
+    updated_at    : { type: 'object' }
   }
 };
 
 Company.relationMappings = {
   employees: {
     relation: db.OneToManyRelation,
-    modelClass: __dirname + '/User',
+    modelClass: require('./User.js'),
     join: {
       from: 'companies.id',
       to: 'users.company_id'
@@ -74,7 +74,7 @@ Company.relationMappings = {
 
   roles: {
     relation: db.OneToManyRelation,
-    modelClass: __dirname + '/Role',
+    modelClass: require('./Role.js'),
     join: {
       from: 'companies.id',
       to: 'roles.company_id'
@@ -83,14 +83,14 @@ Company.relationMappings = {
 
   surveys: {
     realtion: db.OneToManyRelation,
-    modelClass: __dirname + '/Survey',
+    modelClass: require('./Survey.js'),
     join: 'companies.id',
     to: 'surveys.company_id'
   },
 
   completed_surveys: {
     realtion: db.OneToManyRelation,
-    modelClass: __dirname + '/CompletedSurvey',
+    modelClass: require('./CompletedSurvey.js'),
     join: 'companies.id',
     to: 'completed_surveys.company_id'
   }
