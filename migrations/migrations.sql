@@ -12,18 +12,10 @@ CREATE TABLE companies (
   updated_at timestamptz DEFAULT now()
 );
 
--- role names table
-CREATE TABLE role_names (
-  id bigserial PRIMARY KEY,
-  name varchar(255) UNIQUE NOT NULL,
-  created_at timestamptz DEFAULT now(),
-  updated_at timestamptz DEFAULT now()
-);
-
 -- roles table
 CREATE TABLE roles (
   id bigserial PRIMARY KEY,
-  role_name_id integer REFERENCES role_names,
+  name varchar(255) NOT NULL,
   company_id varchar(50) REFERENCES companies ON DELETE CASCADE,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()

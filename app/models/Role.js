@@ -24,7 +24,7 @@ Role.jsonSchema = {
 
   properties: {
     id            : { type: 'integer' },
-    role_name_id  : { type: 'integer' },
+    name          : { type: 'string' },
     company_id    : { type: 'string' },
     created_at    : { type: 'object' },
     updated_at    : { type: 'object' }
@@ -38,15 +38,6 @@ Role.relationMappings = {
     join: {
       from: 'roles.id',
       to: 'users.role_id'
-    }
-  },
-
-  names: {
-    relation: db.OneToOneRelation,
-    modelClass: require('./RoleName.js'),
-    join: {
-      from: 'roles.role_name_id',
-      to: 'role_names.id'
     }
   },
 
