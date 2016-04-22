@@ -58,12 +58,7 @@ const usersController = (function() {
 
       self.status = 201;
       self.body = {
-<<<<<<< HEAD
         ...model
-=======
-        id: model.id,
-        username: model.username,
->>>>>>> accfb3c53c8526b65a3f91853b15ccd311d331d9
       };
     });
   }
