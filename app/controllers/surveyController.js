@@ -4,7 +4,7 @@ const parse      = require('co-body');
 const R          = require('ramda');
 const returnDate = require('../utils').returnDate;
 const updateDate = require('../utils').updateDate;
-const UUID       = require('uuid-js');
+const uuid       = require('node-uuid');
 
 // Models
 const Survey     = require('../models/Survey');
@@ -48,7 +48,7 @@ const surveysController = (function() {
         company_id: parseInt(request.company_id),
         doc: JSON.parse(JSON.stringify(request.doc)),
         name: request.name || 'Unnamed survey',
-        id: UUID.create().toString()
+        id: uuid.v4()
       }
     );
 
