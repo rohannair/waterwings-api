@@ -2,6 +2,7 @@
 const chalk = require('chalk');
 const parse = require('co-body');
 const R     = require('ramda');
+const uuid = require('node-uuid');
 
 // Models
 const User  = require('../models/User.js');
@@ -52,7 +53,7 @@ const usersController = (function() {
 
     yield User
     .query()
-    .insert(payload)
+    .insert( { id: uuid.v4(), ...payload } )
     .then(function(model) {
       console.log(chalk.green.bold('--- POST', JSON.stringify(model, null, 4)));
 
