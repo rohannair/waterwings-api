@@ -27,7 +27,7 @@ Survey.jsonSchema = {
     name        : { type: 'string', minLength: 1, maxLength: 100 },
     description : { type: 'string', minLength: 1, maxLength: 255 },
     company_id  : { type: 'string' },
-    role_id     : {type: 'integer' },
+    // role_id     : {type: 'integer' },
     doc         : {
                     type: 'object',
                     properties: {

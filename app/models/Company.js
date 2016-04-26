@@ -82,17 +82,21 @@ Company.relationMappings = {
   },
 
   surveys: {
-    realtion: db.OneToManyRelation,
+    relation: db.OneToManyRelation,
     modelClass: require('./Survey.js'),
-    join: 'companies.id',
-    to: 'surveys.company_id'
+    join: {
+      from: 'companies.id',
+      to: 'surveys.company_id'
+    }
   },
 
   completed_surveys: {
-    realtion: db.OneToManyRelation,
+    relation: db.OneToManyRelation,
     modelClass: require('./CompletedSurvey.js'),
-    join: 'companies.id',
-    to: 'completed_surveys.company_id'
+    join: {
+      from: 'companies.id',
+      to: 'completed_surveys.company_id'
+    }
   }
 };
 
