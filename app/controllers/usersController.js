@@ -1,10 +1,10 @@
 // Deps
 const chalk = require('chalk');
 const parse = require('co-body');
-const R     = require('ramda');
+const uuid = require('node-uuid');
 
 // Models
-const User  = require('../models/Users.js');
+const User  = require('../models/User.js');
 
 // Controller
 const usersController = (function() {
@@ -17,19 +17,19 @@ const usersController = (function() {
 
   function* PUT() {
     const request = yield parse(this.req);
-    const payload = R.merge(request, returnDate());
-    const model = yield putUser(payload, parseInt(this.params.id));
+    const model = yield putUser(request, this.params.id);
     console.log(chalk.green.bold('--- PUT', JSON.stringify(model, null, 4)));
     this.body = model;
   }
 
   function* POST() {
     const request = yield parse(this.req);
-    const payload = R.merge(request, returnDate());
-    const result = yield postUser(payload);
+    const result = yield postUser(request);
     console.log(chalk.green.bold('--- POST', JSON.stringify(result, null, 4)));
     this.status = 201;
-    this.body = result;
+    this.body = {
+      ...result
+    };
   }
 
   function* DELETE() {
@@ -40,15 +40,8 @@ const usersController = (function() {
   function* PUT_RESULT() {
     const self = this;
     const body = yield parse(this.req);
-    const payload = R.merge(
-      {
-        survey_results: JSON.parse(JSON.stringify(body.survey_results)),
-      },
-      returnDate(true)
-    );
-
+    const payload = { survey_results: JSON.parse(JSON.stringify(body.survey_results)) };
     console.log(chalk.cyan.bold('body:\n', JSON.stringify(payload, null, 4)), chalk.bgCyan('ID', body.id));
-
     yield User
     .query()
     .patchAndFetchById(body.id, payload)
@@ -72,26 +65,13 @@ const usersController = (function() {
 
 module.exports = usersController;
 
-function returnDate(update) {
-  if (update) {
-    return {
-      updated_at: new Date,
-    };
-  }
-
-  // Parse payload
-  return {
-    created_at: new Date,
-    updated_at: new Date
-  };
-}
-
 function getUser(queryData) {
   return User
           .query()
           .where(queryData)
           .select(
-            'users.id', 'users.email', 'users.first_name', 'users.last_name');
+            'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin'
+          );
 
           //   , 'users.isAdmin', 'c.name as company_name', 'd.name as department_name'
           // )
@@ -105,13 +85,13 @@ function putUser(payload, userId) {
   return User
           .query()
           .patch(payload)
-          .where({ id: userId })
+          .where({ id: userId });
 }
 
 function postUser(payload) {
   return User
           .query()
-          .insert(payload)
+          .insert({ id: uuid.v4(), ...payload } )
           .then((model) => { return ({ message: 'User has been added'}) } )
           .catch((err) => {
             console.error(err);

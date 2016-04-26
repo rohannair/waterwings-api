@@ -4,10 +4,10 @@ const parse      = require('co-body');
 const R          = require('ramda');
 const returnDate = require('../utils').returnDate;
 const updateDate = require('../utils').updateDate;
-const UUID       = require('uuid-js');
+const uuid       = require('node-uuid');
 
 // Models
-const Survey     = require('../models/Surveys');
+const Survey     = require('../models/Survey');
 
 // Controller
 const surveysController = (function() {
@@ -31,7 +31,10 @@ const surveysController = (function() {
     .query()
     .where({id: self.params.id})
     .then(function(resp) {
-      self.body = resp;
+
+      // TODO: Fix this. Why would there be more than 1 returned?
+      // If there are more than 1 ids, this would be an error
+      self.body = resp.length > 1 ? resp : resp[0];
     });
   }
 
@@ -45,7 +48,7 @@ const surveysController = (function() {
         company_id: parseInt(request.company_id),
         doc: JSON.parse(JSON.stringify(request.doc)),
         name: request.name || 'Unnamed survey',
-        id: UUID.create().toString()
+        id: uuid.v4()
       }
     );
 
@@ -73,30 +76,16 @@ const surveysController = (function() {
 
     const request = yield parse(this.req);
     console.log(chalk.blue.bold(JSON.stringify(request, null, 4)));
-    const payload = R.merge(
-      returnDate(),
-      {
-        company_id: parseInt(request.company_id),
-        doc: JSON.parse(JSON.stringify(request.doc)),
-        name: request.name || 'Unnamed survey',
-        id: UUID.create().toString()
-      }
-    );
 
     yield Survey
     .query()
-    .insert(payload)
+    .patch({doc: request.doc})
+    .where({id: self.params.id})
     .then(function(model) {
-      console.log(chalk.green.bold('--- POST', JSON.stringify(model, null, 4)));
-      self.status = 201;
+      console.log(chalk.green.bold('--- PUT', JSON.stringify(model, null, 4)));
       self.body = {
-        message: 'Inserted!',
-        new_survey: {
-          id: model.id,
-          name: model.name,
-          created_at: model.created_at,
-          updated_at: model.updated_at,
-        }
+        message: "Survey Updated",
+        model: model
       };
     });
   }
