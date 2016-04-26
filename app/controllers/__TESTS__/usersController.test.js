@@ -9,52 +9,52 @@ const test = require('tape');
 const User = require('./../../models/Users.js');
 
 // Setup function used to create objects for test.
-// const setup = () => {
-//   return {
-//     createUser: () => {
-//       Need to create a new User in the database to test against
-//                 User
-//                 .query()
-//                 .insert(
-//                   {
-//                     "email": "jordan@golfmail.com",
-//                     "first_name": "Jordan",
-//                     "last_name": "Spieth",
-//                     "isAdmin": false,
-//                     "company_name": "UNDERARMOUR",
-//                     "department_name": "Golfer"
-//                   }
-//                 ).then((user) => {
-//                   return user;
-//                 })
-//                 .catch((err) => {
-//                   return err;
-//                 });
-//     }
-//   };
-  // Ensure that fresh objects are created each time that tests are run
-  // const fixtures = {
-  //   createUser: () =>
-  //
-  // };
-  // return fixtures;
-// };
+const setup = () => {
+  return {
+    createUser: () => {
+      Need to create a new User in the database to test against
+                User
+                .query()
+                .insert(
+                  {
+                    "email": "jordan@golfmail.com",
+                    "first_name": "Jordan",
+                    "last_name": "Spieth",
+                    "isAdmin": false,
+                    "company_name": "UNDERARMOUR",
+                    "department_name": "Golfer"
+                  }
+                ).then((user) => {
+                  return user;
+                })
+                .catch((err) => {
+                  return err;
+                });
+    }
+  };
+  Ensure that fresh objects are created each time that tests are run
+  const fixtures = {
+    createUser: () =>
 
-// const teardown = () => {
-//   return {
-//     deleteUser: (user) => {
-//       User
-//         .delete()
-//         .then((user) => {
-//
-//         });
-//     }
-//   }
-  // Dispose of fixtures here
-  // Need to remove the user I added from the database
-// };
+  };
+  return fixtures;
+};
 
-// Do anything before the tests here
+const teardown = () => {
+  return {
+    deleteUser: (user) => {
+      User
+        .delete()
+        .then((user) => {
+
+        });
+    }
+  }
+  Dispose of fixtures here
+  Need to remove the user I added from the database
+};
+
+Do anything before the tests here
 test('before', (t) => {
 
   t.end();
