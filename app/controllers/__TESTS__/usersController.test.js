@@ -2,87 +2,39 @@
 const app = require('./../../index.js');
 const request = require('supertest')(app.listen());
 const test = require('tape');
-// const sinon = require('sinon');
-// const proxyquire = require('proxyquire');
+const sinon = require('sinon');
+const proxyquire = require('proxyquire');
 
 // Import User Model
-const User = require('./../../models/Users.js');
+const User = require('./../../models/User.js');
 
 // Setup function used to create objects for test.
 const setup = () => {
-  return {
-    createUser: () => {
-      Need to create a new User in the database to test against
-                User
-                .query()
-                .insert(
-                  {
-                    "email": "jordan@golfmail.com",
-                    "first_name": "Jordan",
-                    "last_name": "Spieth",
-                    "isAdmin": false,
-                    "company_name": "UNDERARMOUR",
-                    "department_name": "Golfer"
-                  }
-                ).then((user) => {
-                  return user;
-                })
-                .catch((err) => {
-                  return err;
-                });
-    }
-  };
-  Ensure that fresh objects are created each time that tests are run
-  const fixtures = {
-    createUser: () =>
-
-  };
+  return {};
+  // Ensure that fresh objects are created each time that tests are run
+  const fixtures = {};
   return fixtures;
 };
 
 const teardown = () => {
-  return {
-    deleteUser: (user) => {
-      User
-        .delete()
-        .then((user) => {
-
-        });
-    }
-  }
-  Dispose of fixtures here
-  Need to remove the user I added from the database
+  return {};
+  // Dispose of fixtures here
 };
 
-Do anything before the tests here
-test('before', (t) => {
-
-  t.end();
+// Do anything before the tests here
+test('Set Up tests', (t) => {
+  User.query().where({username: "tester@workmail.com"}).del();
+  t.end()
 });
 
 // Test #1 Make a GET request to the users controller
 test('usersController GET request', (t) => {
-  // console.log(setup().createUser());
-  // console.log()
   request
     .get('/api/v1/users')
-    .query({first_name: 'Rohan'})
+    .query()
     .expect(200)
-    .expect(
-      [
-        {
-          id: "1",
-          email: "r@rohannair.ca",
-          first_name: "Rohan",
-          last_name: "Nair",
-          isAdmin: true,
-          company_name: "QRTRMSTR",
-          department_name: "Executive"
-        }
-      ]
-    )
     .end((err, res) => {
-      if(err) {
+      if(err || res.length < 0) {
         t.fail('GET request test failed');
       } else {
         t.pass('Get request test passed');
@@ -94,31 +46,48 @@ test('usersController GET request', (t) => {
 
 // Test #2: Make a POST request to the users controller
 test('usersController POST request', (t) => {
-  // request
-  //   .post('/api/v1/users')
-  //   .expect(200)
-  //   .end((err, resp) => {
-  //     if(err) {
-  //       t.fail('POST request test Failed');
-  //     } else {
-  //       t.pass('POST request test Passed');
-  //     }
-  //   });
+  request
+    .post('/api/v1/users')
+    .send(
+      {
+        "username": "tester@workmail.com",
+        "password": "password",
+        "is_admin": false,
+        "first_name": "Master",
+        "last_name": "Tester",
+        "personal_email": "tester@testmail.com",
+        "company_id": "3",
+        "role_id": 5
+      }
+    )
+    .expect(201)
+    .end((err, resp) => {
+      if(err) {
+        t.fail('POST request test Failed');
+      } else {
+        t.pass('POST request test Passed');
+      }
+    });
     t.end();
 });
 
 // Test #3: Make a PUT request to the users controller
 test('usersController PUT request', (t) => {
-  // request
-  //   .put('/api/v1/users/1')
-  //   .expect(200)
-  //   .end((err, resp) => {
-  //     if(err) {
-  //       t.fail('PUT request to test Failed');
-  //     } else {
-  //       t.pass('PUT request to test Passed');
-  //     }
-  //   });
+  request
+    .put('/api/v1/users/1')
+    .send(
+      {
+        "first_name": "John"
+      }
+    )
+    .expect(201)
+    .end((err, resp) => {
+      if(err) {
+        t.fail('PUT request to test Failed');
+      } else {
+        t.pass('PUT request to test Passed');
+      }
+    });
     t.end();
 });
 
@@ -154,7 +123,7 @@ test('usersController PUT_RESULT request', (t) => {
 });
 
 // Do anything after the tests here
-test('after', (t) => {
-
-  t.end();
+test('Clean up tests', (t) => {
+  User.query().where({username: "tester@workmail.com"}).del();
+  t.end()
 });

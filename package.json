@@ -14,7 +14,7 @@
     "babel-node": "babel-node --ignore='node_modules'",
     "start": "NODE_ENV=production nodemon --exec npm run babel-node -- ./app/index.js",
     "dev": "nodemon --exec npm run babel-node -- ./app/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "babel-node ./app/controllers/__TESTS__/*.js | tap-spec"
   },
   "author": "Rohan Nair",
   "dependencies": {

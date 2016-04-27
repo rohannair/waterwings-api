@@ -1,7 +1,8 @@
 // Company model
 const db = require('../db');
+const uuid = require('node-uuid');
 
-function Company() {
+export function Company() {
   db.apply(this, arguments);
 }
 
@@ -63,41 +64,73 @@ Company.jsonSchema = {
 };
 
 Company.relationMappings = {
-  employees: {
-    relation: db.OneToManyRelation,
-    modelClass: require('./User.js'),
-    join: {
-      from: 'companies.id',
-      to: 'users.company_id'
-    }
-  },
+  // employees: {
+  //   relation: db.OneToManyRelation,
+  //   modelClass: require('./User.js'),
+  //   join: {
+  //     from: 'companies.id',
+  //     to: 'users.company_id'
+  //   }
+  // },
 
-  roles: {
-    relation: db.OneToManyRelation,
-    modelClass: require('./Role.js'),
-    join: {
-      from: 'companies.id',
-      to: 'roles.company_id'
-    }
-  },
-
-  surveys: {
-    relation: db.OneToManyRelation,
-    modelClass: require('./Survey.js'),
-    join: {
-      from: 'companies.id',
-      to: 'surveys.company_id'
-    }
-  },
-
-  completed_surveys: {
-    relation: db.OneToManyRelation,
-    modelClass: require('./CompletedSurvey.js'),
-    join: {
-      from: 'companies.id',
-      to: 'completed_surveys.company_id'
-    }
-  }
+  // roles: {
+  //   relation: db.OneToManyRelation,
+  //   modelClass: require('./Role.js'),
+  //   join: {
+  //     from: 'companies.id',
+  //     to: 'roles.company_id'
+  //   }
+  // },
+  //
+  // surveys: {
+  //   relation: db.OneToManyRelation,
+  //   modelClass: require('./Survey.js'),
+  //   join: {
+  //     from: 'companies.id',
+  //     to: 'surveys.company_id'
+  //   }
+  // },
+  //
+  // completed_surveys: {
+  //   relation: db.OneToManyRelation,
+  //   modelClass: require('./CompletedSurvey.js'),
+  //   join: {
+  //     from: 'companies.id',
+  //     to: 'completed_surveys.company_id'
+  //   }
+  // }
 };
 
-module.exports = Company;
+export function getCompany(queryData) {
+  return Company
+          .query()
+          .where(queryData)
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
+
+export function postCompany(data) {
+  return Company
+          .query()
+          .insert({ id: uuid.v4(), ...data } )
+          .then((result) => result )
+          .catch((err) => { throw err });
+}
+
+export function putCompany(data, companyId) {
+  return Company
+          .query()
+          .patch(data)
+          .where({ id: companyId })
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
+
+export function deleteCompany(companyId) {
+  return Company
+          .query()
+          .where({ id: companyId })
+          .del()
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
