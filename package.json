@@ -8,8 +8,8 @@
     "node": "4.2.3"
   },
   "scripts": {
-    "db:migrate": "psql -h localhost -p 5432 -d waterwings -U root -f ./migrations/migrations.sql",
-    "db:seed": "psql -h localhost -p 5432 -d waterwings -U root -f ./seeds.sql",
+    "db:migrate": "psql -h localhost -p 5432 -d quartermasterdb -U root -f ./migrations/migrations.sql",
+    "db:seed": "psql -h localhost -p 5432 -d quartermasterdb -U root -f ./seeds.sql",
     "db:createMigration": "knex migrate:make",
     "babel-node": "babel-node --ignore='node_modules'",
     "start": "NODE_ENV=production nodemon --exec npm run babel-node -- ./app/index.js",
