@@ -5,7 +5,7 @@ const knex = require('knex')({
     host     : 'localhost',
     user     : 'root',
     password : 'password',
-    database : 'waterwings',
+    database : 'quartermasterdb',
     charset  : 'utf8'
   },
   pool: {
