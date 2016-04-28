@@ -38,7 +38,7 @@ module.exports = function configure(router) {
   .get('/surveys/:id', surveysController.GET_ONE)
   .post('/surveys', surveysController.POST)
   .put('/surveys/:id', surveysController.PUT)
-  .delete('/survey/:id', surveysController.DELETE)
+  .delete('/surveys/:id', surveysController.DELETE)
 
   // Completed Surveys
   .get('/completedSurveys', completedSurveysController.GET)

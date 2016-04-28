@@ -3,10 +3,10 @@ const app = require('./../../index.js');
 const request = require('supertest')(app.listen());
 const test = require('tape');
 
-// Test #1 Make a GET request to the users controller
-test('usersController GET request', (t) => {
+// Test #1 Make a GET request to the surveys controller
+test('surveysController GET request', (t) => {
   request
-    .get('/api/v1/users')
+    .get('/api/v1/surveys')
     .expect(200)
     .end((err, res) => {
       if(err || res.length < 0) {
@@ -18,21 +18,17 @@ test('usersController GET request', (t) => {
   t.end();
 });
 
-// Test #2: Make a POST request to the users controller
-test('usersController POST request', (t) => {
+// Test #2: Make a POST request to the surveys controller
+test('surveysController POST request', (t) => {
 
   request
-    .post('/api/v1/users')
+    .post('/api/v1/surveys')
     .send(
       {
-        "username": "tester@workmail.com",
-        "password": "password",
-        "is_admin": false,
-        "first_name": "Master",
-        "last_name": "Tester",
-        "personal_email": "tester@testmail.com",
-        "company_id": "3",
-        "role_id": 5
+        "name": "Test Survey",
+        "description": "Test Survey blah blah blah",
+        "company_id": "1",
+        "doc": { "body": "Generic Playbook", "data": { "title": "Welcome to the Company", "Stuff": "Here is some more information" } }
       }
     )
     .expect(201)
@@ -46,13 +42,13 @@ test('usersController POST request', (t) => {
     t.end();
 });
 
-// Test #3: Make a PUT request to the users controller
-test('usersController PUT request', (t) => {
+// Test #3: Make a PUT request to the surveys controller
+test('surveysController PUT request', (t) => {
   request
-    .put('/api/v1/users/1')
+    .put('/api/v1/surveys/1')
     .send(
       {
-        "first_name": "John"
+        "name": "Other Test Survey"
       }
     )
     .expect(200)
@@ -66,10 +62,10 @@ test('usersController PUT request', (t) => {
     t.end();
 });
 
-// Test #4: Make a DELETE request to the users controller
-test('usersController DELETE request', (t) => {
+// Test #4: Make a DELETE request to the surveys controller
+test('surveysController DELETE request', (t) => {
   request
-    .delete('/api/v1/users/1')
+    .delete('/api/v1/surveys/1')
     .expect(403)
     .end((err, resp) => {
       if(err) {

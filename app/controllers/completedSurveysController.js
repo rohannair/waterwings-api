@@ -28,8 +28,8 @@ const completedSurveysController = (function() {
   function* POST() {
     const request = yield parse(this.req);
     // TODO: Need to figure out how survey results will be sent back to database
-    const payload = { survey_results: JSON.parse(JSON.stringify(request.survey_results)) };
-    console.log(chalk.cyan.bold('body:\n', JSON.stringify(payload, null, 4)));
+    const payload = request.results;
+    console.log(chalk.cyan.bold('--- INCOMING REQUEST BODY', JSON.stringify(payload, null, 4)));
     try {
       const result = yield postCompletedSurvey(payload);
       console.log(chalk.green.bold('--- POST', JSON.stringify(result, null, 4)));
