@@ -1,6 +1,7 @@
 // User model
 const db = require('../db');
 const uuid = require('node-uuid');
+const encryptPassword = require('');
 
 export function User() {
   db.apply(this, arguments);
@@ -89,6 +90,8 @@ export function getUser(queryData) {
 }
 
 export function postUser(data) {
+  // Here we need to change the password into a hash
+  const password  =
   return User
           .query()
           .insert({ id: uuid.v4(), ...data } )

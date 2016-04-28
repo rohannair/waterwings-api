@@ -13,10 +13,11 @@ import { User } from '../models/User';
 // Controller
 const loginController = (function() {
 
-  function* PUT() {
+  function* REGISTER() {
     const self    = this;
     const request = yield parse(this.req);
     const salt    = yield bcrypt.genSalt(10);
+
     const hash    = yield bcrypt.hash(request.password, salt);
     const payload = { ...request, password: hash };
 
@@ -29,9 +30,10 @@ const loginController = (function() {
     });
   }
 
-  function* POST() {
+  function* LOGIN() {
     const self    = this;
     const request = yield parse(this.req);
+    
 
     yield User
     .query()
@@ -56,8 +58,8 @@ const loginController = (function() {
   }
 
   return {
-    PUT: PUT,
-    POST: POST,
+    REGISTER: REGISTER,
+    LOGIN: LOGIN
   };
 })();
 
