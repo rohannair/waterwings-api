@@ -7,9 +7,27 @@ import { User } from '../models/User';
 // Controller
 const loginController = (function() {
 
-  function* POST() {
+  function* REGISTER() {
     const self    = this;
     const request = yield parse(this.req);
+    const salt    = yield bcrypt.genSalt(10);
+
+    const hash    = yield bcrypt.hash(request.password, salt);
+    const payload = { ...request, password: hash };
+
+    yield User
+    .query()
+    .insert(payload)
+    .then(function(model) {
+      console.log(chalk.green.bold('--- POST', JSON.stringify(model, null, 4)));
+      self.body = {token: model.token};
+    });
+  }
+
+  function* LOGIN() {
+    const self    = this;
+    const request = yield parse(this.req);
+
 
     yield User
     .query()
@@ -34,7 +52,8 @@ const loginController = (function() {
   }
 
   return {
-    POST: POST
+    REGISTER: REGISTER,
+    LOGIN: LOGIN
   };
 })();
 

@@ -19,7 +19,8 @@ module.exports = function configure(router) {
   router
 
   // Login
-  .post('/login', loginController.POST)
+  .post('/register', loginController.REGISTER)
+  .post('/login', loginController.LOGIN)
 
   // Companies
   .get('/companies', companiesController.GET)

@@ -1,6 +1,7 @@
 // User model
 const db = require('../db');
 const uuid = require('node-uuid');
+const encryptPassword = require('');
 
 function User() {
   db.apply(this, arguments);
