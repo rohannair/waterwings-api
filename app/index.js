@@ -82,10 +82,7 @@ router.use(function* (next) {
 });
 
 // JWT auth needed for API routes
-// router.use(jwt({ secret: 'shared' }).unless({path: [/^\/api\/v1\/login|register|playbooks|submitPlaybook/]}));
-
-
-
+router.use(jwt({ secret: 'shared' }).unless({path: [/^\/api\/v1\/login/]}));
 
 // Generic Response
 app.use(function* (next) {

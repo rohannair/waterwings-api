@@ -49,6 +49,44 @@ $ npm run db:seed
 $ npm start
 ```
 
+## Token Information
+The API now requires tokens in order to return data.
+The only open endpoint without a valid token is
+```bash
+/api/v1/login
+```
+In order to generate a token you must first hit the above endpoint with
+a post request with the following information
+```JSON
+{
+  "username": "user@workmail.com",
+  "password": "password123"
+}
+```
+
+If the username and password are correct the API will return a token the can then be placed in the header of all future requests
+
+The format of the header data is
+```
+key: Authorization
+value: Bearer theTokenGoesHere
+```
+
+## JSON Web Token
+The JWT contains a payload with the following information about the user
+```JSON
+{
+  "userID": "The user's id",
+  "isAdmin": "true of false",
+  "companyId": "The id of the users company"
+}
+```
+
+This information can be accessed in any endpoint in the API by calling
+```javascript
+this.state.user
+```
+
 ## Testing
 To run each test first move into the testing directory
 ```bash
