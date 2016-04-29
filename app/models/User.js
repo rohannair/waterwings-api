@@ -98,7 +98,7 @@ export function getUserwithPassword(queryData) {
           .query()
           .where(queryData)
           .select(
-            'users.id', 'users.username', 'users.password', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
+            'users.id', 'users.username', 'users.password', 'users.first_name', 'users.last_name', 'users.is_admin','users.company_id', 'r.name as rolename'
           )
           .leftJoin('roles as r', 'users.role_id', 'r.id')
           .then((result) => result)
