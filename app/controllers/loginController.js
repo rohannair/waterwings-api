@@ -2,6 +2,7 @@
 const jwt      = require('koa-jwt');
 const parse    = require('co-body');
 const encrypt = require('../utils/encryption');
+const genToken = require('../utils/token');
 
 // Models
 import { User, getUserwithPassword } from '../models/User';
@@ -36,9 +37,9 @@ const loginController = (function() {
       const result = yield encrypt.checkPassword(request.password, user[0].password);
       if(result === false) throw { status: 401, message: 'Wrong password'};
       // If user has been succesfully authenticated return user without the password key
-      delete user[0].password;
+      const token = genToken({userId: user[0].id, isAdmin: user[0].is_admin, companyId: user[0].company_id});
       this.status = 200;
-      this.body = user[0];
+      this.body = token;
     }
     catch(err) {
       console.error(chalk.red.bold('--- POST', JSON.stringify(err, null, 4)));
