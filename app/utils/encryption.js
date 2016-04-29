@@ -14,7 +14,6 @@ function encryptPassword(password, saltRounds = 10) {
 // dbHash is the hashed password in the database
 // returns a boolean depending on the match
 function checkPassword(password, dbHash) {
-  console.log(arguments);
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, dbHash, (err, res) => {
       if (err !== undefined) return resolve(false);
