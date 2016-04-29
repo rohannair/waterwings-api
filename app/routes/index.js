@@ -39,6 +39,7 @@ module.exports = function configure(router) {
   .post('/surveys', surveysController.POST)
   .put('/surveys/:id', surveysController.PUT)
   .delete('/surveys/:id', surveysController.DELETE)
+  .post('/surveys/duplicate', surveysController.DUPLICATE)
 
   // Completed Surveys
   .get('/completedSurveys', completedSurveysController.GET)
