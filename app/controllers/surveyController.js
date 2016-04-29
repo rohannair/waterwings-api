@@ -3,7 +3,7 @@ const chalk      = require('chalk');
 const parse      = require('co-body');
 
 // Models
-import { Survey, getSurvey, postSurvey, putSurvey, deleteSurvey } from '../models/Survey';
+import { Survey, getSurvey, postSurvey, putSurvey, deleteSurvey, duplicateSurvey } from '../models/Survey';
 import { getUser } from '../models/User';
 
 // Controller
@@ -102,12 +102,30 @@ const surveysController = (function() {
 
   }
 
+  function* DUPLICATE() {
+    try {
+      const request = yield parse(this.req);
+      console.log('Request', chalk.cyan.bold(JSON.stringify(request)))
+      const result = yield duplicateSurvey({ id: request.id });
+      this.status = 201;
+      this.body = result;
+    }
+    catch(err) {
+      console.error(chalk.red.bold('--- DUPLICATE', err));
+      this.status = 400;
+      this.body = {
+        message: 'An error has occured.'
+      };
+    };
+  }
+
   return {
     GET       : GET,
     GET_ONE   : GET_ONE,
     POST      : POST,
     PUT       : PUT,
-    DELETE    : DELETE
+    DELETE    : DELETE,
+    DUPLICATE : DUPLICATE
   };
 
 })();

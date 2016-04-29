@@ -1,6 +1,7 @@
 // Surveys model
 const db = require('../db');
 const uuid = require('node-uuid');
+const chalk      = require('chalk');
 
 export function Survey() {
   db.apply(this, arguments);
@@ -11,6 +12,7 @@ Survey.tableName = 'surveys';
 
 Survey.prototype.$beforeInsert = function () {
   this.created_at = new Date().toUTCString();
+  this.updated_at = new Date().toUTCString();
 };
 
 Survey.prototype.$beforeUpdate = function () {
@@ -81,7 +83,7 @@ export function getSurvey(queryData) {
 export function postSurvey(data) {
   return Survey
           .query()
-          .insert({ id: uuid.v4(), ...data } )
+          .insert({ ...data, id: uuid.v4() } )
           .then((result) => result )
           .catch((err) => { throw err });
 }
@@ -102,4 +104,11 @@ export function deleteSurvey(surveyId) {
           .del()
           .then((result) => result)
           .catch((err) => { throw err });
+}
+
+export function duplicateSurvey(surveyId) {
+  return getSurvey(surveyId)
+    .then(data => postSurvey(data[0]))
+    .then((result) => result)
+    .catch((err) => { throw err });
 }
