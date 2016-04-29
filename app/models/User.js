@@ -82,9 +82,14 @@ User.relationMappings = {
 // Database Queries
 
 export function getUser(queryData) {
+  
   return User
           .query()
           .where(queryData)
+          .select(
+            'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
+          )
+          .leftJoin('roles as r', 'users.role_id', 'r.id')
           .then((result) => result)
           .catch((err) => { throw err });
 }
