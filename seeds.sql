@@ -153,9 +153,9 @@ INSERT INTO surveys (id, name, description, company_id, doc) VALUES
 );
 
 INSERT INTO users (id, username, password, is_admin, first_name, last_name, personal_email, company_id, role_id) VALUES
-  (gen_random_uuid(), 'usersname1@email.com', 'password', true, 'Rohan', 'Nair', 'r@rohannair.ca', 1, 1),
-  (gen_random_uuid(), 'usersname2@email.com', 'password', false, 'Ron', 'Swanson', 'rs@parks.rec', 1, 2),
-  (gen_random_uuid(), 'usersname3@email.com', 'password', false, 'Lesley', 'Knope', 'lk@parks.rec', 1, 3),
-  (gen_random_uuid(), 'usersname4@email.com', 'password', false, 'Bruce', 'Wayne', 'bruce@batmail.com', 3, 4),
-  (gen_random_uuid(), 'usersname5@email.com', 'password', false, 'Clark', 'Kent', 'clark@supermail.com', 3, 4),
-  (gen_random_uuid(), 'usersname6@email.com', 'password', false, 'Tony', 'Stark', 'tony@ironmail.com', 4, 5);
+  (gen_random_uuid(), 'usersname1@email.com', crypt('password', gen_salt('bf')), true, 'Rohan', 'Nair', 'r@rohannair.ca', 1, 1),
+  (gen_random_uuid(), 'usersname2@email.com', crypt('password', gen_salt('bf')), false, 'Ron', 'Swanson', 'rs@parks.rec', 1, 2),
+  (gen_random_uuid(), 'usersname3@email.com', crypt('password', gen_salt('bf')), false, 'Lesley', 'Knope', 'lk@parks.rec', 1, 3),
+  (gen_random_uuid(), 'usersname4@email.com', crypt('password', gen_salt('bf')), false, 'Bruce', 'Wayne', 'bruce@batmail.com', 3, 4),
+  (gen_random_uuid(), 'usersname5@email.com', crypt('password', gen_salt('bf')), false, 'Clark', 'Kent', 'clark@supermail.com', 3, 4),
+  (gen_random_uuid(), 'usersname6@email.com', crypt('password', gen_salt('bf')), false, 'Tony', 'Stark', 'tony@ironmail.com', 4, 5);
