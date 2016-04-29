@@ -1,6 +1,7 @@
 // User model
 const db = require('../db');
 const uuid = require('node-uuid');
+const encrypt = require('../utils/encryption');
 
 export function User() {
   db.apply(this, arguments);
@@ -26,7 +27,7 @@ User.jsonSchema = {
   properties: {
     id             : { type: 'string' },
     username       : { type: 'string', minLength: 1, maxLength: 50 },
-    password       : { type: 'string', minLength: 6, maxLength: 50 },
+    password       : { type: 'string', minLength: 6, maxLength: 100 },
     is_admin       : { type: 'boolean' },
     first_name     : { type: 'string', minLength: 1, maxLength: 50 },
     last_name      : { type: 'string', minLength: 1, maxLength: 50 },
@@ -81,12 +82,23 @@ User.relationMappings = {
 // Database Queries
 
 export function getUser(queryData) {
-  
   return User
           .query()
           .where(queryData)
           .select(
             'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
+          )
+          .leftJoin('roles as r', 'users.role_id', 'r.id')
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
+
+export function getUserwithPassword(queryData) {
+  return User
+          .query()
+          .where(queryData)
+          .select(
+            'users.id', 'users.username', 'users.password', 'users.first_name', 'users.last_name', 'users.is_admin','users.company_id', 'r.name as rolename'
           )
           .leftJoin('roles as r', 'users.role_id', 'r.id')
           .then((result) => result)

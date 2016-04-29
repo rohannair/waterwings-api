@@ -1,6 +1,8 @@
 // Deps
 const chalk = require('chalk');
 const parse = require('co-body');
+const encrypt = require('../utils/encryption');
+const bcrypt = require('bcrypt');
 
 // Models and queries
 import { User, getUser, postUser, putUser, deleteUser } from '../models/User';
@@ -27,6 +29,8 @@ const usersController = (function() {
   function* POST() {
     const request = yield parse(this.req);
     try {
+      const hash = yield encrypt.encryptPassword(request.password, 10);
+      request.password = hash
       const result = yield postUser(request);
       console.log(chalk.green.bold('--- POST', JSON.stringify(result, null, 4)));
       this.status = 201;
