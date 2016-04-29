@@ -1,7 +1,7 @@
 // User model
 const db = require('../db');
 const uuid = require('node-uuid');
-const encryptPassword = require('');
+const encrypt = require('../utils/encryption');
 
 function User() {
   db.apply(this, arguments);
@@ -27,7 +27,7 @@ User.jsonSchema = {
   properties: {
     id             : { type: 'string' },
     username       : { type: 'string', minLength: 1, maxLength: 50 },
-    password       : { type: 'string', minLength: 6, maxLength: 50 },
+    password       : { type: 'string', minLength: 6, maxLength: 100 },
     is_admin       : { type: 'boolean' },
     first_name     : { type: 'string', minLength: 1, maxLength: 50 },
     last_name      : { type: 'string', minLength: 1, maxLength: 50 },
@@ -91,6 +91,19 @@ User.getUsers = () => {
           .leftJoin('roles as r', 'users.role_id', 'r.id')
           .orderBy('users.created_at', 'asc')
           .where('users.deleted', '=', 'false')
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
+
+
+User.getUserwithPassword = (queryData) => {
+  return User
+          .query()
+          .where(queryData)
+          .select(
+            'users.id', 'users.username', 'users.password', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
+          )
+          .leftJoin('roles as r', 'users.role_id', 'r.id')
           .then((result) => result)
           .catch((err) => { throw err });
 }
