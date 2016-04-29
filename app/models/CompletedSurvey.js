@@ -1,7 +1,8 @@
 // Completed Surveys model
 const db = require('../db');
+const uuid = require('node-uuid');
 
-function CompletedSurvey() {
+export function CompletedSurvey() {
   db.apply(this, arguments);
 }
 
@@ -40,32 +41,65 @@ CompletedSurvey.jsonSchema = {
 };
 
 CompletedSurvey.relationMappings = {
-  survey: {
-    relation: db.OneToOneRelation,
-    modelClass: require('./Survey.js'),
-    join: {
-      from: 'completed_surveys.survey_id',
-      to: 'surveys.id'
-    }
-  },
-
-  company: {
-    relation: db.OneToOneRelation,
-    modelClass: require('./Company.js'),
-    join: {
-      from: 'completed_surveys.company_id',
-      to: 'companies.id'
-    }
-  },
-
-  user: {
-    relation: db.OneToOneRelation,
-    modelClass: require('./User.js'),
-    join: {
-      from: 'completed_surveys.user_id',
-      to: 'users.id'
-    }
-  }
+  // survey: {
+  //   relation: db.OneToOneRelation,
+  //   modelClass: require('./Survey.js'),
+  //   join: {
+  //     from: 'completed_surveys.survey_id',
+  //     to: 'surveys.id'
+  //   }
+  // },
+  //
+  // company: {
+  //   relation: db.OneToOneRelation,
+  //   modelClass: require('./Company.js'),
+  //   join: {
+  //     from: 'completed_surveys.company_id',
+  //     to: 'companies.id'
+  //   }
+  // },
+  //
+  // user: {
+  //   relation: db.OneToOneRelation,
+  //   modelClass: require('./User.js'),
+  //   join: {
+  //     from: 'completed_surveys.user_id',
+  //     to: 'users.id'
+  //   }
+  // }
 };
 
-module.exports = CompletedSurvey;
+
+export function getCompletedSurvey(queryData) {
+  return CompletedSurvey
+          .query()
+          .where(queryData)
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
+
+export function postCompletedSurvey(data) {
+  return CompletedSurvey
+          .query()
+          .insert({ id: uuid.v4(), ...data } )
+          .then((result) => result )
+          .catch((err) => { throw err });
+}
+
+export function putCompletedSurvey(data, completedSurveyId) {
+  return CompletedSurvey
+          .query()
+          .where({ id: completedSurveyId })
+          .patch(data)
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
+
+export function deleteCompletedSurvey(data, completedSurveyId) {
+  return CompletedSurvey
+          .query()
+          .where({ id: completedSurveyId })
+          .del()
+          .then((result) => result)
+          .catch((err) => { throw err });
+}

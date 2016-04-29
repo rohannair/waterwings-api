@@ -1,7 +1,8 @@
 // User model
 const db = require('../db');
+const uuid = require('node-uuid');
 
-function User() {
+export function User() {
   db.apply(this, arguments);
 }
 
@@ -49,32 +50,71 @@ User.jsonSchema = {
 };
 
 User.relationMappings = {
-  company: {
-    relation: db.OneToOneRelation,
-    modelClass: require('./Company.js'),
-    join: {
-      from: 'users.company_id',
-      to: 'companies.id'
-    }
-  },
-
-  role: {
-    relation: db.OneToOneRelation,
-    modelClass: require('./Role.js'),
-    join: {
-      from: 'users.role_id',
-      to: 'roles.id'
-    }
-  },
-
-  completed_surveys: {
-    relation: db.OneToManyRelation,
-    modelClass: require('./CompletedSurvey.js'),
-    join: {
-      from: 'users.id',
-      to: 'completed_surveys.user_id'
-    }
-  }
+  // company: {
+  //   relation: db.OneToOneRelation,
+  //   modelClass: require('./Company.js'),
+  //   join: {
+  //     from: 'users.company_id',
+  //     to: 'companies.id'
+  //   }
+  // },
+  //
+  // role: {
+  //   relation: db.OneToOneRelation,
+  //   modelClass: require('./Role.js'),
+  //   join: {
+  //     from: 'users.role_id',
+  //     to: 'roles.id'
+  //   }
+  // },
+  //
+  // completed_surveys: {
+  //   relation: db.OneToManyRelation,
+  //   modelClass: require('./CompletedSurvey.js'),
+  //   join: {
+  //     from: 'users.id',
+  //     to: 'completed_surveys.user_id'
+  //   }
+  // }
 };
 
-module.exports = User;
+// Database Queries
+
+export function getUser(queryData) {
+  
+  return User
+          .query()
+          .where(queryData)
+          .select(
+            'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
+          )
+          .leftJoin('roles as r', 'users.role_id', 'r.id')
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
+
+export function postUser(data) {
+  return User
+          .query()
+          .insert({ id: uuid.v4(), ...data } )
+          .then((result) => result )
+          .catch((err) => { throw err });
+}
+
+export function putUser(data, userId) {
+  return User
+          .query()
+          .where({ id: userId })
+          .patch(data)
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
+
+export function deleteUser(userId) {
+  return User
+          .query()
+          .where({ id: userId })
+          .del()
+          .then((result) => result)
+          .catch((err) => { throw err });
+}

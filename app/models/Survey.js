@@ -1,7 +1,8 @@
 // Surveys model
 const db = require('../db');
+const uuid = require('node-uuid');
 
-function Survey() {
+export function Survey() {
   db.apply(this, arguments);
 }
 
@@ -27,7 +28,7 @@ Survey.jsonSchema = {
     name        : { type: 'string', minLength: 1, maxLength: 100 },
     description : { type: 'string', minLength: 1, maxLength: 255 },
     company_id  : { type: 'string' },
-    role_id     : {type: 'integer' },
+    // role_id     : {type: 'integer' },
     doc         : {
                     type: 'object',
                     properties: {
@@ -41,32 +42,64 @@ Survey.jsonSchema = {
 };
 
 Survey.relationMappings = {
-  company: {
-    relation: db.OneToOneRelation,
-    modelClass: require('./Company.js'),
-    join: {
-      from: 'surveys.company_id',
-      to: 'companies.id'
-    }
-  },
-
-  role: {
-    relation: db.OneToOneRelation,
-    modelClass: require('./Role.js'),
-    join: {
-      from: 'surveys.role_id',
-      to: 'roles.id'
-    }
-  },
-
-  completed_surveys: {
-    relation: db.OneToManyRelation,
-    modelClass: require('./CompletedSurvey.js'),
-    join: {
-      from: 'surveys.id',
-      to: 'completed_surveys.survey_id'
-    }
-  }
+  // company: {
+  //   relation: db.OneToOneRelation,
+  //   modelClass: require('./Company.js'),
+  //   join: {
+  //     from: 'surveys.company_id',
+  //     to: 'companies.id'
+  //   }
+  // },
+  //
+  // role: {
+  //   relation: db.OneToOneRelation,
+  //   modelClass: require('./Role.js'),
+  //   join: {
+  //     from: 'surveys.role_id',
+  //     to: 'roles.id'
+  //   }
+  // },
+  //
+  // completed_surveys: {
+  //   relation: db.OneToManyRelation,
+  //   modelClass: require('./CompletedSurvey.js'),
+  //   join: {
+  //     from: 'surveys.id',
+  //     to: 'completed_surveys.survey_id'
+  //   }
+  // }
 };
 
-module.exports = Survey;
+export function getSurvey(queryData) {
+  return Survey
+          .query()
+          .where(queryData)
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
+
+export function postSurvey(data) {
+  return Survey
+          .query()
+          .insert({ id: uuid.v4(), ...data } )
+          .then((result) => result )
+          .catch((err) => { throw err });
+}
+
+export function putSurvey(data, surveyId) {
+  return Survey
+          .query()
+          .where({ id: surveyId })
+          .patch(data)
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
+
+export function deleteSurvey(surveyId) {
+  return Survey
+          .query()
+          .where({ id: surveyId })
+          .del()
+          .then((result) => result)
+          .catch((err) => { throw err });
+}

@@ -1,7 +1,8 @@
 // Role model
 const db = require('../db');
+const uuid = require('node-uuid');
 
-function Role() {
+export function Role() {
   db.apply(this, arguments);
 }
 
@@ -32,32 +33,66 @@ Role.jsonSchema = {
 };
 
 Role.relationMappings = {
-  employees: {
-    relation: db.OneToManyRelation,
-    modelClass: require('./User.js'),
-    join: {
-      from: 'roles.id',
-      to: 'users.role_id'
-    }
-  },
-
-  surveys: {
-    relation: db.OneToManyRelation,
-    modelClass: require('./Survey.js'),
-    join: {
-      from: 'roles.id',
-      to: 'surveys.role_id'
-    }
-  },
-
-  company: {
-    relation: db.OneToOneRelation,
-    modelClass: require('./Company.js'),
-    join: {
-      from: 'roles.company_id',
-      to: 'companies.id'
-    }
-  }
+  // employees: {
+  //   relation: db.OneToManyRelation,
+  //   modelClass: require('./User.js'),
+  //   join: {
+  //     from: 'roles.id',
+  //     to: 'users.role_id'
+  //   }
+  // },
+  //
+  // surveys: {
+  //   relation: db.OneToManyRelation,
+  //   modelClass: require('./Survey.js'),
+  //   join: {
+  //     from: 'roles.id',
+  //     to: 'surveys.role_id'
+  //   }
+  // },
+  //
+  // company: {
+  //   relation: db.OneToOneRelation,
+  //   modelClass: require('./Company.js'),
+  //   join: {
+  //     from: 'roles.company_id',
+  //     to: 'companies.id'
+  //   }
+  // }
 };
 
-module.exports = Role;
+// Database Queries
+
+export function getRole(queryData) {
+  return Role
+          .query()
+          .where(queryData)
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
+
+export function postRole(data) {
+  return Role
+          .query()
+          .insert(data)
+          .then((result) => result )
+          .catch((err) => { throw err });
+}
+
+export function putRole(data, roleId) {
+  return Role
+          .query()
+          .where({ id: roleId })
+          .patch(data)
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
+
+export function deleteRole(roleId) {
+  return Role
+          .query()
+          .where({ id: roleId })
+          .del()
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
