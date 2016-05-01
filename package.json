@@ -10,11 +10,10 @@
   "scripts": {
     "db:migrate": "psql -h localhost -p 5432 -d quartermasterdb -U root -f ./migrations/migrations.sql",
     "db:seed": "psql -h localhost -p 5432 -d quartermasterdb -U root -f ./seeds.sql",
-    "db:createMigration": "knex migrate:make",
-    "babel-node": "babel-node --ignore='node_modules'",
-    "start": "NODE_ENV=production npm run babel-node -- ./app/index.js",
-    "dev": "nodemon --exec npm run babel-node -- ./app/index.js",
-    "test": "babel-node ./app/controllers/__TESTS__/*.test.js | tap-spec"
+    "babel-node": "./node_modules/.bin/babel-node --ignore='node_modules'",
+    "start": "NODE_ENV=production ./node_modules/.bin/npm run babel-node -- ./app/index.js",
+    "dev": "./node_modules/.bin/nodemon --exec npm run babel-node -- ./app/index.js",
+    "test": "./node_modules/.bin/babel-node ./app/controllers/__TESTS__/*.test.js | tap-spec"
   },
   "author": "Rohan Nair",
   "dependencies": {
