@@ -5,10 +5,10 @@ const co       = require('co');
 const chalk    = require('chalk');
 const jwt      = require('koa-jwt');
 const parse    = require('co-body');
-const R        = require('ramda');
+
 
 // Models
-const Member   = require('../models/Members');
+import { User } from '../models/User';
 
 // Controller
 const loginController = (function() {
@@ -18,9 +18,9 @@ const loginController = (function() {
     const request = yield parse(this.req);
     const salt    = yield bcrypt.genSalt(10);
     const hash    = yield bcrypt.hash(request.password, salt);
-    const payload = R.merge(request, {password: hash});
+    const payload = { ...request, password: hash };
 
-    yield Member
+    yield User
     .query()
     .insert(payload)
     .then(function(model) {
@@ -33,7 +33,7 @@ const loginController = (function() {
     const self    = this;
     const request = yield parse(this.req);
 
-    yield Member
+    yield User
     .query()
     .where('email', request.email)
     .then(function(response) {
