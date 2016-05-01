@@ -12,7 +12,7 @@
     "db:seed": "psql -h localhost -p 5432 -d quartermasterdb -U root -f ./seeds.sql",
     "db:createMigration": "knex migrate:make",
     "babel-node": "babel-node --ignore='node_modules'",
-    "start": "NODE_ENV=production nodemon --exec npm run babel-node -- ./app/index.js",
+    "start": "NODE_ENV=production npm run babel-node -- ./app/index.js",
     "dev": "nodemon --exec npm run babel-node -- ./app/index.js",
     "test": "babel-node ./app/controllers/__TESTS__/*.test.js | tap-spec"
   },
