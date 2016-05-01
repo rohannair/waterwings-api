@@ -6,7 +6,7 @@ export PATH=/usr/local/bin:$PATH
 PROJECT=waterwings-api
 ARTIFACT_DIR=/opt/artifacts
 LATEST_FILE=${PROJECT}-latest
-FILES_TO_INCLUDE="*"
+FILES_TO_INCLUDE="."
 FILES_TO_DELETE="node_modules"
 
 usage () {
