@@ -1,8 +1,5 @@
 -- Main File to set schema of database
 
--- load pgcrypto extension to allow postgres to generate uuid's
-CREATE EXTENSION pgcrypto;
-
 -- companies Table
 CREATE TABLE companies (
   id varchar(50) PRIMARY KEY,
