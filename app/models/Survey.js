@@ -1,7 +1,8 @@
 // Surveys model
-const db = require('../db');
-const uuid = require('node-uuid');
-const chalk      = require('chalk');
+const db    = require('../db');
+const uuid  = require('node-uuid');
+const chalk = require('chalk');
+const merge = require('Ramda').merge;
 
 export function Survey() {
   db.apply(this, arguments);
@@ -108,7 +109,8 @@ export function deleteSurvey(surveyId) {
 
 export function duplicateSurvey(surveyId) {
   return getSurvey(surveyId)
-    .then(data => postSurvey(data[0]))
+    .then(data => merge(data[0], { name: data[0].name + ' (Copy)' }))
+    .then(data => postSurvey(data))
     .then((result) => result)
     .catch((err) => { throw err });
 }

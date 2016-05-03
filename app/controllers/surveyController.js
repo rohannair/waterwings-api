@@ -100,7 +100,6 @@ const surveysController = (function() {
   function* DUPLICATE() {
     try {
       const request = yield parse(this.req);
-      console.log('Request', chalk.cyan.bold(JSON.stringify(request)))
       const result = yield duplicateSurvey({ id: request.id });
       this.status = 201;
       this.body = result;
