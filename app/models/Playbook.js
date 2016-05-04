@@ -1,28 +1,27 @@
-// Surveys model
+// Playbooks model
 const db    = require('../db');
 const uuid  = require('node-uuid');
-const chalk = require('chalk');
 const merge = require('Ramda').merge;
 
-export function Survey() {
+export function Playbook() {
   db.apply(this, arguments);
 }
 
-db.extend(Survey);
-Survey.tableName = 'surveys';
+db.extend(Playbook);
+Playbook.tableName = 'playbooks';
 
-Survey.prototype.$beforeInsert = function () {
+Playbook.prototype.$beforeInsert = function () {
   this.created_at = new Date().toUTCString();
   this.updated_at = new Date().toUTCString();
 };
 
-Survey.prototype.$beforeUpdate = function () {
+Playbook.prototype.$beforeUpdate = function () {
   this.updated_at = new Date().toUTCString();
 };
 
 // This is not used to create the database schema it is only used for validation.
 // Whenever a model instance is created it is checked against this schema.
-Survey.jsonSchema = {
+Playbook.jsonSchema = {
   type: 'object',
   require: ['doc'],
 
@@ -44,12 +43,12 @@ Survey.jsonSchema = {
   }
 };
 
-Survey.relationMappings = {
+Playbook.relationMappings = {
   // company: {
   //   relation: db.OneToOneRelation,
   //   modelClass: require('./Company.js'),
   //   join: {
-  //     from: 'surveys.company_id',
+  //     from: 'playbooks.company_id',
   //     to: 'companies.id'
   //   }
   // },
@@ -58,59 +57,59 @@ Survey.relationMappings = {
   //   relation: db.OneToOneRelation,
   //   modelClass: require('./Role.js'),
   //   join: {
-  //     from: 'surveys.role_id',
+  //     from: 'playbooks.role_id',
   //     to: 'roles.id'
   //   }
   // },
   //
-  // completed_surveys: {
+  // completed_playbooks: {
   //   relation: db.OneToManyRelation,
-  //   modelClass: require('./CompletedSurvey.js'),
+  //   modelClass: require('./CompletedPlaybook.js'),
   //   join: {
-  //     from: 'surveys.id',
-  //     to: 'completed_surveys.survey_id'
+  //     from: 'playbooks.id',
+  //     to: 'completed_playbooks.playbook_id'
   //   }
   // }
 };
 
-export function getSurvey(queryData) {
-  return Survey
+export function getPlaybook(queryData) {
+  return Playbook
           .query()
           .where(queryData)
           .then((result) => result)
           .catch((err) => { throw err });
 }
 
-export function postSurvey(data) {
-  return Survey
+export function postPlaybook(data) {
+  return Playbook
           .query()
           .insert({ ...data, id: uuid.v4() } )
           .then((result) => result )
           .catch((err) => { throw err });
 }
 
-export function putSurvey(data, surveyId) {
-  return Survey
+export function putPlaybook(data, playbookId) {
+  return Playbook
           .query()
-          .where({ id: surveyId })
+          .where({ id: playbookId })
           .patch(data)
           .then((result) => result)
           .catch((err) => { throw err });
 }
 
-export function deleteSurvey(surveyId) {
-  return Survey
+export function deletePlaybook(playbookId) {
+  return Playbook
           .query()
-          .where({ id: surveyId })
+          .where({ id: playbookId })
           .del()
           .then((result) => result)
           .catch((err) => { throw err });
 }
 
-export function duplicateSurvey(surveyId) {
-  return getSurvey(surveyId)
+export function duplicatePlaybook(playbookId) {
+  return getPlaybook(playbookId)
     .then(data => merge(data[0], { name: data[0].name + ' (Copy)' }))
-    .then(data => postSurvey(data))
+    .then(data => postPlaybook(data))
     .then((result) => result)
     .catch((err) => { throw err });
 }

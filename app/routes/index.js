@@ -3,8 +3,8 @@ const loginController  = require('../controllers/loginController');
 const companiesController = require('../controllers/companiesController');
 const usersController  = require('../controllers/usersController');
 const rolesController = require('../controllers/rolesController');
-const surveysController = require('../controllers/surveyController');
-const completedSurveysController = require('../controllers/completedSurveysController');
+const playbooksController = require('../controllers/playbooksController');
+const completedPlaybooksController = require('../controllers/completedPlaybooksController');
 
 
 module.exports = function configure(router) {
@@ -33,18 +33,18 @@ module.exports = function configure(router) {
   .put('/roles/:id', rolesController.PUT)
   .delete('/roles/:id', rolesController.DELETE)
 
-  // Surveys
-  .get('/surveys', surveysController.GET)
-  .get('/surveys/:id', surveysController.GET_ONE)
-  .post('/surveys', surveysController.POST)
-  .put('/surveys/:id', surveysController.PUT)
-  .delete('/surveys/:id', surveysController.DELETE)
-  .post('/surveys/duplicate', surveysController.DUPLICATE)
+  // Playbooks
+  .get('/playbooks', playbooksController.GET)
+  .get('/playbooks/:id', playbooksController.GET_ONE)
+  .post('/playbooks', playbooksController.POST)
+  .put('/playbooks/:id', playbooksController.PUT)
+  .delete('/playbooks/:id', playbooksController.DELETE)
+  .post('/playbooks/duplicate', playbooksController.DUPLICATE)
 
-  // Completed Surveys
-  .get('/completedSurveys', completedSurveysController.GET)
-  .post('/completedSurveys', completedSurveysController.POST)
-  .put('/completedSurveys/:id', completedSurveysController.PUT)
-  .delete('/completedSurveys/:id', completedSurveysController.DELETE);
+  // Completed Playbooks
+  .get('/completedPlaybooks', completedPlaybooksController.GET)
+  .post('/completedPlaybooks', completedPlaybooksController.POST)
+  .put('/completedPlaybooks/:id', completedPlaybooksController.PUT)
+  .delete('/completedPlaybooks/:id', completedPlaybooksController.DELETE);
 
 };

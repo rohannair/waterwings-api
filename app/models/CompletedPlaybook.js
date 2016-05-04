@@ -1,31 +1,31 @@
-// Completed Surveys model
+// Completed Playbooks model
 const db = require('../db');
 const uuid = require('node-uuid');
 
-export function CompletedSurvey() {
+export function CompletedPlaybook() {
   db.apply(this, arguments);
 }
 
-db.extend(CompletedSurvey);
-CompletedSurvey.tableName = 'completed_surveys';
+db.extend(CompletedPlaybook);
+CompletedPlaybook.tableName = 'completed_playbooks';
 
-CompletedSurvey.prototype.$beforeInsert = function () {
+CompletedPlaybook.prototype.$beforeInsert = function () {
   this.created_at = new Date().toUTCString();
 };
 
-CompletedSurvey.prototype.$beforeUpdate = function () {
+CompletedPlaybook.prototype.$beforeUpdate = function () {
   this.updated_at = new Date().toUTCString();
 };
 
 // This is not used to create the database schema it is only used for validation.
 // Whenever a model instance is created it is checked against this schema.
-CompletedSurvey.jsonSchema = {
+CompletedPlaybook.jsonSchema = {
   type: 'object',
   require: ['doc'],
 
   properties: {
     id          : { type: 'string' },
-    survey_id   : { type: 'string' },
+    playbook_id   : { type: 'string' },
     user_id     : { type: 'string' },
     company_id  : { type: 'integer' },
     results     : {
@@ -40,13 +40,13 @@ CompletedSurvey.jsonSchema = {
   }
 };
 
-CompletedSurvey.relationMappings = {
-  // survey: {
+CompletedPlaybook.relationMappings = {
+  // playbook: {
   //   relation: db.OneToOneRelation,
-  //   modelClass: require('./Survey.js'),
+  //   modelClass: require('./Playbook.js'),
   //   join: {
-  //     from: 'completed_surveys.survey_id',
-  //     to: 'surveys.id'
+  //     from: 'completed_playbooks.playbook_id',
+  //     to: 'playbooks.id'
   //   }
   // },
   //
@@ -54,7 +54,7 @@ CompletedSurvey.relationMappings = {
   //   relation: db.OneToOneRelation,
   //   modelClass: require('./Company.js'),
   //   join: {
-  //     from: 'completed_surveys.company_id',
+  //     from: 'completed_playbooks.company_id',
   //     to: 'companies.id'
   //   }
   // },
@@ -63,42 +63,42 @@ CompletedSurvey.relationMappings = {
   //   relation: db.OneToOneRelation,
   //   modelClass: require('./User.js'),
   //   join: {
-  //     from: 'completed_surveys.user_id',
+  //     from: 'completed_playbooks.user_id',
   //     to: 'users.id'
   //   }
   // }
 };
 
 
-export function getCompletedSurvey(queryData) {
-  return CompletedSurvey
+export function getCompletedPlaybook(queryData) {
+  return CompletedPlaybook
           .query()
           .where(queryData)
           .then((result) => result)
           .catch((err) => { throw err });
 }
 
-export function postCompletedSurvey(data) {
-  return CompletedSurvey
+export function postCompletedPlaybook(data) {
+  return CompletedPlaybook
           .query()
           .insert({ id: uuid.v4(), ...data } )
           .then((result) => result )
           .catch((err) => { throw err });
 }
 
-export function putCompletedSurvey(data, completedSurveyId) {
-  return CompletedSurvey
+export function putCompletedPlaybook(data, completedPlaybookId) {
+  return CompletedPlaybook
           .query()
-          .where({ id: completedSurveyId })
+          .where({ id: completedPlaybookId })
           .patch(data)
           .then((result) => result)
           .catch((err) => { throw err });
 }
 
-export function deleteCompletedSurvey(data, completedSurveyId) {
-  return CompletedSurvey
+export function deleteCompletedPlaybook(data, completedPlaybookId) {
+  return CompletedPlaybook
           .query()
-          .where({ id: completedSurveyId })
+          .where({ id: completedPlaybookId })
           .del()
           .then((result) => result)
           .catch((err) => { throw err });

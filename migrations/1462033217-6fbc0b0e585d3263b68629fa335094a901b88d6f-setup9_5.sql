@@ -18,8 +18,8 @@ CREATE TABLE roles (
   updated_at timestamptz DEFAULT now()
 );
 
--- surveys table
-CREATE TABLE surveys (
+-- playbooks table
+CREATE TABLE playbooks (
   id varchar(50) PRIMARY KEY,
   name varchar(100) NOT NULL,
   description varchar(255),
@@ -29,7 +29,7 @@ CREATE TABLE surveys (
   updated_at timestamptz DEFAULT now()
 );
 
-CREATE INDEX ON surveys USING GIN (doc);
+CREATE INDEX ON playbooks USING GIN (doc);
 
 -- users table
 CREATE TABLE users (
@@ -49,10 +49,10 @@ CREATE TABLE users (
   updated_at timestamptz DEFAULT now()
 );
 
--- completed_surveys table
-CREATE TABLE completed_surveys (
+-- completed_playbooks table
+CREATE TABLE completed_playbooks (
   id varchar(50) PRIMARY KEY,
-  survey_id varchar(50) REFERENCES surveys,
+  playbook_id varchar(50) REFERENCES playbooks,
   user_id varchar(50) REFERENCES users,
   company_id varchar(50) REFERENCES companies,
   results jsonb,
@@ -60,4 +60,4 @@ CREATE TABLE completed_surveys (
   updated_at timestamptz DEFAULT now()
 );
 
-CREATE INDEX ON completed_surveys USING GIN (results);
+CREATE INDEX ON completed_playbooks USING GIN (results);

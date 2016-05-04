@@ -42,12 +42,12 @@ Role.relationMappings = {
   //   }
   // },
   //
-  // surveys: {
+  // playbooks: {
   //   relation: db.OneToManyRelation,
-  //   modelClass: require('./Survey.js'),
+  //   modelClass: require('./Playbook.js'),
   //   join: {
   //     from: 'roles.id',
-  //     to: 'surveys.role_id'
+  //     to: 'playbooks.role_id'
   //   }
   // },
   //

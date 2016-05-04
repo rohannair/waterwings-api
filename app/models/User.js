@@ -68,12 +68,12 @@ User.relationMappings = {
   //   }
   // },
   //
-  // completed_surveys: {
+  // completed_playbooks: {
   //   relation: db.OneToManyRelation,
-  //   modelClass: require('./CompletedSurvey.js'),
+  //   modelClass: require('./CompletedPlaybook.js'),
   //   join: {
   //     from: 'users.id',
-  //     to: 'completed_surveys.user_id'
+  //     to: 'completed_playbooks.user_id'
   //   }
   // }
 };
@@ -81,7 +81,7 @@ User.relationMappings = {
 // Database Queries
 
 export function getUser(queryData) {
-  
+
   return User
           .query()
           .where(queryData)
