@@ -18,7 +18,7 @@ module.exports = function configure(router) {
   // Companies
   .get('/companies', companiesController.GET)
   .post('/companies', companiesController.POST)
-  .put('/companies', companiesController.PUT)
+  .put('/companies/:id', companiesController.PUT)
   .delete('/companies/:id', companiesController.DELETE)
 
   // Users
