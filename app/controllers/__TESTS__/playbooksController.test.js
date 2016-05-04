@@ -3,10 +3,10 @@ const app = require('./../../index.js');
 const request = require('supertest')(app.listen());
 const test = require('tape');
 
-// Test #1 Make a GET request to the surveys controller
-test('surveysController GET request', (t) => {
+// Test #1 Make a GET request to the playbooks controller
+test('playbooksController GET request', (t) => {
   request
-    .get('/api/v1/surveys')
+    .get('/api/v1/playbooks')
     .expect(200)
     .end((err, res) => {
       if(err || res.length < 0) {
@@ -18,15 +18,15 @@ test('surveysController GET request', (t) => {
   t.end();
 });
 
-// Test #2: Make a POST request to the surveys controller
-test('surveysController POST request', (t) => {
+// Test #2: Make a POST request to the playbooks controller
+test('playbooksController POST request', (t) => {
 
   request
-    .post('/api/v1/surveys')
+    .post('/api/v1/playbooks')
     .send(
       {
-        "name": "Test Survey",
-        "description": "Test Survey blah blah blah",
+        "name": "Test Playbook",
+        "description": "Test Playbook blah blah blah",
         "company_id": "1",
         "doc": { "body": "Generic Playbook", "data": { "title": "Welcome to the Company", "Stuff": "Here is some more information" } }
       }
@@ -42,13 +42,13 @@ test('surveysController POST request', (t) => {
     t.end();
 });
 
-// Test #3: Make a PUT request to the surveys controller
-test('surveysController PUT request', (t) => {
+// Test #3: Make a PUT request to the playbooks controller
+test('playbooksController PUT request', (t) => {
   request
-    .put('/api/v1/surveys/1')
+    .put('/api/v1/playbooks/1')
     .send(
       {
-        "name": "Other Test Survey"
+        "name": "Other Test Playbook"
       }
     )
     .expect(200)
@@ -62,10 +62,10 @@ test('surveysController PUT request', (t) => {
     t.end();
 });
 
-// Test #4: Make a DELETE request to the surveys controller
-test('surveysController DELETE request', (t) => {
+// Test #4: Make a DELETE request to the playbooks controller
+test('playbooksController DELETE request', (t) => {
   request
-    .delete('/api/v1/surveys/1')
+    .delete('/api/v1/playbooks/1')
     .expect(403)
     .end((err, resp) => {
       if(err) {

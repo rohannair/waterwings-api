@@ -1,17 +1,16 @@
 // Deps
-const chalk      = require('chalk');
 const parse      = require('co-body');
 
 // Models
-import { Survey, getSurvey, postSurvey, putSurvey, deleteSurvey, duplicateSurvey } from '../models/Survey';
+import { Playbook, getPlaybook, postPlaybook, putPlaybook, deletePlaybook, duplicatePlaybook } from '../models/Playbook';
 import { getUser } from '../models/User';
 
 // Controller
-const surveysController = (function() {
+const playbooksController = (function() {
 
   function* GET() {
     try {
-      const result = yield getSurvey(this.query);
+      const result = yield getPlaybook(this.query);
       this.status = 200;
       this.body = result;
     }
@@ -26,7 +25,7 @@ const surveysController = (function() {
 
   function* GET_ONE() {
     try {
-      const result = yield getSurvey({ id: this.params.id });
+      const result = yield getPlaybook({ id: this.params.id });
       this.status = 200;
       this.body = result[0];
     }
@@ -42,7 +41,7 @@ const surveysController = (function() {
   function* POST() {
     const request = yield parse(this.req);
     try {
-      const result = yield postSurvey(request);
+      const result = yield postPlaybook(request);
       this.status = 201;
       this.body = result;
     }
@@ -57,9 +56,9 @@ const surveysController = (function() {
 
   function* PUT() {
     const request = yield parse(this.req);
-    console.log(chalk.blue.bold(JSON.stringify(request, null, 4)));
+    this.log.info(JSON.stringify(request));
     try {
-      const result = yield putSurvey(request, this.params.id);
+      const result = yield putPlaybook(request, this.params.id);
       this.status = 200;
       this.body = result;
     }
@@ -73,25 +72,25 @@ const surveysController = (function() {
   }
 
   function* DELETE() {
-    // TODO: Need to determine how we will pass in the id of the survey to be deleted
+    // TODO: Need to determine how we will pass in the id of the playbook to be deleted
     try {
       // TODO: need to check if user is an admin here. I can query them based on their ID,
       // which will be contained in the JSON web token
       const user = yield getUser( {id: 'Something'} );
       if (user.is_admin === true) {
-        const result = yield deleteSurvey('id of survey to be deleted');
+        const result = yield deletePlaybook('id of playbook to be deleted');
         this.status = 201;
         this.body = result;
       }
       else {
-        throw 'Unauthorized user attempted to delete a survey'
+        throw 'Unauthorized user attempted to delete a playbook'
       }
     }
     catch(err) {
       this.log.info(err);
       this.status = 403;
       this.body = {
-        message: 'You are not authorized to delete a survey.'
+        message: 'You are not authorized to delete a playbook.'
       };
     };
 
@@ -100,7 +99,7 @@ const surveysController = (function() {
   function* DUPLICATE() {
     try {
       const request = yield parse(this.req);
-      const result = yield duplicateSurvey({ id: request.id });
+      const result = yield duplicatePlaybook({ id: request.id });
       this.status = 201;
       this.body = result;
     }
@@ -124,4 +123,4 @@ const surveysController = (function() {
 
 })();
 
-module.exports = surveysController;
+module.exports = playbooksController;

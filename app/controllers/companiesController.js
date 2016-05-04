@@ -1,5 +1,4 @@
 // Deps
-const chalk = require('chalk');
 const parse = require('co-body');
 
 // Models

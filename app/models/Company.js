@@ -82,21 +82,21 @@ Company.relationMappings = {
   //   }
   // },
   //
-  // surveys: {
+  // playbooks: {
   //   relation: db.OneToManyRelation,
-  //   modelClass: require('./Survey.js'),
+  //   modelClass: require('./Playbook.js'),
   //   join: {
   //     from: 'companies.id',
-  //     to: 'surveys.company_id'
+  //     to: 'playbooks.company_id'
   //   }
   // },
   //
-  // completed_surveys: {
+  // completed_playbooks: {
   //   relation: db.OneToManyRelation,
-  //   modelClass: require('./CompletedSurvey.js'),
+  //   modelClass: require('./CompletedPlaybook.js'),
   //   join: {
   //     from: 'companies.id',
-  //     to: 'completed_surveys.company_id'
+  //     to: 'completed_playbooks.company_id'
   //   }
   // }
 };

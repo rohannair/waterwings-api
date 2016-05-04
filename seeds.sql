@@ -13,8 +13,8 @@ INSERT INTO roles(name, company_id) VALUES
   ('Superhero', 'OeUMkxw'),
   ('Superhero', 'smYQv0A');
 
-INSERT INTO surveys (id, name, description, company_id, doc) VALUES
-  ('4958cfba-d713-4919-9a80-c124079cf52a', 'ScotiaBank UX Survey', 'Scotia Bank UX survey for new hire', 'hw9AcbY',
+INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
+  ('4958cfba-d713-4919-9a80-c124079cf52a', 'ScotiaBank UX Playbook', 'Scotia Bank UX playbook for new hire', 'hw9AcbY',
   '{
     "0": {
       "slide_number": 0,
