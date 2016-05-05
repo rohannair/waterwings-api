@@ -56,27 +56,11 @@ const companiesController = (function() {
   }
 
   function* DELETE() {
-    const request = yield parse(this.req);
-    try {
-      //  Currently for delete requests we need the UI to send the user's id in the request body
-      // But in the future we can use the token as it will contain the information
-      // About whether a user is an admin or not
-      const user = yield getUser({id: request.userId });
-      if (user.is_admin === true) {
-        const result = yield deleteCompany({id: this.params.id});
-        this.status = 201;
-        this.body = result;
-      }
-      else {
-        throw 'Unauthorized user attempted to delete a company'
-      }
-    }
-    catch(err) {
-      this.log.info(err);
-      this.status = 403;
-      this.body = {
-        message: 'You are not authorized to delete a company.'
-      };
+    // No one should be able to delete a company
+    this.log.info('User attempted to delete a company');
+    this.status = 403;
+    this.body = {
+      message: 'You are not authorized to delete a company.'
     };
   }
 
