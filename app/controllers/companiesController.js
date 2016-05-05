@@ -56,13 +56,14 @@ const companiesController = (function() {
   }
 
   function* DELETE() {
-    // TODO: Need to determine who can delete companies
+    const request = yield parse(this.req);
     try {
-      // TODO: need to check if user is an admin here. I can query them based on their ID,
-      // which will be contained in the JSON web token
-      const user = yield getUser( {id: 'Something'} );
+      //  Currently for delete requests we need the UI to send the user's id in the request body
+      // But in the future we can use the token as it will contain the information
+      // About whether a user is an admin or not
+      const user = yield getUser({id: request.userId });
       if (user.is_admin === true) {
-        const result = yield deleteCompany('id of company to be deleted');
+        const result = yield deleteCompany({id: this.params.id});
         this.status = 201;
         this.body = result;
       }
