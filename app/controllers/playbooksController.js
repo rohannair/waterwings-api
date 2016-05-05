@@ -2,17 +2,17 @@
 const parse      = require('co-body');
 
 // Models
-import { Playbook, getPlaybook, postPlaybook, putPlaybook, duplicatePlaybook } from '../models/Playbook';
-import { getUserByQuery } from '../models/User';
 
 const isAdminCheck = require('./../utils/isAdminCheck');
+
+const Playbook = require('../models/Playbook');
 
 // Controller
 const playbooksController = (function() {
 
   function* GET() {
     try {
-      const result = yield getPlaybook(this.query);
+      const result = yield Playbook.getPlaybook(this.query);
       this.status = 200;
       this.body = result;
     }
@@ -27,7 +27,7 @@ const playbooksController = (function() {
 
   function* GET_ONE() {
     try {
-      const result = yield getPlaybook({ id: this.params.id });
+      const result = yield Playbook.getPlaybook({ id: this.params.id });
       this.status = 200;
       this.body = result[0];
     }
@@ -43,7 +43,7 @@ const playbooksController = (function() {
   function* POST() {
     const request = yield parse(this.req);
     try {
-      const result = yield postPlaybook(request);
+      const result = yield Playbook.postPlaybook(request);
       this.status = 201;
       this.body = result;
     }
@@ -60,7 +60,7 @@ const playbooksController = (function() {
     const request = yield parse(this.req);
     this.log.info(JSON.stringify(request));
     try {
-      const result = yield putPlaybook(request, this.params.id);
+      const result = yield Playbook.putPlaybook(request, this.params.id);
       this.status = 200;
       this.body = result;
     }
@@ -78,7 +78,7 @@ const playbooksController = (function() {
     try {
       const userIsAdmin = yield isAdminCheck(request.userId);
       if (userIsAdmin) {
-        const result = yield putPlaybook({ deleted: true }, this.params.id);
+        const result = yield Playbook.putPlaybook({ deleted: true }, this.params.id);
         this.status = 201;
         this.body = result;
       }
@@ -98,7 +98,7 @@ const playbooksController = (function() {
   function* DUPLICATE() {
     try {
       const request = yield parse(this.req);
-      const result = yield duplicatePlaybook({ id: request.id });
+      const result = yield Playbook.duplicatePlaybook({ id: request.id });
       this.status = 201;
       this.body = result;
     }

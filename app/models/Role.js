@@ -2,7 +2,7 @@
 const db = require('../db');
 const uuid = require('node-uuid');
 
-export function Role() {
+function Role() {
   db.apply(this, arguments);
 }
 
@@ -34,37 +34,37 @@ Role.jsonSchema = {
 };
 
 Role.relationMappings = {
-  // employees: {
-  //   relation: db.OneToManyRelation,
-  //   modelClass: require('./User.js'),
-  //   join: {
-  //     from: 'roles.id',
-  //     to: 'users.role_id'
-  //   }
-  // },
-  //
-  // playbooks: {
-  //   relation: db.OneToManyRelation,
-  //   modelClass: require('./Playbook.js'),
-  //   join: {
-  //     from: 'roles.id',
-  //     to: 'playbooks.role_id'
-  //   }
-  // },
-  //
-  // company: {
-  //   relation: db.OneToOneRelation,
-  //   modelClass: require('./Company.js'),
-  //   join: {
-  //     from: 'roles.company_id',
-  //     to: 'companies.id'
-  //   }
-  // }
+  users: {
+    relation: db.OneToManyRelation,
+    modelClass: __dirname + '/User',
+    join: {
+      from: 'roles.id',
+      to: 'users.role_id'
+    }
+  },
+
+  playbooks: {
+    relation: db.OneToManyRelation,
+    modelClass: __dirname + '/Playbook',
+    join: {
+      from: 'roles.id',
+      to: 'playbooks.role_id'
+    }
+  },
+
+  company: {
+    relation: db.OneToOneRelation,
+    modelClass: __dirname + '/Company',
+    join: {
+      from: 'roles.company_id',
+      to: 'companies.id'
+    }
+  }
 };
 
 // Database Queries
 
-export function getRole(queryData) {
+Role.getRole = (queryData) => {
   return Role
           .query()
           .where(queryData)
@@ -73,7 +73,7 @@ export function getRole(queryData) {
           .catch((err) => { throw err });
 }
 
-export function postRole(data) {
+Role.postRole = (data) => {
   return Role
           .query()
           .insert(data)
@@ -81,7 +81,7 @@ export function postRole(data) {
           .catch((err) => { throw err });
 }
 
-export function putRole(data, roleId) {
+Role.putRole = (data, roleId) => {
   return Role
           .query()
           .where({ id: roleId })
@@ -89,3 +89,5 @@ export function putRole(data, roleId) {
           .then((result) => result)
           .catch((err) => { throw err });
 }
+
+module.exports = Role;

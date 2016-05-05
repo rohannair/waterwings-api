@@ -2,17 +2,14 @@
 const parse = require('co-body');
 
 // Models
-import { Company, getCompany, postCompany, putCompany } from '../models/Company';
-import { getUserByQuery } from '../models/User';
-
-const isAdminCheck = require('./../utils/isAdminCheck');
+const Company = require('../models/Company');
 
 // Controller
 const companiesController = (function() {
 
   function* GET() {
     try {
-      const result = yield getCompany(this.query);
+      const result = yield Company.getCompany(this.query);
       this.status = 200;
       this.body = result;
     }
@@ -28,7 +25,7 @@ const companiesController = (function() {
   function* POST() {
     const request = yield parse(this.req);
     try {
-      const result = yield postCompany(request);
+      const result = yield Company.postCompany(request);
       this.status = 201;
       this.body = result;
     }
@@ -44,7 +41,7 @@ const companiesController = (function() {
   function* PUT() {
     const request = yield parse(this.req);
     try {
-      const result = yield putCompany(request, this.params.id);
+      const result = yield Company.putCompany(request, this.params.id);
       this.status = 200;
       this.body = result;
     }

@@ -2,17 +2,17 @@
 const parse = require('co-body');
 
 // Models and queries
-import { Role, getRole, postRole, putRole } from '../models/Role';
-import { getUserByQuery } from '../models/User';
 
 const isAdminCheck = require('./../utils/isAdminCheck');
+
+const Role = require('../models/Role');
 
 // Controller
 const rolesController = (function() {
 
   function* GET() {
     try {
-      const result = yield getRole(this.query);
+      const result = yield Role.getRole(this.query);
       this.status = 200;
       this.body = result;
     }
@@ -28,7 +28,7 @@ const rolesController = (function() {
   function* POST() {
     const request = yield parse(this.req);
     try {
-      const result = yield postRole(request);
+      const result = yield Role.postRole(request);
       this.status = 201;
       this.body = result;
     }
@@ -44,7 +44,7 @@ const rolesController = (function() {
   function* PUT() {
     const request = yield parse(this.req);
     try {
-      const result = yield putRole(request, this.params.id);
+      const result = yield Role.putRole(request, this.params.id);
       this.status = 200;
       this.body = result;
     }
@@ -62,7 +62,7 @@ const rolesController = (function() {
     try {
       const userIsAdmin = yield isAdminCheck(request.userId);
       if (userIsAdmin) {
-        const result = yield putRole({ deleted: true }, this.params.id);
+        const result = yield Role.putRole({ deleted: true }, this.params.id);
         this.status = 201;
         this.body = result;
       }

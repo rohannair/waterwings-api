@@ -2,7 +2,7 @@
 const db = require('../db');
 const uuid = require('node-uuid');
 
-export function User() {
+function User() {
   db.apply(this, arguments);
 }
 
@@ -51,49 +51,37 @@ User.jsonSchema = {
 };
 
 User.relationMappings = {
-  // company: {
-  //   relation: db.OneToOneRelation,
-  //   modelClass: require('./Company.js'),
-  //   join: {
-  //     from: 'users.company_id',
-  //     to: 'companies.id'
-  //   }
-  // },
-  //
-  // role: {
-  //   relation: db.OneToOneRelation,
-  //   modelClass: require('./Role.js'),
-  //   join: {
-  //     from: 'users.role_id',
-  //     to: 'roles.id'
-  //   }
-  // },
-  //
-  // completed_playbooks: {
-  //   relation: db.OneToManyRelation,
-  //   modelClass: require('./CompletedPlaybook.js'),
-  //   join: {
-  //     from: 'users.id',
-  //     to: 'completed_playbooks.user_id'
-  //   }
-  // }
+  company: {
+    relation: db.OneToOneRelation,
+    modelClass: __dirname + '/Company',
+    join: {
+      from: 'users.company_id',
+      to: 'companies.id'
+    }
+  },
+
+  role: {
+    relation: db.OneToOneRelation,
+    modelClass: __dirname + '/Role',
+    join: {
+      from: 'users.role_id',
+      to: 'roles.id'
+    }
+  },
+
+  completed_playbooks: {
+    relation: db.OneToManyRelation,
+    modelClass: __dirname + '/CompletedPlaybook',
+    join: {
+      from: 'users.id',
+      to: 'completed_playbooks.user_id'
+    }
+  }
 };
 
 // Database Queries
 
-export function getUsers() {
-  return User
-          .query()
-          .select(
-            'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
-          )
-          .leftJoin('roles as r', 'users.role_id', 'r.id')
-          .where('users.deleted', '=', 'false')
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
-
-export function getUserByQuery(queryData) {
+User.getUser = (queryData) => {
   return User
           .query()
           .select(
@@ -106,7 +94,7 @@ export function getUserByQuery(queryData) {
           .catch((err) => { throw err });
 }
 
-export function postUser(data) {
+User.postUser = (data) => {
   return User
           .query()
           .insert({ id: uuid.v4(), ...data } )
@@ -114,7 +102,7 @@ export function postUser(data) {
           .catch((err) => { throw err });
 }
 
-export function putUser(data, userId) {
+User.putUser = (data, userId) => {
   return User
           .query()
           .where({ id: userId })
@@ -122,3 +110,5 @@ export function putUser(data, userId) {
           .then((result) => result)
           .catch((err) => { throw err });
 }
+
+module.exports = User;

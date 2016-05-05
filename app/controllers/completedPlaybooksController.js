@@ -2,17 +2,17 @@
 const parse = require('co-body');
 
 // Model
-import { CompletedPlaybook, getCompletedPlaybook, postCompletedPlaybook, putCompletedPlaybook } from '../models/CompletedPlaybook';
-import { getUserByQuery } from '../models/User';
 
 const isAdminCheck = require('./../utils/isAdminCheck');
+
+const CompletedPlaybook = require('../models/CompletedPlaybook');
 
 // Controller
 const completedPlaybooksController = (function() {
 
   function* GET() {
     try {
-      const result = yield getCompletedPlaybook(this.query);
+      const result = yield CompletedPlaybook.getCompletedPlaybook(this.query);
       this.status = 200;
       this.body = result;
     }
@@ -31,7 +31,7 @@ const completedPlaybooksController = (function() {
     const payload = request.results;
     this.log.info('--- INCOMING REQUEST BODY', JSON.stringify(payload));
     try {
-      const result = yield postCompletedPlaybook(payload);
+      const result = yield CompletedPlaybook.postCompletedPlaybook(payload);
       this.status = 201;
       this.body = result;
     }
@@ -47,7 +47,7 @@ const completedPlaybooksController = (function() {
   function* PUT() {
     const request = yield parse(this.req);
     try {
-      const result = yield putCompletedPlaybook(request, this.params.id);
+      const result = yield CompletedPlaybook.putCompletedPlaybook(request, this.params.id);
       this.status = 200;
       this.body = result;
     }
@@ -65,7 +65,7 @@ const completedPlaybooksController = (function() {
     try {
       const userIsAdmin = yield isAdminCheck(request.userId);
       if (userIsAdmin) {
-        const result = yield putCompletedPlaybook({ deleted: true }, this.params.id);
+        const result = yield CompletedPlaybook.putCompletedPlaybook({ deleted: true }, this.params.id);
         this.status = 201;
         this.body = result;
       }

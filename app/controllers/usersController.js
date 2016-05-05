@@ -1,17 +1,16 @@
 // Deps
 const parse = require('co-body');
 
-// Models and queries
-import { User, getUsers, getUserByQuery, postUser, putUser } from '../models/User';
-
 const isAdminCheck = require('./../utils/isAdminCheck');
+
+const User = require('../models/User');
 
 // Controller
 const usersController = (function() {
 
   function* GET() {
     try {
-      const result = yield getUsers();
+      const result = yield User.getUsers();
       this.status = 200;
       this.body = result;
     }
@@ -26,7 +25,7 @@ const usersController = (function() {
 
   function* GET_ONE() {
     try {
-      const result = yield getUserByQuery(this.params.id);
+      const result = yield User.getUserByQuery(this.params.id);
       this.status = 200;
       this.body = result[0];
     }
@@ -42,7 +41,7 @@ const usersController = (function() {
   function* POST() {
     const request = yield parse(this.req);
     try {
-      const result = yield postUser(request);
+      const result = yield User.postUser(request);
       this.status = 201;
       this.body = result;
     }
@@ -58,7 +57,7 @@ const usersController = (function() {
   function* PUT() {
     const request = yield parse(this.req);
     try {
-      const result = yield putUser(request, this.params.id);
+      const result = yield User.putUser(request, this.params.id);
       this.status = 200;
       this.body = result;
     }
@@ -74,9 +73,9 @@ const usersController = (function() {
   function* DELETE() {
     const request = yield parse(this.req);
     try {
-      const userIsAdmin = yield isAdminCheck(request.userId);
-      if (userIsAdmin) {
-        const result = yield putUser({ deleted: true }, this.params.id);
+        const userIsAdmin = yield isAdminCheck(request.userId);
+        if (userIsAdmin) {
+        const result = yield User.deleteUser('id of user to be deleted');
         this.status = 201;
         this.body = result;
       }
