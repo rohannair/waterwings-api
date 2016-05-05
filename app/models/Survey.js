@@ -41,23 +41,23 @@ Survey.jsonSchema = {
 };
 
 Survey.relationMappings = {
-  company: {
-    relation: db.OneToOneRelation,
-    modelClass: require('./Company.js'),
-    join: {
-      from: 'surveys.company_id',
-      to: 'companies.id'
-    }
-  },
+  // company: {
+  //   relation: db.OneToOneRelation,
+  //   modelClass: require('./Company.js'),
+  //   join: {
+  //     from: 'surveys.company_id',
+  //     to: 'companies.id'
+  //   }
+  // },
 
-  role: {
-    relation: db.OneToOneRelation,
-    modelClass: require('./Role.js'),
-    join: {
-      from: 'surveys.role_id',
-      to: 'roles.id'
-    }
-  },
+  // role: {
+  //   relation: db.OneToOneRelation,
+  //   modelClass: require('./Role.js'),
+  //   join: {
+  //     from: 'surveys.role_id',
+  //     to: 'roles.id'
+  //   }
+  // },
 
   completed_surveys: {
     relation: db.OneToManyRelation,
