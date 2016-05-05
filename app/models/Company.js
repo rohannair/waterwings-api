@@ -59,7 +59,8 @@ Company.jsonSchema = {
                       additionalProperties: true
                     },
     created_at    : { type: 'object' },
-    updated_at    : { type: 'object' }
+    updated_at    : { type: 'object' },
+    deleted       : { type: 'boolean' }
   }
 };
 
@@ -105,6 +106,7 @@ export function getCompany(queryData) {
   return Company
           .query()
           .where(queryData)
+          .where('companies.deleted', '=', 'false')
           .then((result) => result)
           .catch((err) => { throw err });
 }
@@ -122,15 +124,6 @@ export function putCompany(data, companyId) {
           .query()
           .patch(data)
           .where({ id: companyId })
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
-
-export function deleteCompany(companyId) {
-  return Company
-          .query()
-          .where({ id: companyId })
-          .del()
           .then((result) => result)
           .catch((err) => { throw err });
 }

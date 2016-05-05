@@ -45,7 +45,8 @@ User.jsonSchema = {
     company_id     : { type: 'string' },
     role_id        : { type: 'integer' },
     created_at     : { type: 'object' },
-    updated_at     : { type: 'object' }
+    updated_at     : { type: 'object' },
+    deleted        : { type: 'boolean' }
   }
 };
 
@@ -118,15 +119,6 @@ export function putUser(data, userId) {
           .query()
           .where({ id: userId })
           .patch(data)
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
-
-export function deleteUser(userId) {
-  return User
-          .query()
-          .where({ id: userId })
-          .patch({ deleted: true })
           .then((result) => result)
           .catch((err) => { throw err });
 }

@@ -2,8 +2,8 @@
 const parse = require('co-body');
 
 // Models and queries
-import { Role, getRole, postRole, putRole, deleteRole } from '../models/Role';
-import { getUser } from '../models/User';
+import { Role, getRole, postRole, putRole } from '../models/Role';
+import { getUserByQuery } from '../models/User';
 
 // Controller
 const rolesController = (function() {
@@ -56,18 +56,16 @@ const rolesController = (function() {
   }
 
   function* DELETE() {
-    // TODO: Need to determine how we will pass in the id of the role to be deleted
+    const request = yield parse(this.req);
     try {
-      // TODO: need to check if user is an admin here. I can query them based on their ID,
-      // which will be contained in the JSON web token
-      const user = yield getUser( {id: 'Something'} );
-      if (user.is_admin === true) {
-        const result = yield deleteRole('id of role to be deleted');
+      const user = yield getUserByQuery(request.userId);
+      if (user[0].is_admin === true) {
+        const result = yield putRole({ deleted: true }, this.params.id);
         this.status = 201;
         this.body = result;
       }
       else {
-        throw 'Unauthorized user attempted to delete a role'
+        throw 'Unauthorized user attempted to delete a a role'
       }
     }
     catch(err) {
@@ -76,7 +74,7 @@ const rolesController = (function() {
       this.body = {
         message: 'You are not authorized to delete a role.'
       };
-    };
+    }
   }
 
   return {

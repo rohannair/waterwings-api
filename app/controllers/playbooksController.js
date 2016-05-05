@@ -2,8 +2,8 @@
 const parse      = require('co-body');
 
 // Models
-import { Playbook, getPlaybook, postPlaybook, putPlaybook, deletePlaybook, duplicatePlaybook } from '../models/Playbook';
-import { getUser } from '../models/User';
+import { Playbook, getPlaybook, postPlaybook, putPlaybook, duplicatePlaybook } from '../models/Playbook';
+import { getUserByQuery } from '../models/User';
 
 // Controller
 const playbooksController = (function() {
@@ -72,18 +72,16 @@ const playbooksController = (function() {
   }
 
   function* DELETE() {
-    // TODO: Need to determine how we will pass in the id of the playbook to be deleted
+    const request = yield parse(this.req);
     try {
-      // TODO: need to check if user is an admin here. I can query them based on their ID,
-      // which will be contained in the JSON web token
-      const user = yield getUser( {id: 'Something'} );
-      if (user.is_admin === true) {
-        const result = yield deletePlaybook('id of playbook to be deleted');
+      const user = yield getUserByQuery(request.userId);
+      if (user[0].is_admin === true) {
+        const result = yield putPlaybook({ deleted: true }, this.params.id);
         this.status = 201;
         this.body = result;
       }
       else {
-        throw 'Unauthorized user attempted to delete a playbook'
+        throw 'Unauthorized user attempted to delete a a playbook'
       }
     }
     catch(err) {
@@ -92,8 +90,7 @@ const playbooksController = (function() {
       this.body = {
         message: 'You are not authorized to delete a playbook.'
       };
-    };
-
+    }
   }
 
   function* DUPLICATE() {

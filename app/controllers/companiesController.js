@@ -2,8 +2,8 @@
 const parse = require('co-body');
 
 // Models
-import { Company, getCompany, postCompany, putCompany, deleteCompany } from '../models/Company';
-import { getUser } from '../models/User';
+import { Company, getCompany, postCompany, putCompany } from '../models/Company';
+import { getUserByQuery } from '../models/User';
 
 // Controller
 const companiesController = (function() {
