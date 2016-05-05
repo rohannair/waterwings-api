@@ -1,21 +1,20 @@
 -- Seed file for database
 
 INSERT INTO companies(id, name, address) VALUES
-  (1, 'QRTRMSTR', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "CA"}'),
-  (2, 'Scotia Bank', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "CA"}'),
-  (3, 'The Justice League', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "USA"}'),
-  (4, 'The Avengers', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "USA"}');
+  ('nGLHsVI', 'QRTRMSTR', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "CA"}'),
+  ('hw9AcbY', 'Scotia Bank', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "CA"}'),
+  ('OeUMkxw', 'The Justice League', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "USA"}'),
+  ('smYQv0A', 'The Avengers', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "USA"}');
 
 INSERT INTO roles(name, company_id) VALUES
-  ('Executive', 1),
-  ('Marketer', 1),
-  ('Developer', 1),
-  ('Superhero', 3),
-  ('Superhero', 4);
+  ('Executive', 'nGLHsVI'),
+  ('Marketer', 'nGLHsVI'),
+  ('Developer', 'nGLHsVI'),
+  ('Superhero', 'OeUMkxw'),
+  ('Superhero', 'smYQv0A');
 
-INSERT INTO surveys (id, name, description, company_id, doc) VALUES
-  (gen_random_uuid(), 'Generic Playbook','Generic Onboarding Playbook', 1, '{ "body": "Generic Playbook", "data": { "title": "Welcome to the Company", "Stuff": "Here is some more information" } }'),
-  (gen_random_uuid(), 'ScotiaBank UX Survey', 'Scotia Bank UX survey for new hire', 2,
+INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
+  ('4958cfba-d713-4919-9a80-c124079cf52a', 'ScotiaBank UX Playbook', 'Scotia Bank UX playbook for new hire', 'hw9AcbY',
   '{
     "0": {
       "slide_number": 0,
@@ -25,7 +24,10 @@ INSERT INTO surveys (id, name, description, company_id, doc) VALUES
     },
     "1": {
       "slide_number": 1,
-      "type": "bio"
+      "type": "bio",
+      "body": {
+        "heading": "Biography"
+      }
     },
     "2": {
       "slide_number": 2,
@@ -153,9 +155,9 @@ INSERT INTO surveys (id, name, description, company_id, doc) VALUES
 );
 
 INSERT INTO users (id, username, password, is_admin, first_name, last_name, personal_email, company_id, role_id) VALUES
-  (gen_random_uuid(), 'usersname1@email.com', 'password', true, 'Rohan', 'Nair', 'r@rohannair.ca', 1, 1),
-  (gen_random_uuid(), 'usersname2@email.com', 'password', false, 'Ron', 'Swanson', 'rs@parks.rec', 1, 2),
-  (gen_random_uuid(), 'usersname3@email.com', 'password', false, 'Lesley', 'Knope', 'lk@parks.rec', 1, 3),
-  (gen_random_uuid(), 'usersname4@email.com', 'password', false, 'Bruce', 'Wayne', 'bruce@batmail.com', 3, 4),
-  (gen_random_uuid(), 'usersname5@email.com', 'password', false, 'Clark', 'Kent', 'clark@supermail.com', 3, 4),
-  (gen_random_uuid(), 'usersname6@email.com', 'password', false, 'Tony', 'Stark', 'tony@ironmail.com', 4, 5);
+  ('a4bd224f-9aa6-4f15-b3c9-cb7551cd797f', 'usersname1@email.com', 'password', true, 'Rohan', 'Nair', 'r@rohannair.ca', 'nGLHsVI', 1),
+  ('a24b4195-4a49-450b-9b30-81632ef4c245', 'usersname2@email.com', 'password', false, 'Ron', 'Swanson', 'rs@parks.rec', 'nGLHsVI', 2),
+  ('2bd3d5b7-e013-40af-b236-770844e55124', 'usersname3@email.com', 'password', false, 'Lesley', 'Knope', 'lk@parks.rec', 'nGLHsVI', 3),
+  ('376e0300-22d4-4d66-ad31-caf91882964d', 'usersname4@email.com', 'password', false, 'Bruce', 'Wayne', 'bruce@batmail.com', 'OeUMkxw', 4),
+  ('4f0eefc6-dbee-4974-bacb-9f02c112718e', 'usersname5@email.com', 'password', false, 'Clark', 'Kent', 'clark@supermail.com', 'OeUMkxw', 4),
+  ('2f55e067-776e-4d11-817a-9a9c456dddc9', 'usersname6@email.com', 'password', false, 'Tony', 'Stark', 'tony@ironmail.com', 'smYQv0A', 5);

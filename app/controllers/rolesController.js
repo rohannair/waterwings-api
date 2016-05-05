@@ -2,14 +2,15 @@
 const parse = require('co-body');
 
 // Models and queries
-import { User, getUser, postUser, putUser, deleteUser } from '../models/User';
+import { Role, getRole, postRole, putRole, deleteRole } from '../models/Role';
+import { getUser } from '../models/User';
 
 // Controller
-const usersController = (function() {
+const rolesController = (function() {
 
   function* GET() {
     try {
-      const result = yield getUser(this.query);
+      const result = yield getRole(this.query);
       this.status = 200;
       this.body = result;
     }
@@ -25,7 +26,7 @@ const usersController = (function() {
   function* POST() {
     const request = yield parse(this.req);
     try {
-      const result = yield postUser(request);
+      const result = yield postRole(request);
       this.status = 201;
       this.body = result;
     }
@@ -41,7 +42,7 @@ const usersController = (function() {
   function* PUT() {
     const request = yield parse(this.req);
     try {
-      const result = yield putUser(request, this.params.id);
+      const result = yield putRole(request, this.params.id);
       this.status = 200;
       this.body = result;
     }
@@ -55,25 +56,25 @@ const usersController = (function() {
   }
 
   function* DELETE() {
-    // TODO: Need to determine how we will pass in the id of the user to be deleted
+    // TODO: Need to determine how we will pass in the id of the role to be deleted
     try {
       // TODO: need to check if user is an admin here. I can query them based on their ID,
       // which will be contained in the JSON web token
       const user = yield getUser( {id: 'Something'} );
       if (user.is_admin === true) {
-        const result = yield deleteUser('id of user to be deleted');
+        const result = yield deleteRole('id of role to be deleted');
         this.status = 201;
         this.body = result;
       }
       else {
-        throw 'Unauthorized user attempted to delete another user'
+        throw 'Unauthorized user attempted to delete a role'
       }
     }
     catch(err) {
       this.log.info(err);
       this.status = 403;
       this.body = {
-        message: 'You are not authorized to delete a user.'
+        message: 'You are not authorized to delete a role.'
       };
     };
   }
@@ -86,4 +87,4 @@ const usersController = (function() {
   };
 })();
 
-module.exports = usersController;
+module.exports = rolesController;

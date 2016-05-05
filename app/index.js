@@ -2,11 +2,11 @@
 const chalk   = require('chalk');
 const cors    = require('koa-cors');
 const Koa     = require('koa');
-const logger  = require('koa-logger');
 const Router  = require('koa-router');
 const bouncer = require('koa-bouncer');
 const jwt     = require('koa-jwt');
 const unless  = require('koa-unless');
+const logger = require('./utils/logger');
 
 // Instantiate app
 const app     = module.exports = Koa();
@@ -35,8 +35,19 @@ app
   .use(router.allowedMethods());
 
 // Logger
-app.use(logger());
-router.use(logger());
+
+// Add logger to app
+router.use(function* (next) {
+  this.log = logger;
+  yield* next;
+});
+
+// Log both incoming requests and outgoing responses
+router.use(function* (next) {
+  this.log.info('REQUEST: ' + this.request.method + ' ' + this.request.url);
+  yield* next;
+  this.log.info('RESPONSE: ' + this.response.status);
+});
 
 // Other middleware
 router.use(bouncer.middleware());
@@ -61,7 +72,7 @@ router.use(function* (next) {
 });
 
 // JWT auth needed for API routes
-// router.use(jwt({ secret: 'shared' }).unless({path: [/^\/api\/v1\/login|register|surveys|submitSurvey/]}));
+// router.use(jwt({ secret: 'shared' }).unless({path: [/^\/api\/v1\/login|register|playbooks|submitPlaybook/]}));
 
 // Generic Response
 app.use(function* (next) {

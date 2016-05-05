@@ -1,15 +1,16 @@
 // Deps
 const parse = require('co-body');
 
-// Models and queries
-import { User, getUser, postUser, putUser, deleteUser } from '../models/User';
+// Models
+import { Company, getCompany, postCompany, putCompany, deleteCompany } from '../models/Company';
+import { getUser } from '../models/User';
 
 // Controller
-const usersController = (function() {
+const companiesController = (function() {
 
   function* GET() {
     try {
-      const result = yield getUser(this.query);
+      const result = yield getCompany(this.query);
       this.status = 200;
       this.body = result;
     }
@@ -25,7 +26,7 @@ const usersController = (function() {
   function* POST() {
     const request = yield parse(this.req);
     try {
-      const result = yield postUser(request);
+      const result = yield postCompany(request);
       this.status = 201;
       this.body = result;
     }
@@ -41,7 +42,7 @@ const usersController = (function() {
   function* PUT() {
     const request = yield parse(this.req);
     try {
-      const result = yield putUser(request, this.params.id);
+      const result = yield putCompany(request, this.params.id);
       this.status = 200;
       this.body = result;
     }
@@ -55,25 +56,25 @@ const usersController = (function() {
   }
 
   function* DELETE() {
-    // TODO: Need to determine how we will pass in the id of the user to be deleted
+    // TODO: Need to determine who can delete companies
     try {
       // TODO: need to check if user is an admin here. I can query them based on their ID,
       // which will be contained in the JSON web token
       const user = yield getUser( {id: 'Something'} );
       if (user.is_admin === true) {
-        const result = yield deleteUser('id of user to be deleted');
+        const result = yield deleteCompany('id of company to be deleted');
         this.status = 201;
         this.body = result;
       }
       else {
-        throw 'Unauthorized user attempted to delete another user'
+        throw 'Unauthorized user attempted to delete a company'
       }
     }
     catch(err) {
       this.log.info(err);
       this.status = 403;
       this.body = {
-        message: 'You are not authorized to delete a user.'
+        message: 'You are not authorized to delete a company.'
       };
     };
   }
@@ -86,4 +87,4 @@ const usersController = (function() {
   };
 })();
 
-module.exports = usersController;
+module.exports = companiesController;
