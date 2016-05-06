@@ -45,7 +45,8 @@ User.jsonSchema = {
     company_id     : { type: 'string' },
     role_id        : { type: 'integer' },
     created_at     : { type: 'object' },
-    updated_at     : { type: 'object' }
+    updated_at     : { type: 'object' },
+    deleted        : { type: 'boolean' }
   }
 };
 
@@ -80,15 +81,27 @@ User.relationMappings = {
 
 // Database Queries
 
-export function getUser(queryData) {
-
+export function getUsers() {
   return User
           .query()
-          .where(queryData)
           .select(
             'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
           )
           .leftJoin('roles as r', 'users.role_id', 'r.id')
+          .where('users.deleted', '=', 'false')
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
+
+export function getUserByQuery(queryData) {
+  return User
+          .query()
+          .select(
+            'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
+          )
+          .leftJoin('roles as r', 'users.role_id', 'r.id')
+          .where('users.id', '=', `${queryData}`)
+          .where('users.deleted', '=', 'false')
           .then((result) => result)
           .catch((err) => { throw err });
 }
@@ -106,15 +119,6 @@ export function putUser(data, userId) {
           .query()
           .where({ id: userId })
           .patch(data)
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
-
-export function deleteUser(userId) {
-  return User
-          .query()
-          .where({ id: userId })
-          .del()
           .then((result) => result)
           .catch((err) => { throw err });
 }

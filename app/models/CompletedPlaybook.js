@@ -36,7 +36,8 @@ CompletedPlaybook.jsonSchema = {
                     additionalProperties: true
                   },
     created_at    : { type: 'object' },
-    updated_at    : { type: 'object' }
+    updated_at    : { type: 'object' },
+    deleted       : { type: 'boolean' }
   }
 };
 
@@ -74,6 +75,7 @@ export function getCompletedPlaybook(queryData) {
   return CompletedPlaybook
           .query()
           .where(queryData)
+          .where('completed_playbooks.deleted', '=', 'false')
           .then((result) => result)
           .catch((err) => { throw err });
 }
@@ -91,15 +93,6 @@ export function putCompletedPlaybook(data, completedPlaybookId) {
           .query()
           .where({ id: completedPlaybookId })
           .patch(data)
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
-
-export function deleteCompletedPlaybook(data, completedPlaybookId) {
-  return CompletedPlaybook
-          .query()
-          .where({ id: completedPlaybookId })
-          .del()
           .then((result) => result)
           .catch((err) => { throw err });
 }

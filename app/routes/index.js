@@ -23,6 +23,7 @@ module.exports = function configure(router) {
 
   // Users
   .get('/users', usersController.GET)
+  .get('/users/:id', usersController.GET_ONE)
   .post('/users', usersController.POST)
   .put('/users/:id', usersController.PUT)
   .delete('/users/:id', usersController.DELETE)

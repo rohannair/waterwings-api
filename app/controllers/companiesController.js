@@ -2,8 +2,10 @@
 const parse = require('co-body');
 
 // Models
-import { Company, getCompany, postCompany, putCompany, deleteCompany } from '../models/Company';
-import { getUser } from '../models/User';
+import { Company, getCompany, postCompany, putCompany } from '../models/Company';
+import { getUserByQuery } from '../models/User';
+
+const isAdminCheck = require('./../utils/isAdminCheck');
 
 // Controller
 const companiesController = (function() {
@@ -56,26 +58,11 @@ const companiesController = (function() {
   }
 
   function* DELETE() {
-    // TODO: Need to determine who can delete companies
-    try {
-      // TODO: need to check if user is an admin here. I can query them based on their ID,
-      // which will be contained in the JSON web token
-      const user = yield getUser( {id: 'Something'} );
-      if (user.is_admin === true) {
-        const result = yield deleteCompany('id of company to be deleted');
-        this.status = 201;
-        this.body = result;
-      }
-      else {
-        throw 'Unauthorized user attempted to delete a company'
-      }
-    }
-    catch(err) {
-      this.log.info(err);
-      this.status = 403;
-      this.body = {
-        message: 'You are not authorized to delete a company.'
-      };
+    // No one should be able to delete a company
+    this.log.info('User attempted to delete a company');
+    this.status = 403;
+    this.body = {
+      message: 'Not Able to Delete'
     };
   }
 

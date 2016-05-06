@@ -28,7 +28,8 @@ Role.jsonSchema = {
     name          : { type: 'string' },
     company_id    : { type: 'string' },
     created_at    : { type: 'object' },
-    updated_at    : { type: 'object' }
+    updated_at    : { type: 'object' },
+    deleted       : { type: 'boolean' }
   }
 };
 
@@ -67,6 +68,7 @@ export function getRole(queryData) {
   return Role
           .query()
           .where(queryData)
+          .where('roles.deleted', '=', 'false')
           .then((result) => result)
           .catch((err) => { throw err });
 }
@@ -84,15 +86,6 @@ export function putRole(data, roleId) {
           .query()
           .where({ id: roleId })
           .patch(data)
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
-
-export function deleteRole(roleId) {
-  return Role
-          .query()
-          .where({ id: roleId })
-          .del()
           .then((result) => result)
           .catch((err) => { throw err });
 }
