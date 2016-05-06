@@ -5,6 +5,8 @@ const parse = require('co-body');
 import { Role, getRole, postRole, putRole } from '../models/Role';
 import { getUserByQuery } from '../models/User';
 
+const isAdminCheck = require('./../utils/isAdminCheck');
+
 // Controller
 const rolesController = (function() {
 
@@ -58,8 +60,8 @@ const rolesController = (function() {
   function* DELETE() {
     const request = yield parse(this.req);
     try {
-      const user = yield getUserByQuery(request.userId);
-      if (user[0].is_admin === true) {
+      const userIsAdmin = yield isAdminCheck(request.userId);
+      if (userIsAdmin) {
         const result = yield putRole({ deleted: true }, this.params.id);
         this.status = 201;
         this.body = result;
@@ -72,7 +74,7 @@ const rolesController = (function() {
       this.log.info(err);
       this.status = 403;
       this.body = {
-        message: 'You are not authorized to delete a role.'
+        message: 'Not Able to Delete'
       };
     }
   }

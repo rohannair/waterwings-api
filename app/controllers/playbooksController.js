@@ -5,6 +5,8 @@ const parse      = require('co-body');
 import { Playbook, getPlaybook, postPlaybook, putPlaybook, duplicatePlaybook } from '../models/Playbook';
 import { getUserByQuery } from '../models/User';
 
+const isAdminCheck = require('./../utils/isAdminCheck');
+
 // Controller
 const playbooksController = (function() {
 
@@ -74,8 +76,8 @@ const playbooksController = (function() {
   function* DELETE() {
     const request = yield parse(this.req);
     try {
-      const user = yield getUserByQuery(request.userId);
-      if (user[0].is_admin === true) {
+      const userIsAdmin = yield isAdminCheck(request.userId);
+      if (userIsAdmin) {
         const result = yield putPlaybook({ deleted: true }, this.params.id);
         this.status = 201;
         this.body = result;
@@ -88,7 +90,7 @@ const playbooksController = (function() {
       this.log.info(err);
       this.status = 403;
       this.body = {
-        message: 'You are not authorized to delete a playbook.'
+        message: 'Not Able to Delete'
       };
     }
   }

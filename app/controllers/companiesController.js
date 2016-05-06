@@ -5,6 +5,8 @@ const parse = require('co-body');
 import { Company, getCompany, postCompany, putCompany } from '../models/Company';
 import { getUserByQuery } from '../models/User';
 
+const isAdminCheck = require('./../utils/isAdminCheck');
+
 // Controller
 const companiesController = (function() {
 
@@ -60,7 +62,7 @@ const companiesController = (function() {
     this.log.info('User attempted to delete a company');
     this.status = 403;
     this.body = {
-      message: 'You are not authorized to delete a company.'
+      message: 'Not Able to Delete'
     };
   }
 
