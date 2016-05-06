@@ -1,5 +1,4 @@
 // Deps
-const parse = require('co-body');
 const isAdminCheck = require('./../utils/isAdminCheck');
 
 // Controller
@@ -21,12 +20,10 @@ const completedPlaybooksController = (CompletedPlaybook, User) => {
     },
 
     POST: function* () {
-      const request = yield parse(this.req);
       // TODO: Need to figure out how playbook results will be sent back to database
-      const payload = request.results;
-      this.log.info('--- INCOMING REQUEST BODY', JSON.stringify(payload));
+      this.log.info('--- INCOMING REQUEST BODY', JSON.stringify(this.request.body.results));
       try {
-        const result = yield CompletedPlaybook.postCompletedPlaybook(payload);
+        const result = yield CompletedPlaybook.postCompletedPlaybook(this.request.body.results);
         this.status = 201;
         this.body = result;
       }
@@ -40,9 +37,8 @@ const completedPlaybooksController = (CompletedPlaybook, User) => {
     },
 
     PUT: function* () {
-      const request = yield parse(this.req);
       try {
-        const result = yield CompletedPlaybook.putCompletedPlaybook(request, this.params.id);
+        const result = yield CompletedPlaybook.putCompletedPlaybook(this.request.body, this.params.id);
         this.status = 200;
         this.body = result;
       }
@@ -56,9 +52,8 @@ const completedPlaybooksController = (CompletedPlaybook, User) => {
     },
 
     DELETE: function* () {
-      const request = yield parse(this.req);
       try {
-        const userIsAdmin = yield isAdminCheck(request.userId);
+        const userIsAdmin = yield isAdminCheck(this.request.body.userId);
         if (userIsAdmin) {
           const result = yield CompletedPlaybook.putCompletedPlaybook({ deleted: true }, this.params.id);
           this.status = 201;

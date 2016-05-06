@@ -1,5 +1,4 @@
 // Deps
-const parse = require('co-body');
 const isAdminCheck = require('./../utils/isAdminCheck');
 
 // Controller
@@ -20,7 +19,6 @@ const usersController = (User) => {
       }
     },
 
-
     GET_ONE: function* () {
       try {
         const result = yield User.getUserByQuery(this.params.id);
@@ -37,9 +35,8 @@ const usersController = (User) => {
     },
 
     POST: function* () {
-      const request = yield parse(this.req);
       try {
-        const result = yield User.postUser(request);
+        const result = yield User.postUser(this.request.body);
         this.status = 201;
         this.body = result;
       }
@@ -53,9 +50,8 @@ const usersController = (User) => {
     },
 
     PUT: function* () {
-      const request = yield parse(this.req);
       try {
-        const result = yield User.putUser(request, this.params.id);
+        const result = yield User.putUser(this.request.body, this.params.id);
         this.status = 200;
         this.body = result;
       }

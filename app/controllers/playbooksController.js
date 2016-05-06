@@ -1,11 +1,9 @@
 // Deps
-const parse      = require('co-body');
 const isAdminCheck = require('./../utils/isAdminCheck');
 
 // Controller
 const playbooksController = (Playbook, User) => {
   return {
-
     GET: function* () {
       try {
         const result = yield Playbook.getPlaybook(this.query);
@@ -37,9 +35,8 @@ const playbooksController = (Playbook, User) => {
     },
 
     POST: function* () {
-      const request = yield parse(this.req);
       try {
-        const result = yield Playbook.postPlaybook(request);
+        const result = yield Playbook.postPlaybook(this.request.body);
         this.status = 201;
         this.body = result;
       }
@@ -53,10 +50,9 @@ const playbooksController = (Playbook, User) => {
     },
 
     PUT: function* () {
-      const request = yield parse(this.req);
-      this.log.info(JSON.stringify(request));
+      this.log.info(JSON.stringify(this.request.body));
       try {
-        const result = yield Playbook.putPlaybook(request, this.params.id);
+        const result = yield Playbook.putPlaybook(this.request.body, this.params.id);
         this.status = 200;
         this.body = result;
       }
@@ -70,9 +66,8 @@ const playbooksController = (Playbook, User) => {
     },
 
     DELETE: function* () {
-      const request = yield parse(this.req);
       try {
-        const userIsAdmin = yield isAdminCheck(request.userId);
+        const userIsAdmin = yield isAdminCheck(this.request.body.userId);
         if (userIsAdmin) {
           const result = yield Playbook.putPlaybook({ deleted: true }, this.params.id);
           this.status = 201;
@@ -93,8 +88,7 @@ const playbooksController = (Playbook, User) => {
 
     DUPLICATE: function* () {
       try {
-        const request = yield parse(this.req);
-        const result = yield Playbook.duplicatePlaybook({ id: request.id });
+        const result = yield Playbook.duplicatePlaybook({ id: this.request.body.id });
         this.status = 201;
         this.body = result;
       }

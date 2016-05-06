@@ -1,10 +1,6 @@
-// Deps
-const parse = require('co-body');
-
 // Controller
 const companiesController = (Company, User) => {
   return {
-
     GET: function* () {
       try {
         const result = yield Company.getCompany(this.query);
@@ -21,9 +17,8 @@ const companiesController = (Company, User) => {
     },
 
     POST: function* () {
-      const request = yield parse(this.req);
       try {
-        const result = yield Company.postCompany(request);
+        const result = yield Company.postCompany(this.request.body);
         this.status = 201;
         this.body = result;
       }
@@ -37,9 +32,8 @@ const companiesController = (Company, User) => {
     },
 
     PUT: function* () {
-      const request = yield parse(this.req);
       try {
-        const result = yield Company.putCompany(request, this.params.id);
+        const result = yield Company.putCompany(this.request.body, this.params.id);
         this.status = 200;
         this.body = result;
       }
