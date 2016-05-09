@@ -12,6 +12,7 @@ const usersController  = require('../controllers/usersController')(User);
 const rolesController = require('../controllers/rolesController')(Role, User);
 const playbooksController = require('../controllers/playbooksController')(Playbook, User);
 const completedPlaybooksController = require('../controllers/completedPlaybooksController')(CompletedPlaybook, User);
+const uploadsController = require('../controllers/uploadsController');
 
 module.exports = function configure(router) {
 
@@ -52,6 +53,16 @@ module.exports = function configure(router) {
   .get('/completedPlaybooks', completedPlaybooksController.GET)
   .post('/completedPlaybooks', completedPlaybooksController.POST)
   .put('/completedPlaybooks/:id', completedPlaybooksController.PUT)
-  .delete('/completedPlaybooks/:id', completedPlaybooksController.DELETE);
+  .delete('/completedPlaybooks/:id', completedPlaybooksController.DELETE)
 
+  // Uploads
+  .post('/upload', uploadsController.POST)
+
+  /**
+   * Dear team,
+   *
+   * LEAVE THE DAMN SEMI-COLON OFF IN THIS FILE
+   *
+   *                                  <3 Rohan
+   */
 };
