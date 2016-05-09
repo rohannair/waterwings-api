@@ -2,11 +2,11 @@
 const isAdminCheck = require('./../utils/isAdminCheck');
 
 // Controller
-const usersController = (User) => {
+const completedPlaybooksController = (CompletedPlaybook, User) => {
   return {
     GET: function* () {
       try {
-        const result = yield User.getUsers();
+        const result = yield CompletedPlaybook.getCompletedPlaybook(this.query);
         this.status = 200;
         this.body = result;
       }
@@ -19,24 +19,11 @@ const usersController = (User) => {
       }
     },
 
-    GET_ONE: function* () {
-      try {
-        const result = yield User.getUserByQuery(this.params.id);
-        this.status = 200;
-        this.body = result[0];
-      }
-      catch(err) {
-        this.log.info(err);
-        this.status = 400;
-        this.body = {
-          mesage: 'An error has occured, please try again.'
-        };
-      }
-    },
-
     POST: function* () {
+      // TODO: Need to figure out how playbook results will be sent back to database
+      this.log.info('--- INCOMING REQUEST BODY', JSON.stringify(this.request.body.results));
       try {
-        const result = yield User.postUser(this.request.body);
+        const result = yield CompletedPlaybook.postCompletedPlaybook(this.request.body.results);
         this.status = 201;
         this.body = result;
       }
@@ -51,7 +38,7 @@ const usersController = (User) => {
 
     PUT: function* () {
       try {
-        const result = yield User.putUser(this.request.body, this.params.id);
+        const result = yield CompletedPlaybook.putCompletedPlaybook(this.request.body, this.params.id);
         this.status = 200;
         this.body = result;
       }
@@ -67,13 +54,13 @@ const usersController = (User) => {
     DELETE: function* () {
       try {
         const userIsAdmin = yield isAdminCheck(this.request.body.userId);
-        if(userIsAdmin) {
-          const result = yield User.putUser({ deleted: true }, this.params.id);
+        if (userIsAdmin) {
+          const result = yield CompletedPlaybook.putCompletedPlaybook({ deleted: true }, this.params.id);
           this.status = 201;
           this.body = result;
         }
         else {
-          throw 'Unauthorized user attempted to delete another user';
+          throw 'Unauthorized user attempted to delete a a Completed Playbook'
         }
       }
       catch(err) {
@@ -86,6 +73,6 @@ const usersController = (User) => {
     }
 
   };
-};
+}
 
-module.exports = usersController;
+module.exports = completedPlaybooksController;

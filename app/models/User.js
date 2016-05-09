@@ -2,7 +2,7 @@
 const db = require('../db');
 const uuid = require('node-uuid');
 
-export function User() {
+function User() {
   db.apply(this, arguments);
 }
 
@@ -45,55 +45,68 @@ User.jsonSchema = {
     company_id     : { type: 'string' },
     role_id        : { type: 'integer' },
     created_at     : { type: 'object' },
-    updated_at     : { type: 'object' }
+    updated_at     : { type: 'object' },
+    deleted        : { type: 'boolean' }
   }
 };
 
 User.relationMappings = {
-  // company: {
-  //   relation: db.OneToOneRelation,
-  //   modelClass: require('./Company.js'),
-  //   join: {
-  //     from: 'users.company_id',
-  //     to: 'companies.id'
-  //   }
-  // },
-  //
-  // role: {
-  //   relation: db.OneToOneRelation,
-  //   modelClass: require('./Role.js'),
-  //   join: {
-  //     from: 'users.role_id',
-  //     to: 'roles.id'
-  //   }
-  // },
-  //
-  // completed_surveys: {
-  //   relation: db.OneToManyRelation,
-  //   modelClass: require('./CompletedSurvey.js'),
-  //   join: {
-  //     from: 'users.id',
-  //     to: 'completed_surveys.user_id'
-  //   }
-  // }
+  company: {
+    relation: db.OneToOneRelation,
+    modelClass: __dirname + '/Company',
+    join: {
+      from: 'users.company_id',
+      to: 'companies.id'
+    }
+  },
+
+  role: {
+    relation: db.OneToOneRelation,
+    modelClass: __dirname + '/Role',
+    join: {
+      from: 'users.role_id',
+      to: 'roles.id'
+    }
+  },
+
+  completed_playbooks: {
+    relation: db.OneToManyRelation,
+    modelClass: __dirname + '/CompletedPlaybook',
+    join: {
+      from: 'users.id',
+      to: 'completed_playbooks.user_id'
+    }
+  }
 };
 
 // Database Queries
 
-export function getUser(queryData) {
-  
+User.getUsers = () => {
   return User
           .query()
-          .where(queryData)
           .select(
             'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
           )
           .leftJoin('roles as r', 'users.role_id', 'r.id')
+          .where('users.deleted', '=', 'false')
           .then((result) => result)
           .catch((err) => { throw err });
 }
 
-export function postUser(data) {
+User.getUserByQuery = (queryData) => {
+  return User
+          .query()
+          .select(
+            'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
+          )
+          .leftJoin('roles as r', 'users.role_id', 'r.id')
+          .where('users.id', '=', `${queryData}`)
+          .where('users.deleted', '=', 'false')
+          .then((result) => result)
+          .catch((err) => { throw err });
+}
+
+User.postUser = (data) => {
   return User
           .query()
           .insert({ id: uuid.v4(), ...data } )
@@ -101,7 +114,7 @@ export function postUser(data) {
           .catch((err) => { throw err });
 }
 
-export function putUser(data, userId) {
+User.putUser = (data, userId) => {
   return User
           .query()
           .where({ id: userId })
@@ -110,11 +123,4 @@ export function putUser(data, userId) {
           .catch((err) => { throw err });
 }
 
-export function deleteUser(userId) {
-  return User
-          .query()
-          .where({ id: userId })
-          .del()
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
+module.exports = User;

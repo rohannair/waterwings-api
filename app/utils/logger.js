@@ -3,7 +3,7 @@ const bunyan = require('bunyan');
 
 // Construct Logger
 const logger = bunyan.createLogger({
-  name: 'quatermaster-api',
+  name: 'quartermaster-api',
   streams: [
     {
       // Log all errors,requests and responses to the console
@@ -17,7 +17,7 @@ const logger = bunyan.createLogger({
     }
   ],
   serializers: bunyan.stdSerializers, //Contains three serializers for errs, reqs and res'
-  src: true //Don't use in production as it is very slow
+  src: false //Don't use in production as it is very slow
 });
 
 module.exports = logger;

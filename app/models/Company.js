@@ -2,7 +2,7 @@
 const db = require('../db');
 const uuid = require('node-uuid');
 
-export function Company() {
+function Company() {
   db.apply(this, arguments);
 }
 
@@ -59,57 +59,59 @@ Company.jsonSchema = {
                       additionalProperties: true
                     },
     created_at    : { type: 'object' },
-    updated_at    : { type: 'object' }
+    updated_at    : { type: 'object' },
+    deleted       : { type: 'boolean' }
   }
 };
 
 Company.relationMappings = {
-  // employees: {
-  //   relation: db.OneToManyRelation,
-  //   modelClass: require('./User.js'),
-  //   join: {
-  //     from: 'companies.id',
-  //     to: 'users.company_id'
-  //   }
-  // },
+  users: {
+    relation: db.OneToManyRelation,
+    modelClass: __dirname + '/User',
+    join: {
+      from: 'companies.id',
+      to: 'users.company_id'
+    }
+  },
 
-  // roles: {
-  //   relation: db.OneToManyRelation,
-  //   modelClass: require('./Role.js'),
-  //   join: {
-  //     from: 'companies.id',
-  //     to: 'roles.company_id'
-  //   }
-  // },
-  //
-  // surveys: {
-  //   relation: db.OneToManyRelation,
-  //   modelClass: require('./Survey.js'),
-  //   join: {
-  //     from: 'companies.id',
-  //     to: 'surveys.company_id'
-  //   }
-  // },
-  //
-  // completed_surveys: {
-  //   relation: db.OneToManyRelation,
-  //   modelClass: require('./CompletedSurvey.js'),
-  //   join: {
-  //     from: 'companies.id',
-  //     to: 'completed_surveys.company_id'
-  //   }
-  // }
+  roles: {
+    relation: db.OneToManyRelation,
+    modelClass: __dirname + '/Role',
+    join: {
+      from: 'companies.id',
+      to: 'roles.company_id'
+    }
+  },
+
+  playbooks: {
+    relation: db.OneToManyRelation,
+    modelClass: __dirname + '/Playbook',
+    join: {
+      from: 'companies.id',
+      to: 'playbooks.company_id'
+    }
+  },
+
+  completed_playbooks: {
+    relation: db.OneToManyRelation,
+    modelClass: __dirname + '/CompletedPlaybook',
+    join: {
+      from: 'companies.id',
+      to: 'completed_playbooks.company_id'
+    }
+  }
 };
 
-export function getCompany(queryData) {
+Company.getCompany = (queryData) => {
   return Company
           .query()
           .where(queryData)
+          .where('companies.deleted', '=', 'false')
           .then((result) => result)
           .catch((err) => { throw err });
 }
 
-export function postCompany(data) {
+Company.postCompany = (data) => {
   return Company
           .query()
           .insert({ id: uuid.v4(), ...data } )
@@ -117,7 +119,7 @@ export function postCompany(data) {
           .catch((err) => { throw err });
 }
 
-export function putCompany(data, companyId) {
+Company.putCompany = (data, companyId) => {
   return Company
           .query()
           .patch(data)
@@ -126,11 +128,4 @@ export function putCompany(data, companyId) {
           .catch((err) => { throw err });
 }
 
-export function deleteCompany(companyId) {
-  return Company
-          .query()
-          .where({ id: companyId })
-          .del()
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
+module.exports = Company;

@@ -2,11 +2,11 @@
 const isAdminCheck = require('./../utils/isAdminCheck');
 
 // Controller
-const usersController = (User) => {
+const playbooksController = (Playbook, User) => {
   return {
     GET: function* () {
       try {
-        const result = yield User.getUsers();
+        const result = yield Playbook.getPlaybook(this.query);
         this.status = 200;
         this.body = result;
       }
@@ -21,7 +21,7 @@ const usersController = (User) => {
 
     GET_ONE: function* () {
       try {
-        const result = yield User.getUserByQuery(this.params.id);
+        const result = yield Playbook.getPlaybook({ id: this.params.id });
         this.status = 200;
         this.body = result[0];
       }
@@ -36,7 +36,7 @@ const usersController = (User) => {
 
     POST: function* () {
       try {
-        const result = yield User.postUser(this.request.body);
+        const result = yield Playbook.postPlaybook(this.request.body);
         this.status = 201;
         this.body = result;
       }
@@ -50,8 +50,9 @@ const usersController = (User) => {
     },
 
     PUT: function* () {
+      this.log.info(JSON.stringify(this.request.body));
       try {
-        const result = yield User.putUser(this.request.body, this.params.id);
+        const result = yield Playbook.putPlaybook(this.request.body, this.params.id);
         this.status = 200;
         this.body = result;
       }
@@ -67,13 +68,13 @@ const usersController = (User) => {
     DELETE: function* () {
       try {
         const userIsAdmin = yield isAdminCheck(this.request.body.userId);
-        if(userIsAdmin) {
-          const result = yield User.putUser({ deleted: true }, this.params.id);
+        if (userIsAdmin) {
+          const result = yield Playbook.putPlaybook({ deleted: true }, this.params.id);
           this.status = 201;
           this.body = result;
         }
         else {
-          throw 'Unauthorized user attempted to delete another user';
+          throw 'Unauthorized user attempted to delete a a playbook'
         }
       }
       catch(err) {
@@ -83,9 +84,24 @@ const usersController = (User) => {
           message: 'Not Able to Delete'
         };
       }
+    },
+
+    DUPLICATE: function* () {
+      try {
+        const result = yield Playbook.duplicatePlaybook({ id: this.request.body.id });
+        this.status = 201;
+        this.body = result;
+      }
+      catch(err) {
+        this.log.info(err);
+        this.status = 400;
+        this.body = {
+          message: 'An error has occured.'
+        };
+      }
     }
 
   };
-};
+}
 
-module.exports = usersController;
+module.exports = playbooksController;

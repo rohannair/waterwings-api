@@ -1,91 +1,76 @@
 // Deps
-const chalk = require('chalk');
-const parse = require('co-body');
-
-// Models and queries
-import { Role, getRole, postRole, putRole, deleteRole } from '../models/Role';
-import { getUser } from '../models/User';
+const isAdminCheck = require('./../utils/isAdminCheck');
 
 // Controller
-const rolesController = (function() {
+const rolesController = (Role, User) => {
+  return {
+    GET: function* () {
+      try {
+        const result = yield Role.getRole(this.query);
+        this.status = 200;
+        this.body = result;
+      }
+      catch(err) {
+        this.log.info(err);
+        this.status = 400;
+        this.body = {
+          mesage: 'An error has occured, please try again.'
+        };
+      }
+    },
 
-  function* GET() {
-    try {
-      const result = yield getRole(this.query);
-      this.status = 200;
-      this.body = result;
-    }
-    catch(err) {
-      this.log.info(err);
-      this.status = 400;
-      this.body = {
-        mesage: 'An error has occured, please try again.'
-      };
-    }
-  }
-
-  function* POST() {
-    const request = yield parse(this.req);
-    try {
-      const result = yield postRole(request);
-      this.status = 201;
-      this.body = result;
-    }
-    catch(err) {
-      this.log.info(err);
-      this.status = 400;
-      this.body = {
-        message: 'An error has occured, please try again.'
-      };
-    }
-  }
-
-  function* PUT() {
-    const request = yield parse(this.req);
-    try {
-      const result = yield putRole(request, this.params.id);
-      this.status = 200;
-      this.body = result;
-    }
-    catch(err) {
-      this.log.info(err);
-      this.status = 400;
-      this.body = {
-        message: 'An error has occured, please try again.'
-      };
-    }
-  }
-
-  function* DELETE() {
-    // TODO: Need to determine how we will pass in the id of the role to be deleted
-    try {
-      // TODO: need to check if user is an admin here. I can query them based on their ID,
-      // which will be contained in the JSON web token
-      const user = yield getUser( {id: 'Something'} );
-      if (user.is_admin === true) {
-        const result = yield deleteRole('id of role to be deleted');
+    POST: function* () {
+      try {
+        const result = yield Role.postRole(this.request.body);
         this.status = 201;
         this.body = result;
       }
-      else {
-        throw 'Unauthorized user attempted to delete a role'
+      catch(err) {
+        this.log.info(err);
+        this.status = 400;
+        this.body = {
+          message: 'An error has occured, please try again.'
+        };
+      }
+    },
+
+    PUT: function* () {
+      try {
+        const result = yield Role.putRole(this.request.body, this.params.id);
+        this.status = 200;
+        this.body = result;
+      }
+      catch(err) {
+        this.log.info(err);
+        this.status = 400;
+        this.body = {
+          message: 'An error has occured, please try again.'
+        };
+      }
+    },
+
+    DELETE: function* () {
+      try {
+        const userIsAdmin = yield isAdminCheck(this.request.body.userId);
+        if (userIsAdmin) {
+          const result = yield Role.putRole({ deleted: true }, this.params.id);
+          this.status = 201;
+          this.body = result;
+        }
+        else {
+          throw 'Unauthorized user attempted to delete a a role'
+        }
+      }
+      catch(err) {
+        this.log.info(err);
+        this.status = 403;
+        this.body = {
+          message: 'Not Able to Delete'
+        };
       }
     }
-    catch(err) {
-      this.log.info(err);
-      this.status = 403;
-      this.body = {
-        message: 'You are not authorized to delete a role.'
-      };
-    };
-  }
 
-  return {
-    GET         : GET,
-    POST        : POST,
-    PUT         : PUT,
-    DELETE      : DELETE
   };
-})();
+}
 
 module.exports = rolesController;
