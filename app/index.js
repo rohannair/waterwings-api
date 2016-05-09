@@ -35,7 +35,7 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
-// Middlewear
+// Middleware
 
 // Logger
 
