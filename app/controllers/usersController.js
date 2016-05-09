@@ -64,19 +64,18 @@ const usersController = (User) => {
       }
     },
 
-    function* DELETE() {
-      const request = yield parse(this.req);
+    DELETE: function* () {
       try {
-          const userIsAdmin = yield isAdminCheck(request.userId);
-          if (userIsAdmin) {
-            const result = yield User.deleteUser('id of user to be deleted');
-            this.status = 201;
-            this.body = result;
-          }
-          else {
-            throw 'Unauthorized user attempted to delete another user'
-          }
+        const userIsAdmin = yield isAdminCheck(this.request.body.userId);
+        if(userIsAdmin) {
+          const result = yield User.putUser({ deleted: true }, this.params.id);
+          this.status = 201;
+          this.body = result;
         }
+        else {
+          throw 'Unauthorized user attempted to delete another user';
+        }
+      }
       catch(err) {
         this.log.info(err);
         this.status = 403;
