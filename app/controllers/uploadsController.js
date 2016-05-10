@@ -45,7 +45,8 @@ const uploadsController = (function() {
 
         this.status = 201;
       } catch (e) {
-        console.log(chalk.red.bold(JSON.stringify(e, null, 4)));
+        this.log.info(e);
+
         this.status = e.status || 400;
         this.body = {
           message: e.message,
