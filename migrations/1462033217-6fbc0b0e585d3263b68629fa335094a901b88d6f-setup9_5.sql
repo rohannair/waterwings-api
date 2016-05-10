@@ -1,7 +1,7 @@
 -- Main File to set schema of database
 
 -- companies Table
-CREATE TABLE companies (
+CREATE TABLE IF NOT EXISTS companies (
   id varchar(50) PRIMARY KEY,
   name varchar(255) UNIQUE NOT NULL,
   address jsonb,
@@ -10,7 +10,7 @@ CREATE TABLE companies (
 );
 
 -- roles table
-CREATE TABLE roles (
+CREATE TABLE IF NOT EXISTS roles (
   id bigserial PRIMARY KEY,
   name varchar(255) NOT NULL,
   company_id varchar(50) REFERENCES companies ON DELETE CASCADE,
@@ -19,7 +19,7 @@ CREATE TABLE roles (
 );
 
 -- surveys table
-CREATE TABLE surveys (
+CREATE TABLE IF NOT EXISTS surveys (
   id varchar(50) PRIMARY KEY,
   name varchar(100) NOT NULL,
   description varchar(255),
@@ -32,7 +32,7 @@ CREATE TABLE surveys (
 CREATE INDEX ON surveys USING GIN (doc);
 
 -- users table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id varchar(50) PRIMARY KEY,
   username varchar(100) UNIQUE NOT NULL,
   password varchar(100) NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE users (
 );
 
 -- completed_surveys table
-CREATE TABLE completed_surveys (
+CREATE TABLE IF NOT EXISTS completed_surveys (
   id varchar(50) PRIMARY KEY,
   survey_id varchar(50) REFERENCES surveys,
   user_id varchar(50) REFERENCES users,
