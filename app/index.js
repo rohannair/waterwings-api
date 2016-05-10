@@ -8,6 +8,8 @@ const jwt        = require('koa-jwt');
 const unless     = require('koa-unless');
 const logger     = require('./utils/logger');
 const chalk       = require('chalk');
+const multiTenant = require('./utils/multiTenant');
+
 
 // Instantiate app
 const app     = module.exports = Koa();
@@ -16,6 +18,25 @@ app.poweredBy = false;
 app.use(cors({
   origin: '*'
 }));
+
+// Subdomain catching
+app.use(function* (next) {
+  this.subdomain = yield multiTenant.getSubdomain(this.request.header.host);
+  yield* next;
+});
+
+// Database routing
+app.use(function* (next) {
+  const knex = yield multiTenant.clientCreator(this.subdomain);
+  this.models = {
+    Company: require('./models/Company').bindKnex(knex),
+    User: require('./models/User').bindKnex(knex),
+    Role: require('./models/Role').bindKnex(knex),
+    Playbook: require('./models/Playbook').bindKnex(knex),
+    CompletedPlaybook: require('./models/CompletedPlaybook').bindKnex(knex)
+  };
+  yield* next;
+});
 
 // Configure router
 const router  = new Router({

@@ -2,12 +2,13 @@
 const isAdminCheck = require('./../utils/isAdminCheck');
 const encrypt = require('../utils/encryption');
 
-// Controller
-const usersController = (User) => {
+// Users Controller
+const usersController = () => {
+
   return {
     GET: function* () {
       try {
-        const result = yield User.getUsers();
+        const result = yield this.models.User.query().getAll();
         this.status = 200;
         this.body = result;
       }
@@ -24,8 +25,8 @@ const usersController = (User) => {
       try {
         const hash = yield encrypt.encryptPassword(this.request.body.password, 10);
         this.request.body.password = hash
-        const newUser = yield User.postUser(this.request.body);
-        const result = yield User.getUserByQuery(newUser.id)
+        const newUser = yield this.models.User.query().postUser(this.request.body);
+        const result = yield this.models.User.query().getUserById(this.params.id);
         this.status = 201;
         this.body = result[0];
       }
@@ -40,8 +41,8 @@ const usersController = (User) => {
 
     GET_ONE: function* () {
       try {
-        const result = yield User.getUserByQuery(this.params.id);
-        this.status = 200;
+        const result = yield this.models.User.query().postUser(this.request.body);
+        this.status = 201;
         this.body = result[0];
       }
       catch(err) {
@@ -55,7 +56,7 @@ const usersController = (User) => {
 
     PUT: function* () {
       try {
-        const result = yield User.putUser(this.request.body, this.params.id);
+        const result = yield this.models.User.query().putUser(this.request.body, this.params.id);
         this.status = 200;
         this.body = result;
       }
@@ -70,9 +71,9 @@ const usersController = (User) => {
 
     DELETE: function* () {
       try {
-        const userIsAdmin = yield isAdminCheck(this.request.body.userId);
-        if(userIsAdmin) {
-          const result = yield User.putUser({ deleted: true }, this.params.id);
+        const user = yield this.models.User.query().getUserById(this.request.body.userId);
+        if(user[0].is_admin) {
+          const result = yield this.models.User.query().putUser({ deleted: true }, this.params.id);
           this.status = 201;
           this.body = result;
         }

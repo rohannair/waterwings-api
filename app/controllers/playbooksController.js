@@ -1,12 +1,9 @@
-// Deps
-const isAdminCheck = require('./../utils/isAdminCheck');
-
-// Controller
-const playbooksController = (Playbook, User) => {
+// Playbooks Controller
+const playbooksController = () => {
   return {
     GET: function* () {
       try {
-        const result = yield Playbook.getPlaybook(this.query);
+        const result = yield this.models.Playbook.query().getAll();
         this.status = 200;
         this.body = result;
       }
@@ -21,7 +18,7 @@ const playbooksController = (Playbook, User) => {
 
     GET_ONE: function* () {
       try {
-        const result = yield Playbook.getPlaybook({ id: this.params.id });
+        const result = yield this.models.Playbook.query().getPlaybookById(this.params.id);
         this.status = 200;
         this.body = result[0];
       }
@@ -36,7 +33,7 @@ const playbooksController = (Playbook, User) => {
 
     POST: function* () {
       try {
-        const result = yield Playbook.postPlaybook(this.request.body);
+        const result = yield this.models.Playbook.query().postPlaybook(this.request.body);
         this.status = 201;
         this.body = result;
       }
@@ -52,7 +49,7 @@ const playbooksController = (Playbook, User) => {
     PUT: function* () {
       this.log.info(JSON.stringify(this.request.body));
       try {
-        const result = yield Playbook.putPlaybook(this.request.body, this.params.id);
+        const result = yield this.models.Playbook.query().putPlaybook(this.request.body, this.params.id);
         this.status = 200;
         this.body = result;
       }
@@ -67,12 +64,12 @@ const playbooksController = (Playbook, User) => {
 
     DELETE: function* () {
       try {
-        const userIsAdmin = yield isAdminCheck(this.request.body.userId);
-        if (userIsAdmin) {
-          const result = yield Playbook.putPlaybook({ deleted: true }, this.params.id);
-          this.status = 201;
-          this.body = result;
-        }
+          const user = yield this.models.User.query().getUserById(this.request.body.userId);
+          if(user[0].is_admin) {
+            const result = yield this.models.Playbook.query().putPlaybook({ deleted: true }, this.params.id);
+            this.status = 201;
+            this.body = result;
+          }
         else {
           throw 'Unauthorized user attempted to delete a a playbook'
         }
@@ -88,7 +85,8 @@ const playbooksController = (Playbook, User) => {
 
     DUPLICATE: function* () {
       try {
-        const result = yield Playbook.duplicatePlaybook({ id: this.request.body.id });
+        const playbookCopy = yield this.models.Playbook.query().duplicatePlaybook(this.request.body.id);
+        const result = yield this.models.Playbook.query().postPlaybook(playbookCopy);
         this.status = 201;
         this.body = result;
       }

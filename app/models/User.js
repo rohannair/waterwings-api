@@ -1,15 +1,28 @@
 // User model
-const db = require('../db');
+const Model = require('objection').Model;
+const QueryBuilder = require('objection').QueryBuilder;
 const uuid = require('node-uuid');
 const encrypt = require('../utils/encryption');
 
 function User() {
-  db.apply(this, arguments);
+  Model.apply(this, arguments);
 }
 
-db.extend(User);
+Model.extend(User);
 User.tableName = 'users';
 
+function MyQueryBuilder() {
+  QueryBuilder.apply(this, arguments);
+}
+
+QueryBuilder.extend(MyQueryBuilder);
+
+// Instance of this is created when you call `query()` or `$query()`.
+User.QueryBuilder = MyQueryBuilder;
+// Instance of this is created when you call `$relatedQuery()`.
+User.RelatedQueryBuilder = MyQueryBuilder;
+
+// Timestamp functions
 User.prototype.$beforeInsert = function () {
   this.created_at = new Date().toUTCString();
 };
@@ -53,7 +66,7 @@ User.jsonSchema = {
 
 User.relationMappings = {
   company: {
-    relation: db.OneToOneRelation,
+    relation: Model.OneToOneRelation,
     modelClass: __dirname + '/Company',
     join: {
       from: 'users.company_id',
@@ -62,7 +75,7 @@ User.relationMappings = {
   },
 
   role: {
-    relation: db.OneToOneRelation,
+    relation: Model.OneToOneRelation,
     modelClass: __dirname + '/Role',
     join: {
       from: 'users.role_id',
@@ -71,7 +84,7 @@ User.relationMappings = {
   },
 
   completed_playbooks: {
-    relation: db.OneToManyRelation,
+    relation: Model.OneToManyRelation,
     modelClass: __dirname + '/CompletedPlaybook',
     join: {
       from: 'users.id',
@@ -80,62 +93,57 @@ User.relationMappings = {
   }
 };
 
-// Database Queries
+// Custom Queries
 
-User.getUsers = () => {
-  return User
-          .query()
-          .select(
-            'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
-          )
-          .leftJoin('roles as r', 'users.role_id', 'r.id')
-          .orderBy('users.created_at', 'asc')
-          .where('users.deleted', '=', 'false')
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.getAll = function () {
+    return this
+              .select(
+                'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
+              )
+              .leftJoin('roles as r', 'users.role_id', 'r.id')
+              .where('users.deleted', '=', 'false')
+              .orderBy('users.created_at', 'asc')
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
 
+MyQueryBuilder.prototype.getUserById = function (userId) {
+    return this
+              .select(
+                'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
+              )
+              .leftJoin('roles as r', 'users.role_id', 'r.id')
+              .where('users.id', '=', `${userId}`)
+              .where('users.deleted', '=', 'false')
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
 
-User.getUserwithPassword = (queryData) => {
-  return User
-          .query()
-          .where(queryData)
-          .select(
-            'users.id', 'users.username', 'users.password', 'users.first_name', 'users.last_name', 'users.is_admin','users.company_id', 'r.name as rolename'
-          )
-          .leftJoin('roles as r', 'users.role_id', 'r.id')
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.getUserwithPassword = function (userId) {
+    return this
+            .select(
+                'users.id', 'users.username', 'users.password', 'users.first_name', 'users.last_name', 'users.is_admin','users.company_id', 'r.name as rolename'
+              )
+              .leftJoin('roles as r', 'users.role_id', 'r.id')
+              .where('users.id', '=', `${userId}`)
+              .where('users.deleted', '=', 'false')
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
 
-User.getUserByQuery = (queryData) => {
-  return User
-          .query()
-          .select(
-            'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
-          )
-          .leftJoin('roles as r', 'users.role_id', 'r.id')
-          .where('users.id', '=', `${queryData}`)
-          .where('users.deleted', '=', 'false')
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.postUser = function (data) {
+    return this
+            .insert({ id: uuid.v4(), ...data } )
+            .then((result) => result)
+            .catch((err) => { throw err });
+};
 
-User.postUser = (data) => {
-  return User
-          .query()
-          .insert({ id: uuid.v4(), ...data } )
-          .then((result) => result )
-          .catch((err) => { throw err });
-}
-
-User.putUser = (data, userId) => {
-  return User
-          .query()
-          .where({ id: userId })
-          .patch(data)
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.putUser = function (data, userId) {
+    return this
+              .where({ id: userId })
+              .patch(data)
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
 
 module.exports = User;

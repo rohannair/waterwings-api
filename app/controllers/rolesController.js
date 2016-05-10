@@ -1,12 +1,9 @@
-// Deps
-const isAdminCheck = require('./../utils/isAdminCheck');
-
-// Controller
-const rolesController = (Role, User) => {
+// Roles Controller
+const rolesController = () => {
   return {
     GET: function* () {
       try {
-        const result = yield Role.getRole(this.query);
+        const result = yield this.models.Role.query().getAll();
         this.status = 200;
         this.body = result;
       }
@@ -21,7 +18,7 @@ const rolesController = (Role, User) => {
 
     POST: function* () {
       try {
-        const result = yield Role.postRole(this.request.body);
+        const result = yield this.models.Role.query().postRole(this.request.body);
         this.status = 201;
         this.body = result;
       }
@@ -36,7 +33,7 @@ const rolesController = (Role, User) => {
 
     PUT: function* () {
       try {
-        const result = yield Role.putRole(this.request.body, this.params.id);
+        const result = yield this.models.Role.query().putRole(this.request.body, this.params.id);
         this.status = 200;
         this.body = result;
       }
@@ -51,9 +48,9 @@ const rolesController = (Role, User) => {
 
     DELETE: function* () {
       try {
-        const userIsAdmin = yield isAdminCheck(this.request.body.userId);
-        if (userIsAdmin) {
-          const result = yield Role.putRole({ deleted: true }, this.params.id);
+        const user = yield this.models.User.query().getUserById(this.request.body.userId);
+        if(user[0].is_admin) {
+          const result = yield this.models.Role.query().putRole({ deleted: true }, this.params.id);
           this.status = 201;
           this.body = result;
         }

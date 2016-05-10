@@ -1,14 +1,27 @@
 // Completed Playbooks model
-const db = require('../db');
+const Model = require('objection').Model;
+const QueryBuilder = require('objection').QueryBuilder;
 const uuid = require('node-uuid');
 
 function CompletedPlaybook() {
-  db.apply(this, arguments);
+  Model.apply(this, arguments);
 }
 
-db.extend(CompletedPlaybook);
+Model.extend(CompletedPlaybook);
 CompletedPlaybook.tableName = 'completed_playbooks';
 
+function MyQueryBuilder() {
+  QueryBuilder.apply(this, arguments);
+}
+
+QueryBuilder.extend(MyQueryBuilder);
+
+// Instance of this is created when you call `query()` or `$query()`.
+CompletedPlaybook.QueryBuilder = MyQueryBuilder;
+// Instance of this is created when you call `$relatedQuery()`.
+CompletedPlaybook.RelatedQueryBuilder = MyQueryBuilder;
+
+// Timestamp functions
 CompletedPlaybook.prototype.$beforeInsert = function () {
   this.created_at = new Date().toUTCString();
 };
@@ -43,7 +56,7 @@ CompletedPlaybook.jsonSchema = {
 
 CompletedPlaybook.relationMappings = {
   playbook: {
-    relation: db.OneToOneRelation,
+    relation: Model.OneToOneRelation,
     modelClass: __dirname + '/Playbook',
     join: {
       from: 'completed_playbooks.playbook_id',
@@ -52,7 +65,7 @@ CompletedPlaybook.relationMappings = {
   },
 
   company: {
-    relation: db.OneToOneRelation,
+    relation: Model.OneToOneRelation,
     modelClass: __dirname + '/Company',
     join: {
       from: 'completed_playbooks.company_id',
@@ -61,8 +74,8 @@ CompletedPlaybook.relationMappings = {
   },
 
   user: {
-    relation: db.OneToOneRelation,
-    modelClass: __dirname + './User',
+    relation: Model.OneToOneRelation,
+    modelClass: __dirname + '/User',
     join: {
       from: 'completed_playbooks.user_id',
       to: 'users.id'
@@ -70,31 +83,43 @@ CompletedPlaybook.relationMappings = {
   }
 };
 
+// Custom Queries
 
-CompletedPlaybook.getCompletedPlaybook = (queryData) => {
-  return CompletedPlaybook
-          .query()
-          .where(queryData)
-          .where('completed_playbooks.deleted', '=', 'false')
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.getAll = function () {
+    return this
+              .select(
+                'completed_playbooks.id', 'completed_playbooks.playbook_id', 'completed_playbooks.user_id', 'completed_playbooks.company_id', 'completed_playbooks.results'
+              )
+              .where('completed_playbooks.deleted', '=', 'false')
+              .orderBy('completed_playbooks.created_at', 'asc')
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
 
-CompletedPlaybook.postCompletedPlaybook = (data) => {
-  return CompletedPlaybook
-          .query()
-          .insert({ id: uuid.v4(), ...data } )
-          .then((result) => result )
-          .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.getCompletedPlaybookById = function (completedPlaybookId) {
+    return this
+              .select(
+                'completed_playbooks.id', 'completed_playbooks.playbook_id', 'completed_playbooks.user_id', 'completed_playbooks.company_id', 'completed_playbooks.results'
+              )
+              .where('completed_playbooks.id', '=', `${completedPlaybookId}`)
+              .where('completed_playbooks.deleted', '=', 'false')
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
 
-CompletedPlaybook.putCompletedPlaybook = (data, completedPlaybookId) => {
-  return CompletedPlaybook
-          .query()
-          .where({ id: completedPlaybookId })
-          .patch(data)
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.postCompletedPlaybook = function (data) {
+    return this
+            .insert({ ...data, id: uuid.v4() } )
+            .then((result) => result)
+            .catch((err) => { throw err });
+};
+
+MyQueryBuilder.prototype.putCompletedPlaybook = function (data, completedPlaybookId) {
+    return this
+              .where({ id: completedPlaybookId })
+              .patch(data)
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
 
 module.exports = CompletedPlaybook;
