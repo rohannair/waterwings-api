@@ -1,15 +1,30 @@
 // Playbooks model
-const db    = require('../db');
+const Model = require('objection').Model;
+const QueryBuilder = require('objection').QueryBuilder;
 const uuid  = require('node-uuid');
 const merge = require('Ramda').merge;
 
 function Playbook() {
-  db.apply(this, arguments);
+  Model.apply(this, arguments);
 }
 
-db.extend(Playbook);
+Model.extend(Playbook);
 Playbook.tableName = 'playbooks';
 
+function MyQueryBuilder() {
+  QueryBuilder.apply(this, arguments);
+}
+
+QueryBuilder.extend(MyQueryBuilder);
+
+// Instance of this is created when you call `query()` or `$query()`.
+Playbook.QueryBuilder = MyQueryBuilder;
+// Instance of this is created when you call `$relatedQuery()`.
+Playbook.RelatedQueryBuilder = MyQueryBuilder;
+
+// Custom Functions
+
+// Timestamp functions
 Playbook.prototype.$beforeInsert = function () {
   this.created_at = new Date().toUTCString();
   this.updated_at = new Date().toUTCString();
@@ -18,6 +33,7 @@ Playbook.prototype.$beforeInsert = function () {
 Playbook.prototype.$beforeUpdate = function () {
   this.updated_at = new Date().toUTCString();
 };
+
 
 // This is not used to create the database schema it is only used for validation.
 // Whenever a model instance is created it is checked against this schema.
@@ -46,7 +62,7 @@ Playbook.jsonSchema = {
 
 Playbook.relationMappings = {
   company: {
-    relation: db.OneToOneRelation,
+    relation: Model.OneToOneRelation,
     modelClass: __dirname + '/Company',
     join: {
       from: 'playbooks.company_id',
@@ -55,7 +71,7 @@ Playbook.relationMappings = {
   },
 
   role: {
-    relation: db.OneToOneRelation,
+    relation: Model.OneToOneRelation,
     modelClass: __dirname + '/Role',
     join: {
       from: 'playbooks.role_id',
@@ -64,7 +80,7 @@ Playbook.relationMappings = {
   },
 
   completed_playbooks: {
-    relation: db.OneToManyRelation,
+    relation: Model.OneToManyRelation,
     modelClass: __dirname + '/CompletedPlaybook',
     join: {
       from: 'playbooks.id',
@@ -73,38 +89,54 @@ Playbook.relationMappings = {
   }
 };
 
-Playbook.getPlaybook = (queryData) => {
-  return Playbook
-          .query()
-          .where(queryData)
-          .where('playbooks.deleted', '=', 'false')
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
+// Custom Queries
 
-Playbook.postPlaybook = (data) => {
-  return Playbook
-          .query()
-          .insert({ ...data, id: uuid.v4() } )
-          .then((result) => result )
-          .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.getAll = function () {
+    return this
+              .select(
+                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc'
+              )
+              .where('playbooks.deleted', '=', 'false')
+              .orderBy('playbooks.created_at', 'asc')
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
 
-Playbook.putPlaybook = (data, playbookId) => {
-  return Playbook
-          .query()
-          .where({ id: playbookId })
-          .patch(data)
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
+    return this
+              .select(
+                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc'
+              )
+              .where('playbooks.id', '=', `${playbookId}`)
+              .where('playbooks.deleted', '=', 'false')
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
 
-Playbook.duplicatePlaybook = (playbookId) => {
-  return getPlaybook(playbookId)
-    .then(data => merge(data[0], { name: data[0].name + ' (Copy)' }))
-    .then(data => postPlaybook(data))
-    .then((result) => result)
-    .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.postPlaybook = function (data) {
+    return this
+            .insert({ ...data, id: uuid.v4() } )
+            .then((result) => result)
+            .catch((err) => { throw err });
+};
+
+MyQueryBuilder.prototype.putPlaybook = function (data, playbookId) {
+    return this
+              .where({ id: playbookId })
+              .patch(data)
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
+
+MyQueryBuilder.prototype.duplicatePlaybook = function (playbookId) {
+    return this
+              .select(
+                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc'
+              )
+              .where('playbooks.id', '=', `${playbookId}`)
+              .where('playbooks.deleted', '=', 'false')
+              .then((data) => { return merge(data[0], { name: data[0].name + ' (Copy)' }) })
+              .catch((err) => { throw err });
+};
 
 module.exports = Playbook;

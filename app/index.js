@@ -8,6 +8,7 @@ const bodyParser = require('koa-bodyparser');
 const jwt        = require('koa-jwt');
 const unless     = require('koa-unless');
 const logger     = require('./utils/logger');
+const multiTenant = require('./utils/multiTenant');
 
 // Instantiate app
 const app     = module.exports = Koa();
@@ -17,18 +18,33 @@ app.use(cors({
   origin: '*'
 }));
 
+// Subdomain catching
+app.use(function* (next) {
+  this.subdomain = yield multiTenant.getSubdomain(this.request.header.host);
+  yield* next;
+});
+
+// Database routing
+app.use(function* (next) {
+  const knex = yield multiTenant.clientCreator(this.subdomain);
+  this.models = {
+    Company: require('./models/Company').bindKnex(knex),
+    User: require('./models/User').bindKnex(knex),
+    Role: require('./models/Role').bindKnex(knex),
+    Playbook: require('./models/Playbook').bindKnex(knex),
+    CompletedPlaybook: require('./models/CompletedPlaybook').bindKnex(knex)
+  };
+  yield* next;
+});
+
 // Configure router
 const router  = new Router({
   prefix: '/api/v1'
 });
 
-// Configure DBs
-app.context.db = require('./db.js');
-
 // Add routes to router
 const configureRoutes = require('./routes/');
 configureRoutes(router);
-console.log(chalk.green.bold('--- Routes configured'));
 
 // Tell app to use router
 app
@@ -79,9 +95,6 @@ router.use(function* (next) {
 
 // JWT auth needed for API routes
 // router.use(jwt({ secret: 'shared' }).unless({path: [/^\/api\/v1\/login|register|playbooks|submitPlaybook/]}));
-
-
-
 
 // Generic Response
 app.use(function* (next) {

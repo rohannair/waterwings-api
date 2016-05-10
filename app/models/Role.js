@@ -1,14 +1,27 @@
 // Role model
-const db = require('../db');
+const Model = require('objection').Model;
+const QueryBuilder = require('objection').QueryBuilder;
 const uuid = require('node-uuid');
 
 function Role() {
-  db.apply(this, arguments);
+  Model.apply(this, arguments);
 }
 
-db.extend(Role);
+Model.extend(Role);
 Role.tableName = 'roles';
 
+function MyQueryBuilder() {
+  QueryBuilder.apply(this, arguments);
+}
+
+QueryBuilder.extend(MyQueryBuilder);
+
+// Instance of this is created when you call `query()` or `$query()`.
+Role.QueryBuilder = MyQueryBuilder;
+// Instance of this is created when you call `$relatedQuery()`.
+Role.RelatedQueryBuilder = MyQueryBuilder;
+
+// Timestamp functions
 Role.prototype.$beforeInsert = function () {
   this.created_at = new Date().toUTCString();
 };
@@ -35,7 +48,7 @@ Role.jsonSchema = {
 
 Role.relationMappings = {
   users: {
-    relation: db.OneToManyRelation,
+    relation: Model.OneToManyRelation,
     modelClass: __dirname + '/User',
     join: {
       from: 'roles.id',
@@ -44,7 +57,7 @@ Role.relationMappings = {
   },
 
   playbooks: {
-    relation: db.OneToManyRelation,
+    relation: Model.OneToManyRelation,
     modelClass: __dirname + '/Playbook',
     join: {
       from: 'roles.id',
@@ -53,7 +66,7 @@ Role.relationMappings = {
   },
 
   company: {
-    relation: db.OneToOneRelation,
+    relation: Model.OneToOneRelation,
     modelClass: __dirname + '/Company',
     join: {
       from: 'roles.company_id',
@@ -62,32 +75,31 @@ Role.relationMappings = {
   }
 };
 
-// Database Queries
+// Custom Queries
 
-Role.getRole = (queryData) => {
-  return Role
-          .query()
-          .where(queryData)
-          .where('roles.deleted', '=', 'false')
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.getAll = function () {
+    return this
+              .select(
+                'roles.name'
+              )
+              .where('roles.deleted', '=', 'false')
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
 
-Role.postRole = (data) => {
-  return Role
-          .query()
-          .insert(data)
-          .then((result) => result )
-          .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.postRole = function (data) {
+    return this
+            .insert(data)
+            .then((result) => result)
+            .catch((err) => { throw err });
+};
 
-Role.putRole = (data, roleId) => {
-  return Role
-          .query()
-          .where({ id: roleId })
-          .patch(data)
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.putRole = function (data, roleId) {
+    return this
+              .where({ id: roleId })
+              .patch(data)
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
 
 module.exports = Role;

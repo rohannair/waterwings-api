@@ -1,17 +1,12 @@
-// Import Models
-const Company = require('../models/Company');
-const User = require('../models/User');
-const Role = require('../models/Role');
-const Playbook = require('../models/Playbook');
-const CompletedPlaybook = require('../models/CompletedPlaybook');
+// Router
 
-// Import Controllers and load models into them
+// Controllers
 const loginController  = require('../controllers/loginController');
-const companiesController = require('../controllers/companiesController')(Company, User);
-const usersController  = require('../controllers/usersController')(User);
-const rolesController = require('../controllers/rolesController')(Role, User);
-const playbooksController = require('../controllers/playbooksController')(Playbook, User);
-const completedPlaybooksController = require('../controllers/completedPlaybooksController')(CompletedPlaybook, User);
+const companiesController = require('../controllers/companiesController')();
+const usersController  = require('../controllers/usersController')();
+const rolesController = require('../controllers/rolesController')();
+const playbooksController = require('../controllers/playbooksController')();
+const completedPlaybooksController = require('../controllers/completedPlaybooksController')();
 
 module.exports = function configure(router) {
 
