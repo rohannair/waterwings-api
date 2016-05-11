@@ -1,3 +1,9 @@
+// Deps
+const chalk = require('chalk');
+const parse = require('co-body');
+const encrypt = require('../utils/encryption');
+const bcrypt = require('bcrypt');
+
 // Users Controller
 const usersController = () => {
 
@@ -34,7 +40,11 @@ const usersController = () => {
 
     POST: function* () {
       try {
-        const result = yield this.models.User.query().postUser(this.request.body);
+        // TODO: Consider moving the password hashing into the model
+        const request = this.request.body;
+        const hash = yield encrypt.encryptPassword(request.password);
+        request.password = hash
+        const result = yield this.models.User.query().postUser(request);
         this.status = 201;
         this.body = result;
       }

@@ -13,7 +13,7 @@ function* clientCreator(user) {
       connection: {
         host     : 'localhost',
         user     : `${user}`,
-        password : `${user}`,
+        password : 'password',
         database : 'quartermasterdb',
         charset  : 'utf8'
       },

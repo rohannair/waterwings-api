@@ -2,6 +2,7 @@
 const Model = require('objection').Model;
 const QueryBuilder = require('objection').QueryBuilder;
 const uuid = require('node-uuid');
+const encrypt = require('../utils/encryption');
 
 function User() {
   Model.apply(this, arguments);
@@ -39,7 +40,7 @@ User.jsonSchema = {
   properties: {
     id             : { type: 'string' },
     username       : { type: 'string', minLength: 1, maxLength: 50 },
-    password       : { type: 'string', minLength: 6, maxLength: 50 },
+    password       : { type: 'string', minLength: 6, maxLength: 100 },
     is_admin       : { type: 'boolean' },
     first_name     : { type: 'string', minLength: 1, maxLength: 50 },
     last_name      : { type: 'string', minLength: 1, maxLength: 50 },
@@ -116,6 +117,17 @@ MyQueryBuilder.prototype.getUserById = function (userId) {
               .where('users.deleted', '=', 'false')
               .then((result) => result)
               .catch((err) => { throw err });
+};
+
+MyQueryBuilder.prototype.getUserwithPasswordByUsername = function (name) {
+    return this
+              .select(
+                'users.id', 'users.username', 'users.password', 'users.is_admin', 'users.company_id'
+              )
+              .where('users.username', '=', `${name}`)
+              .where('users.deleted', '=', 'false')
+              .then((result) => result)
+              .catch((err) => { throw { status: 404, message: 'Can not find a user with that username'} });
 };
 
 MyQueryBuilder.prototype.postUser = function (data) {
