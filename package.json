@@ -19,7 +19,7 @@
     "babel-node": "./node_modules/.bin/babel-node --ignore='node_modules'",
     "start": "NODE_ENV=production npm run babel-node -- ./app/index.js | ./node_modules/.bin/bunyan -o short",
     "dev": "./node_modules/.bin/nodemon --exec npm run babel-node -- ./app/index.js | ./node_modules/.bin/bunyan -o short",
-    "test": "./node_modules/.bin/babel-node ./app/controllers/__TESTS__/*.test.js | tap-spec"
+    "test": "echo 'Currently no tests' && exit 0"
   },
   "author": "Rohan Nair",
   "dependencies": {
