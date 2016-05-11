@@ -1,7 +1,7 @@
 // Router
 
 // Controllers
-const loginController  = require('../controllers/loginController');
+const loginController  = require('../controllers/loginController')();
 const companiesController = require('../controllers/companiesController')();
 const usersController  = require('../controllers/usersController')();
 const rolesController = require('../controllers/rolesController')();
