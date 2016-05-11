@@ -1,4 +1,3 @@
-const chalk = require('chalk');
 const multipart = require('co-multipart');
 const fetch = require('node-fetch');
 const fs = require('fs');

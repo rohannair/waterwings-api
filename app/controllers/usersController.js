@@ -1,6 +1,4 @@
 // Deps
-const chalk = require('chalk');
-const parse = require('co-body');
 const encrypt = require('../utils/encryption');
 const bcrypt = require('bcrypt');
 

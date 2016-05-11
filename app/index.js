@@ -1,5 +1,4 @@
 // Dependencies
-const chalk      = require('chalk');
 const cors       = require('koa-cors');
 const Koa        = require('koa');
 const Router     = require('koa-router');
@@ -89,7 +88,7 @@ router.use(function* (next) {
       this.response.status = this.status || 500;
       this.response.body = err;
     }
-    console.error(chalk.red.bold('--- ' + err));
+    this.log.info(err);
   }
 });
 
@@ -105,4 +104,4 @@ app.use(function* (next) {
 
 // Turn on the server
 if (!module.parent) app.listen(appPort);
-console.log(chalk.green.bold('--- Listening at port', appPort));
+console.log('--- Listening at port', appPort);
