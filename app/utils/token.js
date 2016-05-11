@@ -4,7 +4,6 @@ const config = require('../config/app.js');
 
 // Utility function to create a jwt, accepts the user details to be included as the payload
 function genToken(userDetails) {
-  console.log(userDetails);
   return jwt.sign(
     // Payload
     { ...userDetails },

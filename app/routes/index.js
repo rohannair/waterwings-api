@@ -1,12 +1,12 @@
 // Router
 
 // Controllers
+const loginController  = require('../controllers/loginController')();
 const companiesController = require('../controllers/companiesController')();
 const usersController  = require('../controllers/usersController')();
 const rolesController = require('../controllers/rolesController')();
 const playbooksController = require('../controllers/playbooksController')();
 const completedPlaybooksController = require('../controllers/completedPlaybooksController')();
-const loginController  = require('../controllers/loginController');
 const uploadsController = require('../controllers/uploadsController');
 
 
