@@ -1,5 +1,7 @@
 // Deps
 const isAdminCheck = require('./../utils/isAdminCheck');
+const encrypt = require('../utils/encryption');
+const bcrypt = require('bcrypt');
 
 // Controller
 const usersController = (User) => {
