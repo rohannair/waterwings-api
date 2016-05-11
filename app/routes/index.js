@@ -7,13 +7,13 @@ const usersController  = require('../controllers/usersController')();
 const rolesController = require('../controllers/rolesController')();
 const playbooksController = require('../controllers/playbooksController')();
 const completedPlaybooksController = require('../controllers/completedPlaybooksController')();
+const uploadsController = require('../controllers/uploadsController');
 
 module.exports = function configure(router) {
 
   router
 
   // Login
-  // .post('/register', loginController.REGISTER)
   .post('/login', loginController.LOGIN)
 
   // Companies
@@ -47,6 +47,9 @@ module.exports = function configure(router) {
   .get('/completedPlaybooks', completedPlaybooksController.GET)
   .post('/completedPlaybooks', completedPlaybooksController.POST)
   .put('/completedPlaybooks/:id', completedPlaybooksController.PUT)
-  .delete('/completedPlaybooks/:id', completedPlaybooksController.DELETE);
+  .delete('/completedPlaybooks/:id', completedPlaybooksController.DELETE)
+
+  // Uploads
+  .post('/upload', uploadsController.POST)
 
 };
