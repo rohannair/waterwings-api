@@ -7,6 +7,9 @@
   "engines": {
     "node": "4.2.3"
   },
+  "babel": {
+      "presets": ["es2015", "stage-0"]
+  },
   "scripts": {
     "db:migrate": "psql -h localhost -p 5432 -d quartermasterdb -U root -f ./migrations/index.sql",
     "db:seed": "psql -h localhost -p 5432 -d quartermasterdb -U root -f ./seeds.sql",
