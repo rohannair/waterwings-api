@@ -100,9 +100,9 @@ Playbook.putPlaybook = (data, playbookId) => {
 }
 
 Playbook.duplicatePlaybook = (playbookId) => {
-  return getPlaybook(playbookId)
+  return Playbook.getPlaybook(playbookId)
     .then(data => merge(data[0], { name: data[0].name + ' (Copy)' }))
-    .then(data => postPlaybook(data))
+    .then(data => Playbook.postPlaybook(data))
     .then((result) => result)
     .catch((err) => { throw err });
 }
