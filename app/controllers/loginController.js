@@ -1,10 +1,10 @@
 // Dependencies
-const bcrypt   = require('co-bcryptjs');
-const bcryptjs = require('bcryptjs');
-const co       = require('co');
-const chalk    = require('chalk');
+// const bcrypt   = require('co-bcryptjs');
+// const bcryptjs = require('bcryptjs');
+// const co       = require('co');
+// const chalk    = require('chalk');
 const jwt      = require('koa-jwt');
-const parse    = require('co-body');
+// const parse    = require('co-body');
 
 
 // Models
@@ -13,21 +13,21 @@ import { User } from '../models/User';
 // Controller
 const loginController = (function() {
 
-  function* PUT() {
-    const self    = this;
-    const request = yield parse(this.req);
-    const salt    = yield bcrypt.genSalt(10);
-    const hash    = yield bcrypt.hash(request.password, salt);
-    const payload = { ...request, password: hash };
-
-    yield User
-    .query()
-    .insert(payload)
-    .then(function(model) {
-      console.log(chalk.green.bold('--- POST', JSON.stringify(model, null, 4)));
-      self.body = {token: model.token};
-    });
-  }
+  // function* PUT() {
+  //   const self    = this;
+  //   const request = yield parse(this.req);
+  //   const salt    = yield bcrypt.genSalt(10);
+  //   const hash    = yield bcrypt.hash(request.password, salt);
+  //   const payload = { ...request, password: hash };
+  //
+  //   yield User
+  //   .query()
+  //   .insert(payload)
+  //   .then(function(model) {
+  //     console.log(chalk.green.bold('--- POST', JSON.stringify(model, null, 4)));
+  //     self.body = {token: model.token};
+  //   });
+  // }
 
   function* POST() {
     const self    = this;
@@ -56,8 +56,8 @@ const loginController = (function() {
   }
 
   return {
-    PUT: PUT,
-    POST: POST,
+    // PUT: PUT,
+    POST: POST
   };
 })();
 

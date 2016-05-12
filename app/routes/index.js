@@ -19,7 +19,7 @@ module.exports = function configure(router) {
   router
 
   // Login
-  .put('/register', loginController.PUT)
+  // .put('/register', loginController.PUT)
   .post('/login', loginController.POST)
 
   // Companies

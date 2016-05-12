@@ -27,7 +27,7 @@ app.context.db = require('./db.js');
 // Add routes to router
 const configureRoutes = require('./routes/');
 configureRoutes(router);
-console.log(chalk.green.bold('--- Routes configured'));
+console.log('--- Routes configured');
 
 // Tell app to use router
 app
