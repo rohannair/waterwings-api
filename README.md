@@ -12,7 +12,7 @@ $ npm run db:migrate
 ```
 
 ## Seed the database
-Only necessary if you require fake data in the database
+Only necessary if you require mock data in the database
 ```bash
 $ npm run db:seed
 ```
