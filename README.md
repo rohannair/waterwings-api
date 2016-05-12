@@ -25,12 +25,12 @@ $ npm start
 ## Testing
 To run each test first move into the testing directory
 ```bash
-cd app/controllers/__TESTS__/
+$ cd app/controllers/__TESTS__/
 ```
 
 Now you will be able to run each test with
 ```bash
-babel-node usersController.test.js
+$ babel-node usersController.test.js
 ```
 
 Here usersController.test.js is an example but each test can be run in this way.
