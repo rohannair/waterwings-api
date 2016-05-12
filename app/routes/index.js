@@ -1,11 +1,18 @@
-// Controllers
-const loginController  = require('../controllers/loginController');
-const companiesController = require('../controllers/companiesController');
-const usersController  = require('../controllers/usersController');
-const rolesController = require('../controllers/rolesController');
-const playbooksController = require('../controllers/playbooksController');
-const completedPlaybooksController = require('../controllers/completedPlaybooksController');
+// Import Models
+const Company = require('../models/Company');
+const User = require('../models/User');
+const Role = require('../models/Role');
+const Playbook = require('../models/Playbook');
+const CompletedPlaybook = require('../models/CompletedPlaybook');
 
+// Import Controllers and load models into them
+const loginController  = require('../controllers/loginController');
+const companiesController = require('../controllers/companiesController')(Company, User);
+const usersController  = require('../controllers/usersController')(User);
+const rolesController = require('../controllers/rolesController')(Role, User);
+const playbooksController = require('../controllers/playbooksController')(Playbook, User);
+const completedPlaybooksController = require('../controllers/completedPlaybooksController')(CompletedPlaybook, User);
+const uploadsController = require('../controllers/uploadsController');
 
 module.exports = function configure(router) {
 
@@ -23,6 +30,7 @@ module.exports = function configure(router) {
 
   // Users
   .get('/users', usersController.GET)
+  .get('/users/:id', usersController.GET_ONE)
   .post('/users', usersController.POST)
   .put('/users/:id', usersController.PUT)
   .delete('/users/:id', usersController.DELETE)
@@ -45,6 +53,16 @@ module.exports = function configure(router) {
   .get('/completedPlaybooks', completedPlaybooksController.GET)
   .post('/completedPlaybooks', completedPlaybooksController.POST)
   .put('/completedPlaybooks/:id', completedPlaybooksController.PUT)
-  .delete('/completedPlaybooks/:id', completedPlaybooksController.DELETE);
+  .delete('/completedPlaybooks/:id', completedPlaybooksController.DELETE)
 
+  // Uploads
+  .post('/upload', uploadsController.POST)
+
+  /**
+   * Dear team,
+   *
+   * LEAVE THE DAMN SEMI-COLON OFF IN THIS FILE
+   *
+   *                                  <3 Rohan
+   */
 };

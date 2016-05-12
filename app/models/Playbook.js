@@ -3,7 +3,7 @@ const db    = require('../db');
 const uuid  = require('node-uuid');
 const merge = require('Ramda').merge;
 
-export function Playbook() {
+function Playbook() {
   db.apply(this, arguments);
 }
 
@@ -39,48 +39,50 @@ Playbook.jsonSchema = {
                     additionalProperties: true
                   },
     created_at  : { type: 'object' },
-    updated_at  : { type: 'object' }
+    updated_at  : { type: 'object' },
+    deleted     : { type: 'boolean' }
   }
 };
 
 Playbook.relationMappings = {
-  // company: {
-  //   relation: db.OneToOneRelation,
-  //   modelClass: require('./Company.js'),
-  //   join: {
-  //     from: 'playbooks.company_id',
-  //     to: 'companies.id'
-  //   }
-  // },
-  //
-  // role: {
-  //   relation: db.OneToOneRelation,
-  //   modelClass: require('./Role.js'),
-  //   join: {
-  //     from: 'playbooks.role_id',
-  //     to: 'roles.id'
-  //   }
-  // },
-  //
-  // completed_playbooks: {
-  //   relation: db.OneToManyRelation,
-  //   modelClass: require('./CompletedPlaybook.js'),
-  //   join: {
-  //     from: 'playbooks.id',
-  //     to: 'completed_playbooks.playbook_id'
-  //   }
-  // }
+  company: {
+    relation: db.OneToOneRelation,
+    modelClass: __dirname + '/Company',
+    join: {
+      from: 'playbooks.company_id',
+      to: 'companies.id'
+    }
+  },
+
+  role: {
+    relation: db.OneToOneRelation,
+    modelClass: __dirname + '/Role',
+    join: {
+      from: 'playbooks.role_id',
+      to: 'roles.id'
+    }
+  },
+
+  completed_playbooks: {
+    relation: db.OneToManyRelation,
+    modelClass: __dirname + '/CompletedPlaybook',
+    join: {
+      from: 'playbooks.id',
+      to: 'completed_playbooks.playbook_id'
+    }
+  }
 };
 
-export function getPlaybook(queryData) {
+Playbook.getPlaybook = (queryData) => {
   return Playbook
           .query()
           .where(queryData)
+          .where('playbooks.deleted', '=', 'false')
           .then((result) => result)
           .catch((err) => { throw err });
 }
 
-export function postPlaybook(data) {
+Playbook.postPlaybook = (data) => {
   return Playbook
           .query()
           .insert({ ...data, id: uuid.v4() } )
@@ -88,7 +90,7 @@ export function postPlaybook(data) {
           .catch((err) => { throw err });
 }
 
-export function putPlaybook(data, playbookId) {
+Playbook.putPlaybook = (data, playbookId) => {
   return Playbook
           .query()
           .where({ id: playbookId })
@@ -97,19 +99,12 @@ export function putPlaybook(data, playbookId) {
           .catch((err) => { throw err });
 }
 
-export function deletePlaybook(playbookId) {
-  return Playbook
-          .query()
-          .where({ id: playbookId })
-          .del()
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
-
-export function duplicatePlaybook(playbookId) {
+Playbook.duplicatePlaybook = (playbookId) => {
   return getPlaybook(playbookId)
     .then(data => merge(data[0], { name: data[0].name + ' (Copy)' }))
     .then(data => postPlaybook(data))
     .then((result) => result)
     .catch((err) => { throw err });
 }
+
+module.exports = Playbook;
