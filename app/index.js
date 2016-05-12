@@ -91,4 +91,4 @@ app.use(function* (next) {
 
 // Turn on the server
 if (!module.parent) app.listen(appPort);
-console.log('--- Listening at port', appPort);
+console.log((chalk.green.bold('--- Listening at port', appPort));
