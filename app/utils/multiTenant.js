@@ -1,12 +1,13 @@
 const knex = require('knex')
 
 function* getSubdomain(url) {
-  let subdomain = url.split('.');
-  if(subdomain.length < 2) throw 'Incorrect SubDomain';
-  return subdomain[0].toLowerCase();
+  // TODO: Need to check that the subdomin belongs to a authorized Company
+  if(url.split('.').length < 2) throw 'Incorrect SubDomain';
+  return url.split('.')[0].toLowerCase();
 }
 
 function* clientCreator(user) {
+
     return knex(
       {
       client: 'pg',

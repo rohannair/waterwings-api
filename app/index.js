@@ -9,6 +9,7 @@ const unless     = require('koa-unless');
 const logger     = require('./utils/logger');
 const chalk       = require('chalk');
 const multiTenant = require('./utils/multiTenant');
+const configs    = require('./config/app')();
 
 
 // Instantiate app
@@ -19,15 +20,44 @@ app.use(cors({
   origin: '*'
 }));
 
-// Subdomain catching
+// Logger
+
+// Add logger to app
 app.use(function* (next) {
-  this.subdomain = yield multiTenant.getSubdomain(this.request.header.host);
+  this.log = logger;
   yield* next;
+});
+
+// Log both incoming requests and outgoing responses
+app.use(function* (next) {
+  this.log.info('REQUEST: ' + this.request.method + ' ' + this.request.url);
+  yield* next;
+  this.log.info('RESPONSE: ' + this.response.status);
+});
+
+// Subdomain catching
+// Grabs the subdomin of the incoming request in order to properly identify to which
+// database the request should be routed too
+app.use(function* (next) {
+  try {
+      this.subdomain = yield multiTenant.getSubdomain(this.request.header.host);
+      yield* next;
+  }
+  catch(err) {
+    this.log.info(err);
+    this.status = 404;
+    this.body = {
+      message: 'Incorrect subdomin, this company does not exist'
+    };
+  }
 });
 
 // Database routing
 app.use(function* (next) {
+  // Determine the database to connect to based on the subdomain of the request
   const knex = yield multiTenant.clientCreator(this.subdomain);
+  // Models are added on each incoming request since a different database may be accessed on
+  // each request due to multi tenancy
   this.models = {
     Company: require('./models/Company').bindKnex(knex),
     User: require('./models/User').bindKnex(knex),
@@ -62,21 +92,6 @@ app
 
 // Middleware
 
-// Logger
-
-// Add logger to app
-router.use(function* (next) {
-  this.log = logger;
-  yield* next;
-});
-
-// Log both incoming requests and outgoing responses
-router.use(function* (next) {
-  this.log.info('REQUEST: ' + this.request.method + ' ' + this.request.url);
-  yield* next;
-  this.log.info('RESPONSE: ' + this.response.status);
-});
-
 // Validation
 router.use(bouncer.middleware());
 
@@ -103,7 +118,7 @@ router.use(function* (next) {
 });
 
 // JWT auth needed for API routes
-router.use(jwt({ secret: 'shared' }).unless({path: [/^\/api\/v1\/login|users|register|surveys|submitSurvey/]}));
+router.use(jwt({ secret: configs.getJWT() }).unless({path: [/^\/api\/v1\/login|playbooks|submitPlaybook/]}));
 
 // Generic Response
 app.use(function* (next) {
