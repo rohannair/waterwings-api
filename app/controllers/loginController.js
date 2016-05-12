@@ -2,7 +2,9 @@
 const encrypt = require('../utils/encryption');
 const genToken = require('../utils/token');
 
-// Controller
+// Login Controller
+// Individual Controller functions are wrapped in a larger function so that they can
+// can be exported using modules.exports and then easily imported into the routes file
 const loginController = function() {
   return {
     LOGIN: function* () {

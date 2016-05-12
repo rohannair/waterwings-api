@@ -1,15 +1,11 @@
-module.exports = (function() {
+module.exports = () => {
+  // Configuration Params
+  let jwtSecret = 'shared';
 
-  let jwtSecret = 'rohan 12345';
-
-  function get(param) {
-    if (param) return param;
-
-    return 'Parameter doesn\'t exist';
-  }
-
+  // Getter functions
   return {
-    get: get,
+    getJWT: () => {
+      return jwtSecret
+    }
   };
-
-})();
+}

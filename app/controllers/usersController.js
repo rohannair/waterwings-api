@@ -3,6 +3,8 @@ const encrypt = require('../utils/encryption');
 const bcrypt = require('bcrypt');
 
 // Users Controller
+// Individual Controller functions are wrapped in a larger function so that they can
+// can be exported using modules.exports and then easily imported into the routes file
 const usersController = () => {
 
   return {
