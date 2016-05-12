@@ -26,8 +26,9 @@ const usersController = (function() {
     const request = yield parse(this.req);
     try {
       const result = yield postUser(request);
+      const newUser = yield getUser(result.id)
       this.status = 201;
-      this.body = result;
+      this.body = newUser;
     }
     catch(err) {
       this.log.info(err);
