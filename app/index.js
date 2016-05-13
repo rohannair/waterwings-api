@@ -22,6 +22,10 @@ const router  = new Router({
   prefix: '/api/v1'
 });
 
+router.use(cors({
+  origin: '*'
+}));
+
 // Configure DBs
 app.context.db = require('./db.js');
 
