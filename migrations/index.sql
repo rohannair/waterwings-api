@@ -7,4 +7,6 @@ BEGIN;
 \i ./migrations/04052016-migration.sql
 -- Migration to added deleted column to tables
 \i ./migrations/05052016-migration.sql
+-- Migration to change is_admin column in user's table to default to false
+\i ./migrations/13052016-migration.sql
 COMMIT;
