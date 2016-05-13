@@ -7,6 +7,7 @@ const bodyParser = require('koa-bodyparser');
 const jwt        = require('koa-jwt');
 const unless     = require('koa-unless');
 const logger     = require('./utils/logger');
+const chalk       = require('chalk');
 
 // Instantiate app
 const app     = module.exports = Koa();
@@ -91,4 +92,4 @@ app.use(function* (next) {
 
 // Turn on the server
 if (!module.parent) app.listen(appPort);
-console.log((chalk.green.bold('--- Listening at port', appPort));
+console.log(chalk.green.bold('--- Listening at port', appPort));
