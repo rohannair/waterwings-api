@@ -38,6 +38,7 @@ then
   exit 2
 fi
 
+npm install -g npm
 npm cache clean
 npm install
 
