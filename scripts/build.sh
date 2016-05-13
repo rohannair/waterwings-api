@@ -59,6 +59,9 @@ else
   echo
 fi
 
+# Remove dev dependencies
+npm prune --production
+
 ARTIFACT_PATH=${ARTIFACT_DIR}/${ARTIFACT_FILE}
 
 # Pack FILES_TO_INCLUDE and copy the artifact somewhere
