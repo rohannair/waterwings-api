@@ -1,6 +1,11 @@
 // Deps
+<<<<<<< HEAD
 const isAdminCheck = require('./../utils/isAdminCheck');
 const encrypt = require('../utils/encryption');
+=======
+const encrypt = require('../utils/encryption');
+const bcrypt = require('bcrypt');
+>>>>>>> 03d6dca5c6cc8a2273f909c22c339f6d277f1166
 
 // Users Controller
 // Individual Controller functions are wrapped in a larger function so that they can
@@ -25,11 +30,16 @@ const usersController = () => {
 
     POST: function* () {
       try {
+<<<<<<< HEAD
         const hash = yield encrypt.encryptPassword(this.request.body.password, 10);
         this.request.body.password = hash
         const newUser = yield this.models.User.query().postUser(this.request.body);
         const result = yield this.models.User.query().getUserById(this.params.id);
         this.status = 201;
+=======
+        const result = yield this.models.User.query().getUserById(this.params.id);
+        this.status = 200;
+>>>>>>> 03d6dca5c6cc8a2273f909c22c339f6d277f1166
         this.body = result[0];
       }
       catch(err) {
@@ -43,7 +53,15 @@ const usersController = () => {
 
     GET_ONE: function* () {
       try {
+<<<<<<< HEAD
         const result = yield this.models.User.query().postUser(this.request.body);
+=======
+        // TODO: Consider moving the password hashing into the model
+        const request = this.request.body;
+        const hash = yield encrypt.encryptPassword(request.password);
+        request.password = hash
+        const result = yield this.models.User.query().postUser(request);
+>>>>>>> 03d6dca5c6cc8a2273f909c22c339f6d277f1166
         this.status = 201;
         this.body = result[0];
       }

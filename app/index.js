@@ -11,7 +11,6 @@ const chalk       = require('chalk');
 const multiTenant = require('./utils/multiTenant');
 const configs    = require('./config/app')();
 
-
 // Instantiate app
 const app     = module.exports = Koa();
 const appPort = process.argv[2] || 3000;
@@ -83,7 +82,6 @@ app.context.db = require('./db.js');
 // Add routes to router
 const configureRoutes = require('./routes/');
 configureRoutes(router);
-console.log('--- Routes configured');
 
 // Tell app to use router
 app

@@ -139,5 +139,4 @@ MyQueryBuilder.prototype.duplicatePlaybook = function (playbookId) {
               .catch((err) => { throw err });
 };
 
-
 module.exports = Playbook;

@@ -1,6 +1,4 @@
 // Dependencies
-const chalk    = require('chalk');
-const parse    = require('co-body');
 const encrypt = require('../utils/encryption');
 const genToken = require('../utils/token');
 

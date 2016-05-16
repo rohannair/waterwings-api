@@ -119,16 +119,25 @@ MyQueryBuilder.prototype.getUserById = function (userId) {
               .catch((err) => { throw err });
 };
 
-MyQueryBuilder.prototype.getUserwithPassword = function (userId) {
+MyQueryBuilder.prototype.getUserwithPasswordById = function (userId) {
     return this
             .select(
                 'users.id', 'users.username', 'users.password', 'users.first_name', 'users.last_name', 'users.is_admin','users.company_id', 'r.name as rolename'
               )
-              .leftJoin('roles as r', 'users.role_id', 'r.id')
               .where('users.id', '=', `${userId}`)
               .where('users.deleted', '=', 'false')
               .then((result) => result)
               .catch((err) => { throw err });
+
+MyQueryBuilder.prototype.getUserwithPasswordByUsername = function (name) {
+    return this
+              .select(
+                'users.id', 'users.username', 'users.password', 'users.is_admin', 'users.company_id'
+              )
+              .where('users.username', '=', `${name}`)
+              .where('users.deleted', '=', 'false')
+              .then((result) => result)
+              .catch((err) => { throw { status: 404, message: 'Can not find a user with that username'} });
 };
 
 MyQueryBuilder.prototype.postUser = function (data) {

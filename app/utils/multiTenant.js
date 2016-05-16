@@ -7,14 +7,13 @@ function* getSubdomain(url) {
 }
 
 function* clientCreator(user) {
-
-    return knex(
-      {
+  return knex(
+    {
       client: 'pg',
       connection: {
         host     : 'localhost',
         user     : `${user}`,
-        password : `${user}`,
+        password : 'password',
         database : 'quartermasterdb',
         charset  : 'utf8'
       },

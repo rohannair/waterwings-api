@@ -15,7 +15,6 @@ module.exports = function configure(router) {
   router
 
   // Login
-  .post('/register', loginController.REGISTER)
   .post('/login', loginController.LOGIN)
 
   // Companies
@@ -54,11 +53,4 @@ module.exports = function configure(router) {
   // Uploads
   .post('/upload', uploadsController.POST)
 
-  /**
-   * Dear team,
-   *
-   * LEAVE THE DAMN SEMI-COLON OFF IN THIS FILE
-   *
-   *                                  <3 Rohan
-   */
 };

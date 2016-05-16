@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 // Async function to encrypt a password, given the password and a saltRound value
-function encryptPassword(password, saltRounds = 10) {
+function encryptPassword(password) {
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
       if (err !== undefined) return reject(err);
