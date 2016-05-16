@@ -1,7 +1,7 @@
 // Playbooks model
 const db    = require('../db');
 const uuid  = require('node-uuid');
-const merge = require('Ramda').merge;
+const merge = require('ramda').merge;
 
 function Playbook() {
   db.apply(this, arguments);
