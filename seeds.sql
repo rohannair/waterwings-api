@@ -1,10 +1,10 @@
 -- Seed file for database
 
-INSERT INTO companies(id, name, address) VALUES
-  ('nGLHsVI', 'QRTRMSTR', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "CA"}'),
-  ('hw9AcbY', 'Scotia Bank', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "CA"}'),
-  ('OeUMkxw', 'The Justice League', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "USA"}'),
-  ('smYQv0A', 'The Avengers', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "USA"}');
+INSERT INTO companies(id, name, address, subdomain, database_host) VALUES
+  ('nGLHsVI', 'QRTRMSTR', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "CA"}','qrtrmstr','localhost'),
+  ('hw9AcbY', 'Scotia Bank', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "CA"}','scotiabank','localhost'),
+  ('OeUMkxw', 'The Justice League', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "USA"}','thejusticeleague','localhost'),
+  ('smYQv0A', 'The Avengers', '{"street_address": [1, "Yonge", "Street", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V3Y4", "country": "USA"}','theavengers','localhost');
 
 INSERT INTO roles(name, company_id) VALUES
   ('Executive', 'nGLHsVI'),
@@ -156,12 +156,12 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
 
 INSERT INTO users (id, username, password, is_admin, first_name, last_name, personal_email, company_id, role_id) VALUES
 
-  ('a4bd224f-9aa6-4f15-b3c9-cb7551cd797f', 'usersname1@email.com', 'password', true, 'Rohan', 'Nair', 'r@rohannair.ca', 'nGLHsVI', 1),
-  ('a24b4195-4a49-450b-9b30-81632ef4c245', 'usersname2@email.com', 'password', false, 'Ron', 'Swanson', 'rs@parks.rec', 'nGLHsVI', 2),
-  ('2bd3d5b7-e013-40af-b236-770844e55124', 'usersname3@email.com', 'password', false, 'Lesley', 'Knope', 'lk@parks.rec', 'nGLHsVI', 3),
-  ('376e0300-22d4-4d66-ad31-caf91882964d', 'usersname4@email.com', 'password', false, 'Bruce', 'Wayne', 'bruce@batmail.com', 'OeUMkxw', 4),
-  ('4f0eefc6-dbee-4974-bacb-9f02c112718e', 'usersname5@email.com', 'password', false, 'Clark', 'Kent', 'clark@supermail.com', 'OeUMkxw', 4),
-  ('2f55e067-776e-4d11-817a-9a9c456dddc9', 'usersname6@email.com', 'password', false, 'Tony', 'Stark', 'tony@ironmail.com', 'smYQv0A', 5);
+  ('a4bd224f-9aa6-4f15-b3c9-cb7551cd797f', 'usersname1@email.com', crypt('password', gen_salt('bf')), true, 'Rohan', 'Nair', 'r@rohannair.ca', 'nGLHsVI', 1),
+  ('a24b4195-4a49-450b-9b30-81632ef4c245', 'usersname2@email.com', crypt('password', gen_salt('bf')), false, 'Ron', 'Swanson', 'rs@parks.rec', 'nGLHsVI', 2),
+  ('2bd3d5b7-e013-40af-b236-770844e55124', 'usersname3@email.com', crypt('password', gen_salt('bf')), false, 'Lesley', 'Knope', 'lk@parks.rec', 'nGLHsVI', 3),
+  ('376e0300-22d4-4d66-ad31-caf91882964d', 'usersname4@email.com', crypt('password', gen_salt('bf')), false, 'Bruce', 'Wayne', 'bruce@batmail.com', 'OeUMkxw', 4),
+  ('4f0eefc6-dbee-4974-bacb-9f02c112718e', 'usersname5@email.com', crypt('password', gen_salt('bf')), false, 'Clark', 'Kent', 'clark@supermail.com', 'OeUMkxw', 4),
+  ('2f55e067-776e-4d11-817a-9a9c456dddc9', 'usersname6@email.com', crypt('password', gen_salt('bf')), false, 'Tony', 'Stark', 'tony@ironmail.com', 'smYQv0A', 5);
   --
   -- (gen_random_uuid(), 'usersname1@email.com', crypt('password', gen_salt('bf')), true, 'Rohan', 'Nair', 'r@rohannair.ca', 'nGLHsVI', 1),
   -- (gen_random_uuid(), 'usersname2@email.com', crypt('password', gen_salt('bf')), false, 'Ron', 'Swanson', 'rs@parks.rec', 'nGLHsVI', 2),

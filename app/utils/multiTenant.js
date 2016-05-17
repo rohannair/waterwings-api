@@ -6,13 +6,13 @@ function* getSubdomain(url) {
   return url.split('.')[0].toLowerCase();
 }
 
-function* clientCreator(user) {
+function* clientCreator() {
   return knex(
     {
       client: 'pg',
       connection: {
         host     : 'localhost',
-        user     : `${user}`,
+        user     : `root`,
         password : 'password',
         database : 'quartermasterdb',
         charset  : 'utf8'

@@ -46,17 +46,16 @@ app.use(function* (next) {
     this.log.info(err);
     this.status = 404;
     this.body = {
-      message: 'Incorrect subdomin, this company does not exist'
+      message: 'Incorrect subdomain, this company does not exist'
     };
   }
 });
 
 // Database routing
 app.use(function* (next) {
-  // Determine the database to connect to based on the subdomain of the request
-  const knex = yield multiTenant.clientCreator(this.subdomain);
-  // Models are added on each incoming request since a different database may be accessed on
-  // each request due to multi tenancy
+  // Create the database connection
+  const knex = yield multiTenant.clientCreator();
+  // Models are added on each incoming request
   this.models = {
     Company: require('./models/Company').bindKnex(knex),
     User: require('./models/User').bindKnex(knex),
@@ -67,6 +66,7 @@ app.use(function* (next) {
   yield* next;
 });
 
+
 // Configure router
 const router  = new Router({
   prefix: '/api/v1'
@@ -75,9 +75,6 @@ const router  = new Router({
 router.use(cors({
   origin: '*'
 }));
-
-// Configure DBs
-app.context.db = require('./db.js');
 
 // Add routes to router
 const configureRoutes = require('./routes/');
@@ -116,7 +113,7 @@ router.use(function* (next) {
 });
 
 // JWT auth needed for API routes
-router.use(jwt({ secret: configs.getJWT() }).unless({path: [/^\/api\/v1\/login|playbooks|submitPlaybook/]}));
+router.use(jwt({ secret: configs.getJWT() }).unless({path: [/^\/api\/v1\/login/]}));
 
 // Generic Response
 app.use(function* (next) {

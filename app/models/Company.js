@@ -73,7 +73,9 @@ Company.jsonSchema = {
                     },
     created_at    : { type: 'object' },
     updated_at    : { type: 'object' },
-    deleted       : { type: 'boolean' }
+    deleted       : { type: 'boolean' },
+    subdomain     : { type: 'text' },
+    domain_host   : { type: 'text' }
   }
 };
 
@@ -127,6 +129,15 @@ MyQueryBuilder.prototype.getAll = function () {
               .then((result) => result)
               .catch((err) => { throw err });
 };
+
+MyQueryBuilder.prototype.getCompanyBySubdomain = function (subdomain) {
+    return this
+              .where('companies.deleted', '=', 'false')
+              .where('companies.subdomain', '=', `${subdomain}`)
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
+
 
 MyQueryBuilder.prototype.postCompany = function (data) {
     return this
