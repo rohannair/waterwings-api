@@ -1,14 +1,27 @@
 // Company model
-const db = require('../db');
+const Model = require('objection').Model;
+const QueryBuilder = require('objection').QueryBuilder;
 const uuid = require('node-uuid');
 
 function Company() {
-  db.apply(this, arguments);
+  Model.apply(this, arguments);
 }
 
-db.extend(Company);
+Model.extend(Company);
 Company.tableName = 'companies';
 
+function MyQueryBuilder() {
+  QueryBuilder.apply(this, arguments);
+}
+
+QueryBuilder.extend(MyQueryBuilder);
+
+// Instance of this is created when you call `query()` or `$query()`.
+Company.QueryBuilder = MyQueryBuilder;
+// Instance of this is created when you call `$relatedQuery()`.
+Company.RelatedQueryBuilder = MyQueryBuilder;
+
+// Timestamp functions
 Company.prototype.$beforeInsert = function () {
   this.created_at = new Date().toUTCString();
 };
@@ -60,13 +73,15 @@ Company.jsonSchema = {
                     },
     created_at    : { type: 'object' },
     updated_at    : { type: 'object' },
-    deleted       : { type: 'boolean' }
+    deleted       : { type: 'boolean' },
+    subdomain     : { type: 'text' },
+    domain_host   : { type: 'text' }
   }
 };
 
 Company.relationMappings = {
   users: {
-    relation: db.OneToManyRelation,
+    relation: Model.OneToManyRelation,
     modelClass: __dirname + '/User',
     join: {
       from: 'companies.id',
@@ -75,7 +90,7 @@ Company.relationMappings = {
   },
 
   roles: {
-    relation: db.OneToManyRelation,
+    relation: Model.OneToManyRelation,
     modelClass: __dirname + '/Role',
     join: {
       from: 'companies.id',
@@ -84,7 +99,7 @@ Company.relationMappings = {
   },
 
   playbooks: {
-    relation: db.OneToManyRelation,
+    relation: Model.OneToManyRelation,
     modelClass: __dirname + '/Playbook',
     join: {
       from: 'companies.id',
@@ -93,7 +108,7 @@ Company.relationMappings = {
   },
 
   completed_playbooks: {
-    relation: db.OneToManyRelation,
+    relation: Model.OneToManyRelation,
     modelClass: __dirname + '/CompletedPlaybook',
     join: {
       from: 'companies.id',
@@ -102,30 +117,41 @@ Company.relationMappings = {
   }
 };
 
-Company.getCompany = (queryData) => {
-  return Company
-          .query()
-          .where(queryData)
-          .where('companies.deleted', '=', 'false')
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
+// Custom Queries
 
-Company.postCompany = (data) => {
-  return Company
-          .query()
-          .insert({ id: uuid.v4(), ...data } )
-          .then((result) => result )
-          .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.getAll = function () {
+    return this
+              .select(
+                'companies.id', 'companies.name'
+              )
+              .where('companies.deleted', '=', 'false')
+              .orderBy('companies.created_at', 'asc')
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
 
-Company.putCompany = (data, companyId) => {
-  return Company
-          .query()
-          .patch(data)
-          .where({ id: companyId })
-          .then((result) => result)
-          .catch((err) => { throw err });
-}
+MyQueryBuilder.prototype.getCompanyBySubdomain = function (subdomain) {
+    return this
+              .where('companies.deleted', '=', 'false')
+              .where('companies.subdomain', '=', `${subdomain}`)
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
+
+
+MyQueryBuilder.prototype.postCompany = function (data) {
+    return this
+            .insert({ id: uuid.v4(), ...data } )
+            .then((result) => result)
+            .catch((err) => { throw err });
+};
+
+MyQueryBuilder.prototype.putCompany = function (data, companyId) {
+    return this
+              .where({ id: companyId })
+              .patch(data)
+              .then((result) => result)
+              .catch((err) => { throw err });
+};
 
 module.exports = Company;

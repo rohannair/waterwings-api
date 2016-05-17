@@ -1,25 +1,21 @@
-// Import Models
-const Company = require('../models/Company');
-const User = require('../models/User');
-const Role = require('../models/Role');
-const Playbook = require('../models/Playbook');
-const CompletedPlaybook = require('../models/CompletedPlaybook');
+// Router
 
-// Import Controllers and load models into them
-const loginController  = require('../controllers/loginController');
-const companiesController = require('../controllers/companiesController')(Company, User);
-const usersController  = require('../controllers/usersController')(User);
-const rolesController = require('../controllers/rolesController')(Role, User);
-const playbooksController = require('../controllers/playbooksController')(Playbook, User);
-const completedPlaybooksController = require('../controllers/completedPlaybooksController')(CompletedPlaybook, User);
+// Controllers
+const loginController  = require('../controllers/loginController')();
+const companiesController = require('../controllers/companiesController')();
+const usersController  = require('../controllers/usersController')();
+const rolesController = require('../controllers/rolesController')();
+const playbooksController = require('../controllers/playbooksController')();
+const completedPlaybooksController = require('../controllers/completedPlaybooksController')();
 const uploadsController = require('../controllers/uploadsController');
+
 
 module.exports = function configure(router) {
 
   router
 
   // Login
-  .post('/login', loginController.POST)
+  .post('/login', loginController.LOGIN)
 
   // Companies
   .get('/companies', companiesController.GET)
@@ -57,11 +53,4 @@ module.exports = function configure(router) {
   // Uploads
   .post('/upload', uploadsController.POST)
 
-  /**
-   * Dear team,
-   *
-   * LEAVE THE DAMN SEMI-COLON OFF IN THIS FILE
-   *
-   *                                  <3 Rohan
-   */
 };

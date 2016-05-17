@@ -1,9 +1,13 @@
-// Controller
-const companiesController = (Company, User) => {
+// Companies Controller
+// Individual Controller functions are wrapped in a larger function so that they can
+// can be exported using modules.exports and then easily imported into the routes file
+const companiesController = () => {
   return {
     GET: function* () {
       try {
-        const result = yield Company.getCompany(this.query);
+        console.log(this.models.User);
+        console.log(this.models.Company);
+        const result = yield this.models.Company.query().getAll();
         this.status = 200;
         this.body = result;
       }
@@ -18,7 +22,7 @@ const companiesController = (Company, User) => {
 
     POST: function* () {
       try {
-        const result = yield Company.postCompany(this.request.body);
+        const result = yield this.models.Company.query().postCompany(this.request.body);
         this.status = 201;
         this.body = result;
       }
@@ -33,7 +37,7 @@ const companiesController = (Company, User) => {
 
     PUT: function* () {
       try {
-        const result = yield Company.putCompany(this.request.body, this.params.id);
+        const result = yield this.models.Company.query().putCompany(this.request.body, this.params.id);
         this.status = 200;
         this.body = result;
       }

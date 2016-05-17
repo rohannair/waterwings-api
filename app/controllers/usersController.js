@@ -1,12 +1,15 @@
 // Deps
-const isAdminCheck = require('./../utils/isAdminCheck');
+const encrypt = require('../utils/encryption');
 
-// Controller
-const usersController = (User) => {
+// Users Controller
+// Individual Controller functions are wrapped in a larger function so that they can
+// can be exported using modules.exports and then easily imported into the routes file
+const usersController = () => {
+
   return {
     GET: function* () {
       try {
-        const result = yield User.getUsers();
+        const result = yield this.models.User.query().getAll(this.state.user.companyId);
         this.status = 200;
         this.body = result;
       }
@@ -19,25 +22,13 @@ const usersController = (User) => {
       }
     },
 
-    GET_ONE: function* () {
-      try {
-        const result = yield User.getUserByQuery(this.params.id);
-        this.status = 200;
-        this.body = result[0];
-      }
-      catch(err) {
-        this.log.info(err);
-        this.status = 400;
-        this.body = {
-          mesage: 'An error has occured, please try again.'
-        };
-      }
-    },
-
     POST: function* () {
       try {
-        const newUser = yield User.postUser(this.request.body);
-        const result = yield User.getUserByQuery(newUser.id)
+        // TODO: Consider moving the password hashing into the model
+        const hash = yield encrypt.encryptPassword(this.request.body.password);
+        this.request.body.password = hash
+        const newUser = yield this.models.User.query().postUser({ ...this.request.body, company_id: this.state.user.companyId });
+        const result = yield this.models.User.query().getUserById(newUser.id, this.state.user.companyId);
         this.status = 201;
         this.body = result[0];
       }
@@ -50,9 +41,24 @@ const usersController = (User) => {
       }
     },
 
+    GET_ONE: function* () {
+      try {
+        const result = yield this.models.User.query().getUserById(this.params.id);
+        this.status = 200;
+        this.body = result[0];
+      }
+      catch(err) {
+        this.log.info(err);
+        this.status = 400;
+        this.body = {
+          mesage: 'An error has occured, please try again.'
+        };
+      }
+    },
+
     PUT: function* () {
       try {
-        const result = yield User.putUser(this.request.body, this.params.id);
+        const result = yield this.models.User.query().putUser(this.request.body, this.params.id);
         this.status = 200;
         this.body = result;
       }
@@ -67,9 +73,9 @@ const usersController = (User) => {
 
     DELETE: function* () {
       try {
-        const userIsAdmin = yield isAdminCheck(this.request.body.userId);
-        if(userIsAdmin) {
-          const result = yield User.putUser({ deleted: true }, this.params.id);
+        const user = yield this.models.User.query().getUserById(this.request.body.userId);
+        if(user[0].is_admin) {
+          const result = yield this.models.User.query().putUser({ deleted: true }, this.params.id);
           this.status = 201;
           this.body = result;
         }
