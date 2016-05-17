@@ -8,6 +8,8 @@ const jwt        = require('koa-jwt');
 const unless     = require('koa-unless');
 const logger     = require('./utils/logger');
 const chalk       = require('chalk');
+const multiTenant = require('./utils/multiTenant');
+const configs    = require('./config/app')();
 
 // Instantiate app
 const app     = module.exports = Koa();
@@ -16,6 +18,54 @@ app.poweredBy = false;
 app.use(cors({
   origin: '*'
 }));
+
+// Logger
+
+// Add logger to app
+app.use(function* (next) {
+  this.log = logger;
+  yield* next;
+});
+
+// Log both incoming requests and outgoing responses
+app.use(function* (next) {
+  this.log.info('REQUEST: ' + this.request.method + ' ' + this.request.url);
+  yield* next;
+  this.log.info('RESPONSE: ' + this.response.status);
+});
+
+// Subdomain catching
+// Grabs the subdomin of the incoming request in order to properly identify to which
+// database the request should be routed too
+app.use(function* (next) {
+  try {
+      this.subdomain = yield multiTenant.getSubdomain(this.request.header.host);
+      yield* next;
+  }
+  catch(err) {
+    this.log.info(err);
+    this.status = 404;
+    this.body = {
+      message: 'Incorrect subdomain, this company does not exist'
+    };
+  }
+});
+
+// Database routing
+app.use(function* (next) {
+  // Create the database connection
+  const knex = yield multiTenant.clientCreator();
+  // Models are added on each incoming request
+  this.models = {
+    Company: require('./models/Company').bindKnex(knex),
+    User: require('./models/User').bindKnex(knex),
+    Role: require('./models/Role').bindKnex(knex),
+    Playbook: require('./models/Playbook').bindKnex(knex),
+    CompletedPlaybook: require('./models/CompletedPlaybook').bindKnex(knex)
+  };
+  yield* next;
+});
+
 
 // Configure router
 const router  = new Router({
@@ -26,13 +76,9 @@ router.use(cors({
   origin: '*'
 }));
 
-// Configure DBs
-app.context.db = require('./db.js');
-
 // Add routes to router
 const configureRoutes = require('./routes/');
 configureRoutes(router);
-console.log('--- Routes configured');
 
 // Tell app to use router
 app
@@ -40,21 +86,6 @@ app
   .use(router.allowedMethods());
 
 // Middleware
-
-// Logger
-
-// Add logger to app
-router.use(function* (next) {
-  this.log = logger;
-  yield* next;
-});
-
-// Log both incoming requests and outgoing responses
-router.use(function* (next) {
-  this.log.info('REQUEST: ' + this.request.method + ' ' + this.request.url);
-  yield* next;
-  this.log.info('RESPONSE: ' + this.response.status);
-});
 
 // Validation
 router.use(bouncer.middleware());
@@ -82,10 +113,7 @@ router.use(function* (next) {
 });
 
 // JWT auth needed for API routes
-// router.use(jwt({ secret: 'shared' }).unless({path: [/^\/api\/v1\/login|register|playbooks|submitPlaybook/]}));
-
-
-
+router.use(jwt({ secret: configs.getJWT() }).unless({path: [/^\/api\/v1\/login/]}));
 
 // Generic Response
 app.use(function* (next) {
@@ -96,4 +124,4 @@ app.use(function* (next) {
 
 // Turn on the server
 if (!module.parent) app.listen(appPort);
-console.log(chalk.green.bold('--- Listening at port', appPort));
+console.log('--- Listening at port', appPort);
