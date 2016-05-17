@@ -29,7 +29,9 @@ const loginController = () => {
       catch(err) {
         this.log.info(err);
         this.status = err.status;
-        this.body = err.message;
+        this.body = {
+          message: err.message
+        };
       }
     }
   }
