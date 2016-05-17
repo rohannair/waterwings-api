@@ -11,7 +11,7 @@ then
   exit 1
 fi
 
-for f in $(ls *.sql | sort -n)
+for f in $(ls migrations/*.sql | sort -n)
 do
-  psql -U $dbuser -h $dbhost $db < $f
+  psql -h $dbhost -p 5432 -d $db -U $dbuser -f $f
 done

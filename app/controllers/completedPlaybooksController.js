@@ -5,7 +5,7 @@ const completedPlaybooksController = () => {
   return {
     GET: function* () {
       try {
-        const result = yield this.models.CompletedPlaybook.query().getAll();
+        const result = yield this.models.CompletedPlaybook.query().getAll(this.state.user.companyId);
         this.status = 200;
         this.body = result;
       }
@@ -20,9 +20,9 @@ const completedPlaybooksController = () => {
 
     POST: function* () {
       // TODO: Need to figure out how playbook results will be sent back to database
-      this.log.info('--- INCOMING REQUEST BODY', JSON.stringify(this.request.body.results));
+      this.log.info('--- INCOMING COMPLETED PLAYBOOK', JSON.stringify(this.request.body.results));
       try {
-        const result = yield this.models.CompletedPlaybook.query().postCompletedPlaybook(this.request.body.results);
+        const result = yield this.models.CompletedPlaybook.query().postCompletedPlaybook({ ...this.request.body.results, company_id: this.state.user.companyId });
         this.status = 201;
         this.body = result;
       }

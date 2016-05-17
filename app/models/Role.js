@@ -77,12 +77,13 @@ Role.relationMappings = {
 
 // Custom Queries
 
-MyQueryBuilder.prototype.getAll = function () {
+MyQueryBuilder.prototype.getAll = function (companyId) {
     return this
               .select(
-                'roles.name'
+                'roles.id', 'roles.name'
               )
               .where('roles.deleted', '=', 'false')
+              .where('roles.company_id', '=', `${companyId}`)
               .then((result) => result)
               .catch((err) => { throw err });
 };

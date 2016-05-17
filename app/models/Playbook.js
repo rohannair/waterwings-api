@@ -91,12 +91,13 @@ Playbook.relationMappings = {
 
 // Custom Queries
 
-MyQueryBuilder.prototype.getAll = function () {
+MyQueryBuilder.prototype.getAll = function (companyId) {
     return this
               .select(
                 'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc'
               )
               .where('playbooks.deleted', '=', 'false')
+              .where('playbooks.company_id', '=', `${companyId}`)
               .orderBy('playbooks.created_at', 'asc')
               .then((result) => result)
               .catch((err) => { throw err });

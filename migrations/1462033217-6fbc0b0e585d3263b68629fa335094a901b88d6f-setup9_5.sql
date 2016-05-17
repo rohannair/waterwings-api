@@ -1,5 +1,8 @@
 -- Main File to set schema of database
 
+-- Add pgcrypto extension
+CREATE EXTENSION pgcrypto;
+
 -- companies Table
 CREATE TABLE IF NOT EXISTS companies (
   id varchar(50) PRIMARY KEY,

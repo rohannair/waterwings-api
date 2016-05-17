@@ -27,8 +27,8 @@ const usersController = () => {
         // TODO: Consider moving the password hashing into the model
         const hash = yield encrypt.encryptPassword(this.request.body.password);
         this.request.body.password = hash
-        const newUser = yield this.models.User.query().postUser(this.request.body);
-        const result = yield this.models.User.query().getUserById(newUser.id);
+        const newUser = yield this.models.User.query().postUser({ ...this.request.body, company_id: this.state.user.companyId });
+        const result = yield this.models.User.query().getUserById(newUser.id, this.state.user.companyId);
         this.status = 201;
         this.body = result[0];
       }

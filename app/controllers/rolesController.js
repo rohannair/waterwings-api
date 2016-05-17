@@ -5,7 +5,7 @@ const rolesController = () => {
   return {
     GET: function* () {
       try {
-        const result = yield this.models.Role.query().getAll();
+        const result = yield this.models.Role.query().getAll(this.state.user.companyId);
         this.status = 200;
         this.body = result;
       }
@@ -20,7 +20,7 @@ const rolesController = () => {
 
     POST: function* () {
       try {
-        const result = yield this.models.Role.query().postRole(this.request.body);
+        const result = yield this.models.Role.query().postRole({ ...this.request.body, company_id: this.state.user.companyId });
         this.status = 201;
         this.body = result;
       }

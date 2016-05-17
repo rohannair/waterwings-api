@@ -35,7 +35,8 @@ $ npm install
 
 ## Migrate the database
 ```bash
-$ npm run db:migrate
+$ export PGPASSWORD=password
+$ sh migrations/migrations.sh localhost quartermasterdb root
 ```
 
 ## Seed the database
@@ -69,10 +70,9 @@ is also accompanied by a valid token (keep reading for token info)
 The API now requires tokens in order to return data
 The only open endpoints without a valid token are
 ```bash
-/api/v1/login|register|playbooks|submitPlaybook
+/api/v1/login
 ```
-In order to generate a token you must first hit the register or login endpoints with
-a post request with the following information
+In order to generate a token you must first hit the login endpoint at the correct subdomain with a post request that contains the following information
 ```JSON
 {
   "username": "user@workmail.com",

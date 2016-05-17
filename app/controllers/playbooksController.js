@@ -5,7 +5,7 @@ const playbooksController = () => {
   return {
     GET: function* () {
       try {
-        const result = yield this.models.Playbook.query().getAll();
+        const result = yield this.models.Playbook.query().getAll(this.state.user.companyId);
         this.status = 200;
         this.body = result;
       }
@@ -35,7 +35,7 @@ const playbooksController = () => {
 
     POST: function* () {
       try {
-        const result = yield this.models.Playbook.query().postPlaybook(this.request.body);
+        const result = yield this.models.Playbook.query().postPlaybook({ ...this.request.body, company_id: this.state.user.companyId });
         this.status = 201;
         this.body = result;
       }
