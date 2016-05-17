@@ -35,8 +35,7 @@ $ npm install
 
 ## Migrate the database
 ```bash
-$ export PGPASSWORD=password
-$ sh migrations/migrations.sh localhost quartermasterdb root
+$ export PGPASSWORD=password; sh migrations/migrations.sh localhost quartermasterdb root
 ```
 
 ## Seed the database
