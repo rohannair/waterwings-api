@@ -113,7 +113,7 @@ router.use(function* (next) {
 });
 
 // JWT auth needed for API routes
-router.use(jwt({ secret: configs.getJWT() }).unless({path: [/^\/api\/v1\/login/]}));
+router.use(jwt({ secret: configs.getJWT() }).unless({path: [/^login|playbooks/]}));
 
 // Generic Response
 app.use(function* (next) {
