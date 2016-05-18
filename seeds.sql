@@ -27,7 +27,15 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
       "slide_number": 1,
       "type": "bio",
       "body": {
-        "heading": "Biography"
+        "heading": "Fill out your Employee profile",
+        "options": {
+          "name": true,
+          "bio": true,
+          "profile_image": true,
+          "linkedin": true,
+          "twitter": true,
+          "facebook": false
+        }
       }
     },
     "2": {
@@ -165,7 +173,15 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
       "slide_number": 1,
       "type": "bio",
       "body": {
-        "heading": "Biography"
+        "heading": "Fill out your Employee profile",
+        "options": {
+          "name": true,
+          "bio": true,
+          "profile_image": true,
+          "linkedin": true,
+          "twitter": true,
+          "facebook": false
+        }
       }
     },
     "2": {
