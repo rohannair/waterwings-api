@@ -183,58 +183,22 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
     },
     "2": {
       "slide_number": 2,
-      "type": "equipment",
-      "heading": "Choose your equipment",
+      "type": "knowledgectr",
+      "heading": "Knowledge Center",
       "body": {
-        "desc": "We want to make sure that you have all the tools you need to work at your best. If something you want is not on this list, let us know.",
+        "desc": "We have got a lot of learning content to get you ready for your role. We recommend that you go through the following lesssons before your first day, to hit the ground running:",
         "options": [
           {
-            "id": "laptop",
-            "name": "Laptop",
-            "opts": [
-              "mbpr13",
-              "mbpr15"
-            ],
-            "optNames": [
-              "MacBook Pro Retina 13",
-              "MacBook Pro Retina 15"
-            ]
+            "id": "gqOEoUR5RHg",
+            "name": "Bootstrap Primer"
           },
           {
-            "id": "monitors",
-            "name": "Monitors",
-            "opts": [
-              "2usharp24",
-              "cinemadisp"
-            ],
-            "optNames": [
-              "2x Dell Utrasharp 24\"",
-              "Apple Cinema Display"
-            ]
+            "id": "qAws7eXItMk",
+            "name": "Running User Interviews"
           },
           {
-            "id": "mouse",
-            "name": "Mouse",
-            "opts": [
-              "magicmouse",
-              "mxmaster"
-            ],
-            "optNames": [
-              "Apple Magic Mouse",
-              "Logitech MX Master"
-            ]
-          },
-          {
-            "id": "keyboard",
-            "name": "Keyboard",
-            "opts": [
-              "applewired",
-              "applewireless"
-            ],
-            "optNames": [
-              "Apple Wired",
-              "Apple Wireless"
-            ]
+            "id": "SqfhZk0eIdE",
+            "name": "Object Oriented CSS (OOCSS)"
           }
         ]
       }
@@ -243,48 +207,25 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
       "slide_number": 3,
       "type": "intro",
       "heading": "Links to Lighthouse Labs stuff!",
-      "body": "<p>Here be links:</p>"
+      "body": "<p><a href=\"http://compass.lighthouselabs.ca/i/ykGpp112qqnbfk67hi5ro3wll\"><ins><strong>Compass Access</strong></ins></a></p>\n<p>Use the following URL to register and gain teacher access to the LMS, curriculum, students, etc. Please do not share it with anyone.</p>\n<p>Please bookmark the root URL b/c you will want to be checking what students are learning during lectures and in assignments prior to your shifts.</p>\n<p><strong>Email</strong></p>\n<p>You<E2><80><99>ve been added to the web-teachers-toronto@lighthouselabs.ca email (google) group, which means you<E2><80><99>ll be getting some emails from Compass (via instructors) and staff, and have access to our important gDocs.</p>\n<p><a href=\"https://docs.google.com/a/functionalimperative.com/spreadsheets/d/1BB4e_7Ih2lkmG9oD6vIhCgtPjq2rKiLOndPEcGMr8zE/edit\"><ins><strong>Schedule</strong></ins></a></p>\n<p>This is an important document, please bookmark it and check it weekly if not more regularly for changes.</p>\n<p>You<E2><80><99>ve been added into the Teacher Info sheet, but please complete all your details in there at your earliest convenience. It will help us with scheduling going forward.</p>\n<p><strong>Slack</strong></p>\n<p>You have been sent an invitation to join the Toronto teacher channel. &nbsp;Use this to quickly communicate with your fellow LHL teachers and staff.</p>\n<p><strong>ClockTower</strong></p>\n<p>The on-boarding document explains what this is and why it is important to you. Your account has been created and you should have another email in your inbox with your credentials. Please send your invoices, as well as any concerns or questions re payment, to Landon at <a href=\"mailto:bookkeeper@lighthouselabs.ca\">bookkeeper@lighthouselabs.ca</a></p>"
     },
     "4": {
       "slide_number": 4,
       "type": "day1agenda",
       "heading": "Your first day - February 29th, 2016",
       "body": {
-        "map": "<div><iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.943199942455!2d-79.38169928447599!3d43.64935007912145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b34d28cfad4bf%3A0x5f2a34991d2bacb5!2sScotia+Plaza!5e0!3m2!1sen!2sca!4v1455674281242\" frameborder=\"0\" allowfullscreen></iframe><div><span class=\"fa fa-building\"></span> 40 King St W, Toronto, ON M5H 3Y2 <a href=\"#\">Get Directions</a></div><div><span class=\"fa fa-user\"></span> Office Manager - <a href=\"#\">John Smith</a></div><div><span class=\"fa fa-envelope\"></span><a href=\"#\">J.Smith@scotiabank.com</a></div><div><div class=\"uber-promo\"> Complimentary UBER Code <strong>Welcome2ScotiaBank</strong></div></div></div>",
+        "map": "<div><iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2887.1693571231563!2d-79.39719274890832!3d43.64464467901919!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b34d97247bbc3%3A0xbc1d36bccb4b45ba!2sLighthouse+Labs!5e0!3m2!1sen!2sca!4v1463603588516\" frameborder=\"0\" allowfullscreen></iframe><div><span class=\"fa fa-building\"></span> 46 Spadina Ave, Toronto, ON <a href=\"#\">Get Directions</a></div><div><span class=\"fa fa-user\"></span> Office Manager - <a href=\"#\">John Smith</a></div><div><span class=\"fa fa-envelope\"></span><a href=\"#\">J.Smith@lighthouselabs.ca</a></div><div><div class=\"uber-promo\"> Complimentary UBER Code <strong>Welcome2LighthouseLabs</strong></div></div></div>",
         "agenda": [
           {
-            "time": 1456754400000,
-            "desc": "Meet Bill Jobs at 11th floor"
+            "desc": "Morning Class (2.5 hours)",
+            "time": "9:00am - 10:30am"
           },
           {
-            "time": 1456756200000,
-            "desc": "Meet and greet with UX team"
-          },
-          {
-            "time": 1456758000000,
-            "desc": "Stand-up meeting with Mobile Application team"
-          },
-          {
-            "time": 1456761600000,
-            "desc": "One-on-One with Bill Jobs"
-          },
-          {
-            "time": 1456765200000,
-            "desc": "Lunch with Bill Jobs and UX team"
-          },
-          {
-            "time": 1456767000000,
-            "desc": "Mix and Mingle"
-          },
-          {
-            "time": 1456777800000,
-            "desc": "Planning meeting with Mobile Application team"
-          },
-          {
-            "time": 1456785000000,
-            "desc": "(optional) Social with team @ The Duke of Richmond"
+            "desc": "Sinatra Apps (Long)",
+            "time": "10:30am - End of Day"
           }
         ]
+
       }
     }
   }'
