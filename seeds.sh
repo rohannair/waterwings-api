@@ -11,7 +11,5 @@ then
   exit 1
 fi
 
-for f in $(ls migrations/*.sql | sort -n)
-do
-  psql -h $dbhost -d $db -U $dbuser -f $f
-done
+
+psql -h $dbhost -d $db -U $dbuser -f ./seeds.sql

@@ -14,9 +14,9 @@
     ]
   },
   "scripts": {
-    "db:migrate": "export PGPASSWORD=password; sh migrations/migrations.sh localhost quartermasterdb root",
-    "db:seed": "psql -h localhost -p 5432 -d quartermasterdb -U root -f ./seeds.sql",
-    "db:drop": "psql -h localhost -p 5432 -d quartermasterdb -U root -f ./dropTable.sql",
+    "db:migrate": "export PGPASSWORD=password; ./migrations/migrations.sh localhost quartermasterdb root",
+    "db:seed": "export PGPASSWORD=password; ./seeds.sh localhost quartermasterdb root",
+    "db:drop": "export PGPASSWORD=password; ./dropTable.sh localhost quartermasterdb root",
     "db:recreate": "npm run db:drop; npm run db:migrate; npm run db:seed",
     "babel-node": "./node_modules/.bin/babel-node --ignore='node_modules'",
     "start": "NODE_ENV=production npm run babel-node -- ./app/index.js | ./node_modules/.bin/bunyan -o short",
