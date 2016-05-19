@@ -159,12 +159,7 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
     }
   }'
 ), ('72ade965-ccc3-406b-b4d9-b3e233e6bf58', 'Lighthouse Toronto Mentor', 'Toronto Mentor', 'OeUMkxw',
-  '{
-     "id":"72ade965-ccc3-406b-b4d9-b3e233e6bf58",
-     "name":"Lighthouse Toronto Mentor",
-     "description":"Toronto Mentor",
-     "company_id":"OeUMkxw",
-     "doc":{
+     '{
         "0":{
            "body":"<p>Welcome to Lighthouse Labs - We are really excited to have your contribution helping us teach and grow the next generation of developer talent!.As part of your on-boarding, there are a few things to do done:</p>\n<ol>\n  <li>Fill out your user profile &amp; upload docs</li>\n  <li>Access team groups</li>\n  <li>Knowledge Center</li>\n  <li>See the schedule for your first day</li>\n</ol>\n<p>If you have any questions feel free to contact <a href=\"mailto:kate@lighthouselabs.ca\">kate@lighthouselabs.ca</a></p>",
            "type":"intro",
@@ -231,7 +226,6 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
            "heading":"Your first day - February 29th, 2016",
            "slide_number":4
         }
-     }
   }'
 );
 
