@@ -1,5 +1,5 @@
 const knex = require('knex')
-const hostLocation = process.env.NODE_ENV === 'production' ? '172.31.20.4' : 'localhost';
+// const hostLocation = process.env.NODE_ENV === 'production' ? '172.31.20.4' : 'localhost';
 
 function* getSubdomain(url) {
   // TODO: Need to check that the subdomin belongs to a authorized Company
@@ -12,7 +12,7 @@ function* clientCreator() {
     {
       client: 'pg',
       connection: {
-        host     : hostLocation,
+        host     : 'localhost',
         user     : `root`,
         password : 'password',
         database : 'quartermasterdb',
