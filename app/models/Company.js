@@ -42,32 +42,11 @@ Company.jsonSchema = {
     address       : {
                       type: 'object',
                       properties: {
-                        // Will be of the format '[123, Fun, Avenue, SE]'
-                        street_address : {
-                          type: 'array',
-                          'items': [
-                            {
-                              // Street Number
-                              type: 'integer'
-                            },
-                            {
-                              // Street Name
-                              type: 'string'
-                            },
-                            {
-                              // Street Type
-                              type: 'string'
-                            },
-                            {
-                              // Direction
-                              type: 'string', minLength: 0, maxLength: 2
-                            }
-                          ]
-                        },
+                        street_address : { type: 'array' },
                         city                    : { type: 'string' },
                         province_or_state       : { type: 'string', minLength: 2, maxLength: 2},
                         postal_code             : { type: 'string', minLength: 1, maxLength: 10},
-                        country                 : { type: 'string', minLength: 2, maxLength: 3}
+                        country                 : { type: 'string', minLength: 2, maxLength: 50}
                       },
                       additionalProperties: true
                     },
