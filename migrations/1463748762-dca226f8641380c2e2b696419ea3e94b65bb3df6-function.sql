@@ -1,14 +1,14 @@
 -- Migration - Fri 20 May 2016
 
 -- SQL Function to add a new customer into the database
-CREATE FUNCTION add_customer (new_company_name text, new_subdomain text, new_role_name text, new_username text, new_password text, new_first_name text, new_last_name text, new_personal_email text) RETURNS void AS $$
+CREATE FUNCTION add_customer (new_company_name text, new_address jsonb, new_subdomain text, new_role_name text, new_username text, new_password text, new_first_name text, new_last_name text, new_personal_email text) RETURNS void AS $$
 DECLARE
   new_company_id text;
   new_role_id int;
 BEGIN
 -- Insert Company Information
 INSERT INTO companies (id, name, address, subdomain, database_host) VALUES
-  (gen_random_uuid(), new_company_name, '{"street_address": [46, "Spadina", "Street", "Suite", 400], "city": "Toronto", "province_or_state": "ON", "postal_code": "M5V 2H8", "country": "CA"}', new_subdomain, 'public');
+  (gen_random_uuid(), new_company_name, new_address, new_subdomain, 'public');
 
 SELECT companies.id INTO new_company_id FROM companies WHERE name = new_company_name;
 
