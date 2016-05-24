@@ -11,6 +11,7 @@ const logger      = require('./utils/logger');
 const chalk       = require('chalk');
 const multiTenant = require('./utils/multiTenant');
 const configs     = require('./config/app')();
+const db          = require('./knexfile');
 
 // Instantiate app
 const app     = module.exports = Koa();
@@ -19,6 +20,9 @@ app.poweredBy = false;
 app.use(cors({
   origin: '*'
 }));
+
+// Add database connection
+app.context.db = db();
 
 // Helmet
 app.use(helmet());
@@ -55,15 +59,13 @@ app.use(function* (next) {
 
 // Database routing
 app.use(function* (next) {
-  // Create the database connection
-  const knex = yield multiTenant.clientCreator();
   // Models are added on each incoming request
   this.models = {
-    Company: require('./models/Company').bindKnex(knex),
-    User: require('./models/User').bindKnex(knex),
-    Role: require('./models/Role').bindKnex(knex),
-    Playbook: require('./models/Playbook').bindKnex(knex),
-    CompletedPlaybook: require('./models/CompletedPlaybook').bindKnex(knex)
+    Company: require('./models/Company').bindKnex(this.db),
+    User: require('./models/User').bindKnex(this.db),
+    Role: require('./models/Role').bindKnex(this.db),
+    Playbook: require('./models/Playbook').bindKnex(this.db),
+    CompletedPlaybook: require('./models/CompletedPlaybook').bindKnex(this.db)
   };
   yield* next;
 });
