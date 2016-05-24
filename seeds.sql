@@ -123,35 +123,35 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
         "map": "<div><iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.943199942455!2d-79.38169928447599!3d43.64935007912145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b34d28cfad4bf%3A0x5f2a34991d2bacb5!2sScotia+Plaza!5e0!3m2!1sen!2sca!4v1455674281242\" frameborder=\"0\" allowfullscreen></iframe><div><span class=\"fa fa-building\"></span> 40 King St W, Toronto, ON M5H 3Y2 <a href=\"#\">Get Directions</a></div><div><span class=\"fa fa-user\"></span> Office Manager - <a href=\"#\">John Smith</a></div><div><span class=\"fa fa-envelope\"></span><a href=\"#\">J.Smith@scotiabank.com</a></div><div><div class=\"uber-promo\"> Complimentary UBER Code <strong>Welcome2ScotiaBank</strong></div></div></div>",
         "agenda": [
           {
-            "time": "09:00",
+            "time": 1464094800,
             "desc": "Meet Bill Jobs at 11th floor"
           },
           {
-            "time": "09:30",
+            "time": 1464096600,
             "desc": "Meet and greet with UX team"
           },
           {
-            "time": "10:00",
+            "time": 1464098400,
             "desc": "Stand-up meeting with Mobile Application team"
           },
           {
-            "time": "11:00",
+            "time": 1464102000,
             "desc": "One-on-One with Bill Jobs"
           },
           {
-            "time": "12:00",
+            "time": 1464105600,
             "desc": "Lunch with Bill Jobs and UX team"
           },
           {
-            "time": "12:30",
+            "time": 1464107400,
             "desc": "Mix and Mingle"
           },
           {
-            "time": "15:30",
+            "time": 1464118200,
             "desc": "Planning meeting with Mobile Application team"
           },
           {
-            "time": "17:30",
+            "time": 1464125400,
             "desc": "(optional) Social with team @ The Duke of Richmond"
           }
         ]
