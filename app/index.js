@@ -117,6 +117,25 @@ router.use(function* (next) {
 // JWT auth needed for API routes
 router.use(jwt({ secret: configs.getJWT() }).unless({path: [/^\/api\/v1\/login/]}));
 
+// Ensure that a user's token and subdomain match
+router.use(function* (next) {
+  try {
+    // Only check if the user has a valid token
+    if(this.state.user) {
+      const company = yield this.models.Company.query().getCompanyBySubdomain(this.subdomain)
+      if (company[0].id !== this.state.user.companyId) throw { status: 403, message: 'User is accessing incorrect subdomain'};
+    }
+    yield* next;
+  }
+  catch(err) {
+    this.log.info(err);
+    this.status = 403;
+    this.body = {
+      message: 'Your token and company do not match, please login to your company'
+    };
+  }
+})
+
 // Generic Response
 app.use(function* (next) {
   this.body = {
