@@ -123,35 +123,35 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
         "map": "<div><iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.943199942455!2d-79.38169928447599!3d43.64935007912145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b34d28cfad4bf%3A0x5f2a34991d2bacb5!2sScotia+Plaza!5e0!3m2!1sen!2sca!4v1455674281242\" frameborder=\"0\" allowfullscreen></iframe><div><span class=\"fa fa-building\"></span> 40 King St W, Toronto, ON M5H 3Y2 <a href=\"#\">Get Directions</a></div><div><span class=\"fa fa-user\"></span> Office Manager - <a href=\"#\">John Smith</a></div><div><span class=\"fa fa-envelope\"></span><a href=\"#\">J.Smith@scotiabank.com</a></div><div><div class=\"uber-promo\"> Complimentary UBER Code <strong>Welcome2ScotiaBank</strong></div></div></div>",
         "agenda": [
           {
-            "time": 1456754400000,
+            "time": "09:00",
             "desc": "Meet Bill Jobs at 11th floor"
           },
           {
-            "time": 1456756200000,
+            "time": "09:30",
             "desc": "Meet and greet with UX team"
           },
           {
-            "time": 1456758000000,
+            "time": "10:00",
             "desc": "Stand-up meeting with Mobile Application team"
           },
           {
-            "time": 1456761600000,
+            "time": "11:00",
             "desc": "One-on-One with Bill Jobs"
           },
           {
-            "time": 1456765200000,
+            "time": "12:00",
             "desc": "Lunch with Bill Jobs and UX team"
           },
           {
-            "time": 1456767000000,
+            "time": "12:30",
             "desc": "Mix and Mingle"
           },
           {
-            "time": 1456777800000,
+            "time": "15:30",
             "desc": "Planning meeting with Mobile Application team"
           },
           {
-            "time": 1456785000000,
+            "time": "17:30",
             "desc": "(optional) Social with team @ The Duke of Richmond"
           }
         ]
