@@ -1,15 +1,16 @@
 // Dependencies
-const cors       = require('koa-cors');
-const Koa        = require('koa');
-const Router     = require('koa-router');
-const bouncer    = require('koa-bouncer');
-const bodyParser = require('koa-bodyparser');
-const jwt        = require('koa-jwt');
-const unless     = require('koa-unless');
-const logger     = require('./utils/logger');
+const cors        = require('koa-cors');
+const Koa         = require('koa');
+const Router      = require('koa-router');
+const bouncer     = require('koa-bouncer');
+const bodyParser  = require('koa-bodyparser');
+const helmet      = require('koa-helmet');
+const jwt         = require('koa-jwt');
+const unless      = require('koa-unless');
+const logger      = require('./utils/logger');
 const chalk       = require('chalk');
 const multiTenant = require('./utils/multiTenant');
-const configs    = require('./config/app')();
+const configs     = require('./config/app')();
 
 // Instantiate app
 const app     = module.exports = Koa();
@@ -19,7 +20,8 @@ app.use(cors({
   origin: '*'
 }));
 
-// Logger
+// Helmet
+app.use(helmet());
 
 // Add logger to app
 app.use(function* (next) {
