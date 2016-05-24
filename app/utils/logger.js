@@ -13,7 +13,7 @@ const logger = bunyan.createLogger({
     {
       // Log all errors,requests and responses to the log file
       level: 'info',
-      path: 'app/logs/quartermaster-api.log'
+      path: 'app/../../logs/quartermaster-api.log'
     }
   ],
   serializers: bunyan.stdSerializers, //Contains three serializers for errs, reqs and res'
