@@ -1,5 +1,5 @@
 const logLocation = process.env.NODE_ENV === 'production'
-  ? 'app/../../../var/log/waterwings-api/waterwings-api.log' : 'app/../../logs/waterwings-api.log';
+  ? '/var/log/waterwings-api/waterwings-api.log' : 'app/logs/waterwings-api.log';
 
 // Import Logging Module
 const bunyan = require('bunyan');
