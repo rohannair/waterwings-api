@@ -118,7 +118,8 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
     "4": {
       "slide_number": 4,
       "type": "day1agenda",
-      "heading": "Your first day - February 29th, 2016",
+      "heading": "Your First Day",
+      "date": "2016-05-24",
       "body": {
         "map": "<div><iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.943199942455!2d-79.38169928447599!3d43.64935007912145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b34d28cfad4bf%3A0x5f2a34991d2bacb5!2sScotia+Plaza!5e0!3m2!1sen!2sca!4v1455674281242\" frameborder=\"0\" allowfullscreen></iframe><div><span class=\"fa fa-building\"></span> 40 King St W, Toronto, ON M5H 3Y2 <a href=\"#\">Get Directions</a></div><div><span class=\"fa fa-user\"></span> Office Manager - <a href=\"#\">John Smith</a></div><div><span class=\"fa fa-envelope\"></span><a href=\"#\">J.Smith@scotiabank.com</a></div><div><div class=\"uber-promo\"> Complimentary UBER Code <strong>Welcome2ScotiaBank</strong></div></div></div>",
         "agenda": [
@@ -223,7 +224,8 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
           ]
        },
        "type":"day1agenda",
-       "heading":"Your first day - February 29th, 2016",
+       "heading":"Your first day",
+       "date": "2016-05-24",
        "slide_number":4
     }
   }'
