@@ -53,7 +53,7 @@ const playbooksController = () => {
       try {
         const result = yield this.models.Playbook.query().putPlaybook(this.request.body, this.params.id);
         this.status = 200;
-        this.body = result;
+        this.body = result[0];
       }
       catch(err) {
         this.log.info(err);
