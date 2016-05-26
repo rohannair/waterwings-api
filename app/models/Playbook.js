@@ -125,6 +125,7 @@ MyQueryBuilder.prototype.putPlaybook = function (data, playbookId) {
     return this
               .where({ id: playbookId })
               .patch(data)
+              .returning('*')
               .then((result) => result)
               .catch((err) => { throw err });
 };
