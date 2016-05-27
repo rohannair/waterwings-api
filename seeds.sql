@@ -116,55 +116,50 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
       }
     },
     "4": {
-      "slide_number": 4,
-      "type": "day1agenda",
-      "heading": "Your First Day",
-      "date": "2016-05-24",
       "body": {
-        "map": "<div><iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.943199942455!2d-79.38169928447599!3d43.64935007912145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b34d28cfad4bf%3A0x5f2a34991d2bacb5!2sScotia+Plaza!5e0!3m2!1sen!2sca!4v1455674281242\" frameborder=\"0\" allowfullscreen></iframe><div><span class=\"fa fa-building\"></span> 40 King St W, Toronto, ON M5H 3Y2 <a href=\"#\">Get Directions</a></div><div><span class=\"fa fa-user\"></span> Office Manager - <a href=\"#\">John Smith</a></div><div><span class=\"fa fa-envelope\"></span><a href=\"#\">J.Smith@scotiabank.com</a></div><div><div class=\"uber-promo\"> Complimentary UBER Code <strong>Welcome2ScotiaBank</strong></div></div></div>",
+        "desc": "<div><span class=\"fa fa-building\"></span> 40 King St W, Toronto, ON M5H 3Y2 <a href=\"#\">Get Directions</a></div><div><span class=\"fa fa-user\"></span> Office Manager - <a href=\"#\">John Smith</a></div><div><span class=\"fa fa-envelope\"></span><a href=\"#\">J.Smith@scotiabank.com</a></div><div><div class=\"uber-promo\"> Complimentary UBER Code <strong>Welcome2ScotiaBank</strong></div></div></div>",
         "agenda": [
           {
-            "startTime": 1464094800000,
-            "finishTime": 1464094800000,
-            "desc": "Meet Bill Jobs at 11th floor"
+            "desc": "Meet Bill Jobs at 11th floor",
+            "time": 1456754400000
           },
           {
-            "startTime": 1464096600000,
-            "finishTime": 1464096600000,
-            "desc": "Meet and greet with UX team"
+            "desc": "Meet and greet with UX team",
+            "time": 1456756200000
           },
           {
-            "startTime": 1464098400000,
-            "finishTime": 1464098400000,
-            "desc": "Stand-up meeting with Mobile Application team"
+            "desc": "Stand-up meeting with Mobile Application team",
+            "time": 1456758000000
           },
           {
-            "startTime": 1464102000000,
-            "finishTime": 1464102000000,
-            "desc": "One-on-One with Bill Jobs"
+            "desc": "One-on-One with Bill Jobs",
+            "time": 1456761600000
           },
           {
-            "startTime": 1464105600000,
-            "finishTime": 1464105600000,
-            "desc": "Lunch with Bill Jobs and UX team"
+            "desc": "Lunch with Bill Jobs and UX team",
+            "time": 1456765200000
           },
           {
-            "startTime": 1464107400000,
-            "finishTime": 1464107400000,
-            "desc": "Mix and Mingle"
+            "desc": "Mix and Mingle",
+            "time": 1456767000000
           },
           {
-            "startTime": 1464118200000,
-            "finishTime": 1464107400000,
-            "desc": "Planning meeting with Mobile Application team"
+            "desc": "Planning meeting with Mobile Application team",
+            "time": 1456777800000
           },
           {
-            "startTime": 1464125400000,
-            "finishTime": 1464125400000,
-            "desc": "(optional) Social with team @ The Duke of Richmond"
+            "desc": "(optional) Social with team @ The Duke of Richmond",
+            "time": 1456785000000
           }
         ]
-      }
+      },
+      "type": "day1agenda",
+      "position": { "lat":43.6446447, "lng": -79.39499869999997 },
+      "place": {"name": "Lighthouse Labs",
+        "formatted_address": "46 Spadina Avenue, Toronto, ON, Canada"},
+      "heading":"Your first day",
+      "date": "2016-05-24",
+      "slide_number": 4
     }
   }'
 ), ('72ade965-ccc3-406b-b4d9-b3e233e6bf58', 'Lighthouse Toronto Mentor', 'Toronto Mentor', 'OeUMkxw',
@@ -217,24 +212,51 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
        "heading":"Knowledge Center",
        "slide_number":3
     },
-    "4":{
-       "body":{
-          "map":"<div><iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2887.1693571231563!2d-79.39719274890832!3d43.64464467901919!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b34d97247bbc3%3A0xbc1d36bccb4b45ba!2sLighthouse+Labs!5e0!3m2!1sen!2sca!4v1463603588516\" frameborder=\"0\" allowfullscreen></iframe><div><span class=\"fa fa-building\"></span> 46 Spadina Ave, Toronto, ON <a href=\"#\">Get Directions</a></div><div><span class=\"fa fa-user\"></span> Office Manager - <a href=\"#\">John Smith</a></div><div><span class=\"fa fa-envelope\"></span><a href=\"#\">J.Smith@lighthouselabs.ca</a></div><div><div class=\"uber-promo\"> Complimentary UBER Code <strong>Welcome2LighthouseLabs</strong></div></div></div>",
-          "agenda":[
-             {
-                "desc":"Morning Class (2.5 hours)",
-                "time":"9:00am - 10:30am"
-             },
-             {
-                "desc":"Sinatra Apps (Long)",
-                "time":"10:30am - End of Day"
-             }
-          ]
-       },
-       "type":"day1agenda",
-       "heading":"Your first day",
-       "date": "2016-05-24",
-       "slide_number":4
+    "4": {
+      "body": {
+        "desc": "<div><span class=\"fa fa-building\"></span> 40 King St W, Toronto, ON M5H 3Y2 <a href=\"#\">Get Directions</a></div><div><span class=\"fa fa-user\"></span> Office Manager - <a href=\"#\">John Smith</a></div><div><span class=\"fa fa-envelope\"></span><a href=\"#\">J.Smith@scotiabank.com</a></div><div><div class=\"uber-promo\"> Complimentary UBER Code <strong>Welcome2ScotiaBank</strong></div></div></div>",
+        "agenda": [
+          {
+            "desc": "Meet Bill Jobs at 11th floor",
+            "time": 1456754400000
+          },
+          {
+            "desc": "Meet and greet with UX team",
+            "time": 1456756200000
+          },
+          {
+            "desc": "Stand-up meeting with Mobile Application team",
+            "time": 1456758000000
+          },
+          {
+            "desc": "One-on-One with Bill Jobs",
+            "time": 1456761600000
+          },
+          {
+            "desc": "Lunch with Bill Jobs and UX team",
+            "time": 1456765200000
+          },
+          {
+            "desc": "Mix and Mingle",
+            "time": 1456767000000
+          },
+          {
+            "desc": "Planning meeting with Mobile Application team",
+            "time": 1456777800000
+          },
+          {
+            "desc": "(optional) Social with team @ The Duke of Richmond",
+            "time": 1456785000000
+          }
+        ]
+      },
+      "type": "day1agenda",
+      "position": { "lat":43.6446447, "lng": -79.39499869999997 },
+      "place": {"name": "Lighthouse Labs",
+        "formatted_address": "46 Spadina Avenue, Toronto, ON, Canada"},
+      "heading":"Your first day",
+      "date": "2016-05-24",
+      "slide_number": 4
     }
   }'
 );
