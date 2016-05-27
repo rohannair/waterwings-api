@@ -8,6 +8,7 @@ const rolesController = require('../controllers/rolesController')();
 const playbooksController = require('../controllers/playbooksController')();
 const completedPlaybooksController = require('../controllers/completedPlaybooksController')();
 const uploadsController = require('../controllers/uploadsController');
+const emailController = require('../controllers/emailController')();
 
 
 module.exports = function configure(router) {
@@ -52,5 +53,8 @@ module.exports = function configure(router) {
 
   // Uploads
   .post('/upload', uploadsController.POST)
+
+  // Emails
+  .post('/playbook/send', emailController.POST)
 
 };
