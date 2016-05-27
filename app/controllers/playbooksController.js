@@ -51,8 +51,7 @@ const playbooksController = () => {
     PUT: function* () {
       this.log.info(JSON.stringify(this.request.body));
       try {
-        const updatedPlaybook = yield this.models.Playbook.query().putPlaybook(this.request.body, this.params.id);
-        const result = yield this.models.Playbook.query().getPlaybookById(this.params.id);
+        const result = yield this.models.Playbook.query().putPlaybook(this.request.body, this.params.id);
         this.status = 200;
         this.body = {
           result: result[0],
