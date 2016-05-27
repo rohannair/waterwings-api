@@ -1,15 +1,17 @@
 // Dependencies
-const cors       = require('koa-cors');
-const Koa        = require('koa');
-const Router     = require('koa-router');
-const bouncer    = require('koa-bouncer');
-const bodyParser = require('koa-bodyparser');
-const jwt        = require('koa-jwt');
-const unless     = require('koa-unless');
-const logger     = require('./utils/logger');
+const cors        = require('koa-cors');
+const Koa         = require('koa');
+const Router      = require('koa-router');
+const bouncer     = require('koa-bouncer');
+const bodyParser  = require('koa-bodyparser');
+const helmet      = require('koa-helmet');
+const jwt         = require('koa-jwt');
+const unless      = require('koa-unless');
+const logger      = require('./utils/logger');
 const chalk       = require('chalk');
 const multiTenant = require('./utils/multiTenant');
-const configs    = require('./config/app')();
+const configs     = require('./config/app')();
+const db          = require('./knexfile');
 
 // Instantiate app
 const app     = module.exports = Koa();
@@ -19,7 +21,11 @@ app.use(cors({
   origin: '*'
 }));
 
-// Logger
+// Add database connection
+app.context.db = db();
+
+// Helmet
+app.use(helmet());
 
 // Add logger to app
 app.use(function* (next) {
@@ -53,15 +59,13 @@ app.use(function* (next) {
 
 // Database routing
 app.use(function* (next) {
-  // Create the database connection
-  const knex = yield multiTenant.clientCreator();
   // Models are added on each incoming request
   this.models = {
-    Company: require('./models/Company').bindKnex(knex),
-    User: require('./models/User').bindKnex(knex),
-    Role: require('./models/Role').bindKnex(knex),
-    Playbook: require('./models/Playbook').bindKnex(knex),
-    CompletedPlaybook: require('./models/CompletedPlaybook').bindKnex(knex)
+    Company: require('./models/Company').bindKnex(this.db),
+    User: require('./models/User').bindKnex(this.db),
+    Role: require('./models/Role').bindKnex(this.db),
+    Playbook: require('./models/Playbook').bindKnex(this.db),
+    CompletedPlaybook: require('./models/CompletedPlaybook').bindKnex(this.db)
   };
   yield* next;
 });
@@ -114,6 +118,25 @@ router.use(function* (next) {
 
 // JWT auth needed for API routes
 router.use(jwt({ secret: configs.getJWT() }).unless({path: [/^\/api\/v1\/login/]}));
+
+// Ensure that a user's token and subdomain match
+router.use(function* (next) {
+  try {
+    // Only check if the user has a valid token
+    if(this.state.user) {
+      const company = yield this.models.Company.query().getCompanyBySubdomain(this.subdomain)
+      if (company[0].id !== this.state.user.companyId) throw { status: 403, message: 'User is accessing incorrect subdomain'};
+    }
+    yield* next;
+  }
+  catch(err) {
+    this.log.info(err);
+    this.status = 403;
+    this.body = {
+      message: 'Your token and company do not match, please login to your company'
+    };
+  }
+})
 
 // Generic Response
 app.use(function* (next) {
