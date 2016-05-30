@@ -107,13 +107,11 @@ this.state.user
 There is a central function that deals with all error reporting for the API.
 This function will return a status code and an error message back to the user whenever an error has occurred.
 
-In order to use the central error function throughout the API at an endpoint call the following functions
+In order to use the central error function throughout the API at an endpoint all you need to do it
+throw an error at anytime using the following code
 
 ```javascript
-// This will log the detailed error message for the sys admin to examine
-this.log.info(err);
-// This message and status code will be returned back to the user
-this.throw('Error Message', 500);
+throw new ApiError('Message for user to see', 404, 'Message to be placed in logs')
 ```
 
 This will throw an error in API and it will be caught by the upstream error reporting function and returned back to the user.
