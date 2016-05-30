@@ -2,6 +2,7 @@
 const Model = require('objection').Model;
 const QueryBuilder = require('objection').QueryBuilder;
 const uuid = require('node-uuid');
+const ApiError = require('../utils/customErrors');
 
 function CompletedPlaybook() {
   Model.apply(this, arguments);
@@ -94,7 +95,7 @@ MyQueryBuilder.prototype.getAll = function (companyId) {
               .where('completed_playbooks.company_id', '=', `${companyId}`)
               .orderBy('completed_playbooks.created_at', 'asc')
               .then((result) => result)
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.getCompletedPlaybookById = function (completedPlaybookId) {
@@ -105,14 +106,14 @@ MyQueryBuilder.prototype.getCompletedPlaybookById = function (completedPlaybookI
               .where('completed_playbooks.id', '=', `${completedPlaybookId}`)
               .where('completed_playbooks.deleted', '=', 'false')
               .then((result) => result)
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.postCompletedPlaybook = function (data) {
     return this
             .insert({ ...data, id: uuid.v4() } )
             .then((result) => result)
-            .catch((err) => { throw err });
+            .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.putCompletedPlaybook = function (data, completedPlaybookId) {
@@ -120,7 +121,7 @@ MyQueryBuilder.prototype.putCompletedPlaybook = function (data, completedPlayboo
               .where({ id: completedPlaybookId })
               .patch(data)
               .then((result) => result)
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 module.exports = CompletedPlaybook;

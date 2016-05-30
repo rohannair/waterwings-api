@@ -1,5 +1,6 @@
 // Deps
 const encrypt = require('../utils/encryption');
+const ApiError = require('../utils/customErrors');
 
 // Users Controller
 // Individual Controller functions are wrapped in a larger function so that they can
@@ -8,87 +9,42 @@ const usersController = () => {
 
   return {
     GET: function* () {
-      try {
-        const result = yield this.models.User.query().getAll(this.state.user.companyId);
-        this.status = 200;
-        this.body = result;
-      }
-      catch(err) {
-        this.log.info(err);
-        this.status = 400;
-        this.body = {
-          mesage: 'An error has occured, please try again.'
-        };
-      }
+      this.body = yield this.models.User.query().getAll(this.state.user.companyId);
+      this.status = 200;
     },
 
     POST: function* () {
-      try {
-        // TODO: Consider moving the password hashing into the model
-        const hash = yield encrypt.encryptPassword(this.request.body.password);
-        this.request.body.password = hash
-        const newUser = yield this.models.User.query().postUser({ ...this.request.body, company_id: this.state.user.companyId });
-        const result = yield this.models.User.query().getUserById(newUser.id, this.state.user.companyId);
-        this.status = 201;
-        this.body = result[0];
-      }
-      catch(err) {
-        this.log.info(err);
-        this.status = 400;
-        this.body = {
-          message: 'An error has occured, please try again.'
-        };
-      }
+      // TODO: Consider moving the password hashing into the model
+      const hash = yield encrypt.encryptPassword(this.request.body.password);
+      this.request.body.password = hash
+      const newUser = yield this.models.User.query().postUser({ ...this.request.body, company_id: this.state.user.companyId });
+      const result = yield this.models.User.query().getUserById(newUser.id, this.state.user.companyId);
+      this.status = 201;
+      this.body = result;
     },
 
     GET_ONE: function* () {
-      try {
-        const result = yield this.models.User.query().getUserById(this.params.id);
-        this.status = 200;
-        this.body = result[0];
-      }
-      catch(err) {
-        this.log.info(err);
-        this.status = 400;
-        this.body = {
-          mesage: 'An error has occured, please try again.'
-        };
-      }
+      const result = yield this.models.User.query().getUserById(this.params.id, this.state.user.companyId);
+      this.status = 200;
+      this.body = result;
     },
 
     PUT: function* () {
-      try {
-        const result = yield this.models.User.query().putUser(this.request.body, this.params.id);
-        this.status = 200;
-        this.body = result;
-      }
-      catch(err) {
-        this.log.info(err);
-        this.status = 400;
-        this.body = {
-          message: 'An error has occured, please try again.'
-        };
-      }
+      const updatedUser = yield this.models.User.query().putUser(this.request.body, this.params.id);
+      const result = yield this.models.User.query().getUserById(this.params.id, this.state.user.companyId);
+      this.status = 200;
+      this.body = result;
     },
 
     DELETE: function* () {
-      try {
-        const user = yield this.models.User.query().getUserById(this.request.body.userId);
-        if(user[0].is_admin) {
-          const result = yield this.models.User.query().putUser({ deleted: true }, this.params.id);
-          this.status = 201;
-          this.body = result;
-        }
-        else {
-          throw 'Unauthorized user attempted to delete another user';
-        }
+      const user = yield this.models.User.query().getUserById(this.request.body.userId);
+      if(user[0].is_admin) {
+        const result = yield this.models.User.query().putUser({ deleted: true }, this.params.id);
+        this.status = 201;
+        this.body = result;
       }
-      catch(err) {
-        this.log.info(err);
-        this.status = 403;
-        this.body = {
-          message: 'Not Able to Delete'
-        };
+      else {
+        throw new ApiError('Not Able to Delete', 403, 'Unauthorized user attempted to delete another user');
       }
     }
 

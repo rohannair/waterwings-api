@@ -3,6 +3,7 @@ const Model = require('objection').Model;
 const QueryBuilder = require('objection').QueryBuilder;
 const uuid = require('node-uuid');
 const encrypt = require('../utils/encryption');
+const ApiError = require('../utils/customErrors');
 
 function User() {
   Model.apply(this, arguments);
@@ -105,7 +106,7 @@ MyQueryBuilder.prototype.getAll = function (companyId) {
               .where('users.company_id', '=', `${companyId}`)
               .orderBy('users.last_name', 'asc')
               .then((result) => result)
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.getUserById = function (userId, companyId) {
@@ -117,8 +118,8 @@ MyQueryBuilder.prototype.getUserById = function (userId, companyId) {
               .where('users.id', '=', `${userId}`)
               .where('users.company_id', '=', `${companyId}`)
               .where('users.deleted', '=', 'false')
-              .then((result) => result)
-              .catch((err) => { throw err });
+              .then((result) => result[0])
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.getUserwithPasswordById = function (userId) {
@@ -129,7 +130,7 @@ MyQueryBuilder.prototype.getUserwithPasswordById = function (userId) {
               .where('users.id', '=', `${userId}`)
               .where('users.deleted', '=', 'false')
               .then((result) => result)
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.getUserwithPasswordByUsername = function (name, companyId) {
@@ -141,14 +142,14 @@ MyQueryBuilder.prototype.getUserwithPasswordByUsername = function (name, company
               .where('users.company_id', '=', `${companyId}`)
               .where('users.deleted', '=', 'false')
               .then((result) => result)
-              .catch((err) => { throw { status: 404, message: 'Can not find a user with that username'} });
+              .catch((err) => { throw new ApiError('Can not find a user with that username', 500, err) });
 };
 
 MyQueryBuilder.prototype.postUser = function (data) {
     return this
             .insert({ id: uuid.v4(), ...data } )
             .then((result) => result)
-            .catch((err) => { throw err });
+            .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.putUser = function (data, userId) {
@@ -156,7 +157,7 @@ MyQueryBuilder.prototype.putUser = function (data, userId) {
               .where({ id: userId })
               .patch(data)
               .then((result) => result)
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 module.exports = User;

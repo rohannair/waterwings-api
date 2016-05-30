@@ -103,6 +103,23 @@ The token payload information can be accessed in any endpoint in the API by call
 this.state.user
 ```
 
+## Error Management
+There is a central function that deals with all error reporting for the API.
+This function will return a status code and an error message back to the user whenever an error has occurred.
+
+In order to use the central error function throughout the API at an endpoint call the following functions
+
+```javascript
+// This will log the detailed error message for the sys admin to examine
+this.log.info(err);
+// This message and status code will be returned back to the user
+this.throw('Error Message', 500);
+```
+
+This will throw an error in API and it will be caught by the upstream error reporting function and returned back to the user.
+
+Only return simple error messages to the user make sure that important systems information is not revealed
+
 ## Testing
 To run each test first move into the testing directory
 ```bash
