@@ -49,7 +49,9 @@ app.use(function* (next) {
   catch(err) {
     this.log.info('ERROR: ' + err.systemError );
     this.status = err.status || 500;
-    this.body = err.message || 'Internal Server Error';
+    this.body = {
+      message: err.message || 'Internal Server Error'
+    };
   }
 });
 
