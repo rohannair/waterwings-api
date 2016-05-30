@@ -50,14 +50,15 @@ const rolesController = () => {
 
     DELETE: function* () {
       try {
-        const user = yield this.models.User.query().getUserById(this.request.body.userId);
-        if(user[0].is_admin) {
+        if(this.state.user.isAdmin) {
           const result = yield this.models.Role.query().putRole({ deleted: true }, this.params.id);
           this.status = 201;
-          this.body = result;
+          this.body = {
+            message: 'Role has been deleted'
+          };
         }
         else {
-          throw 'Unauthorized user attempted to delete a a role'
+          throw 'Unauthorized user attempted to delete a role'
         }
       }
       catch(err) {
