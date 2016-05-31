@@ -26,11 +26,12 @@ const completedPlaybooksController = () => {
     },
 
     DELETE: function* () {
-      const user = yield this.models.User.query().getUserById(this.request.body.userId);
-      if(user[0].is_admin) {
+      if(this.state.user.isAdmin) {
         const result = yield this.models.CompletedPlaybook.query().putCompletedPlaybook({ deleted: true }, this.params.id);
         this.status = 201;
-        this.body = result;
+        this.body = {
+          message: 'Completed Playbook has been deleted'
+        };
       }
       else {
         throw new ApiError('Not Able to Delete', 403, 'Unauthorized user attempted to delete a Completed Playbook');
