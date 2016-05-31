@@ -73,11 +73,12 @@ const usersController = () => {
 
     DELETE: function* () {
       try {
-        const user = yield this.models.User.query().getUserById(this.request.body.userId);
-        if(user[0].is_admin) {
+        if(this.state.user.isAdmin) {
           const result = yield this.models.User.query().putUser({ deleted: true }, this.params.id);
           this.status = 201;
-          this.body = result;
+          this.body = {
+            message: 'User has been deleted'
+          };
         }
         else {
           throw 'Unauthorized user attempted to delete another user';
