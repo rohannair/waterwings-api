@@ -73,7 +73,6 @@ const usersController = () => {
 
     DELETE: function* () {
       try {
-        console.log(this.state.user);
         if(this.state.user.isAdmin) {
           const result = yield this.models.User.query().putUser({ deleted: true }, this.params.id);
           this.status = 201;
