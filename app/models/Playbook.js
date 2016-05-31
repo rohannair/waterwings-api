@@ -56,7 +56,10 @@ Playbook.jsonSchema = {
                   },
     created_at  : { type: 'object' },
     updated_at  : { type: 'object' },
-    deleted     : { type: 'boolean' }
+    deleted     : { type: 'boolean' },
+    collaborators : { type: 'array' },
+    assigned    : { type: 'string' },
+    current_status : { type: 'string' }
   }
 };
 
@@ -94,8 +97,9 @@ Playbook.relationMappings = {
 MyQueryBuilder.prototype.getAll = function (companyId) {
     return this
               .select(
-                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc'
+                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'users.first_name as firstName', 'users.last_name as lastName'
               )
+              .leftJoin('users', 'playbooks.assigned', 'users.id')
               .where('playbooks.deleted', '=', 'false')
               .where('playbooks.company_id', '=', `${companyId}`)
               .orderBy('playbooks.created_at', 'asc')
@@ -106,8 +110,9 @@ MyQueryBuilder.prototype.getAll = function (companyId) {
 MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
     return this
               .select(
-                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc'
+                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'users.first_name as firstName', 'users.last_name as lastName'
               )
+              .leftJoin('users', 'playbooks.assigned', 'users.id')
               .where('playbooks.id', '=', `${playbookId}`)
               .where('playbooks.deleted', '=', 'false')
               .then((result) => result)
@@ -123,9 +128,9 @@ MyQueryBuilder.prototype.postPlaybook = function (data) {
 
 MyQueryBuilder.prototype.putPlaybook = function (data, playbookId) {
     return this
-              .where({ id: playbookId })
+              .where({id: playbookId })
               .patch(data)
-              .returning('*')
+              .returning('id')
               .then((result) => result)
               .catch((err) => { throw err });
 };
