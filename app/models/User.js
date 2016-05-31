@@ -104,7 +104,7 @@ MyQueryBuilder.prototype.getAll = function (companyId) {
               .leftJoin('roles as r', 'users.role_id', 'r.id')
               .where('users.deleted', '=', 'false')
               .where('users.company_id', '=', `${companyId}`)
-              .orderBy('users.last_name', 'asc')
+              .orderBy('users.updated_at', 'desc')
               .then((result) => result)
               .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
