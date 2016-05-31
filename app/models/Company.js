@@ -2,6 +2,7 @@
 const Model = require('objection').Model;
 const QueryBuilder = require('objection').QueryBuilder;
 const uuid = require('node-uuid');
+const ApiError = require('../utils/customErrors');
 
 function Company() {
   Model.apply(this, arguments);
@@ -106,7 +107,7 @@ MyQueryBuilder.prototype.getAll = function () {
               .where('companies.deleted', '=', 'false')
               .orderBy('companies.created_at', 'asc')
               .then((result) => result)
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.getCompanyBySubdomain = function (subdomain) {
@@ -114,7 +115,7 @@ MyQueryBuilder.prototype.getCompanyBySubdomain = function (subdomain) {
               .where('companies.deleted', '=', 'false')
               .where('companies.subdomain', '=', `${subdomain}`)
               .then((result) => result)
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 
@@ -122,7 +123,7 @@ MyQueryBuilder.prototype.postCompany = function (data) {
     return this
             .insert({ id: uuid.v4(), ...data } )
             .then((result) => result)
-            .catch((err) => { throw err });
+            .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.putCompany = function (data, companyId) {
@@ -130,7 +131,7 @@ MyQueryBuilder.prototype.putCompany = function (data, companyId) {
               .where({ id: companyId })
               .patch(data)
               .then((result) => result)
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 module.exports = Company;

@@ -2,6 +2,7 @@
 const Model = require('objection').Model;
 const QueryBuilder = require('objection').QueryBuilder;
 const uuid = require('node-uuid');
+const ApiError = require('../utils/customErrors');
 
 function Role() {
   Model.apply(this, arguments);
@@ -85,14 +86,14 @@ MyQueryBuilder.prototype.getAll = function (companyId) {
               .where('roles.deleted', '=', 'false')
               .where('roles.company_id', '=', `${companyId}`)
               .then((result) => result)
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.postRole = function (data) {
     return this
             .insert(data)
             .then((result) => result)
-            .catch((err) => { throw err });
+            .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.putRole = function (data, roleId) {
@@ -100,7 +101,7 @@ MyQueryBuilder.prototype.putRole = function (data, roleId) {
               .where({ id: roleId })
               .patch(data)
               .then((result) => result)
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 module.exports = Role;

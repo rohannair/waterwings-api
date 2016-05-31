@@ -3,6 +3,7 @@ const Model = require('objection').Model;
 const QueryBuilder = require('objection').QueryBuilder;
 const uuid  = require('node-uuid');
 const merge = require('ramda').merge;
+const ApiError = require('../utils/customErrors');
 
 function Playbook() {
   Model.apply(this, arguments);
@@ -100,7 +101,7 @@ MyQueryBuilder.prototype.getAll = function (companyId) {
               .where('playbooks.company_id', '=', `${companyId}`)
               .orderBy('playbooks.created_at', 'asc')
               .then((result) => result)
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
@@ -111,14 +112,14 @@ MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
               .where('playbooks.id', '=', `${playbookId}`)
               .where('playbooks.deleted', '=', 'false')
               .then((result) => result)
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.postPlaybook = function (data) {
     return this
             .insert({ ...data, id: uuid.v4() } )
             .then((result) => result)
-            .catch((err) => { throw err });
+            .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.putPlaybook = function (data, playbookId) {
@@ -127,7 +128,7 @@ MyQueryBuilder.prototype.putPlaybook = function (data, playbookId) {
               .patch(data)
               .returning('*')
               .then((result) => result)
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.duplicatePlaybook = function (playbookId) {
@@ -138,7 +139,7 @@ MyQueryBuilder.prototype.duplicatePlaybook = function (playbookId) {
               .where('playbooks.id', '=', `${playbookId}`)
               .where('playbooks.deleted', '=', 'false')
               .then((data) => { return merge(data[0], { name: data[0].name + ' (Copy)' }) })
-              .catch((err) => { throw err });
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 module.exports = Playbook;

@@ -12,6 +12,7 @@ const chalk       = require('chalk');
 const multiTenant = require('./utils/multiTenant');
 const configs     = require('./config/app')();
 const db          = require('./knexfile');
+const ApiError    = require('./utils/customErrors');
 
 // Instantiate app
 const app     = module.exports = Koa();
@@ -40,21 +41,26 @@ app.use(function* (next) {
   this.log.info('RESPONSE: ' + this.response.status);
 });
 
-// Subdomain catching
-// Grabs the subdomin of the incoming request in order to properly identify to which
-// database the request should be routed too
+// Central Error Handling
 app.use(function* (next) {
   try {
-      this.subdomain = yield multiTenant.getSubdomain(this.request.header.host);
-      yield* next;
+    yield* next;
   }
   catch(err) {
-    this.log.info(err);
-    this.status = 404;
+    this.log.info('ERROR: ' + err.systemError );
+    this.status = err.status || 500;
     this.body = {
-      message: 'Incorrect subdomain, this company does not exist'
+      message: err.message || 'Internal Server Error'
     };
   }
+});
+
+// Subdomain catching
+// Grabs the subdomin of the incoming request in order to properly identify to which company
+// the request should be routed too
+app.use(function* (next) {
+    this.subdomain = yield multiTenant.getSubdomain(this.request.header.host);
+    yield* next;
 });
 
 // Database routing
@@ -69,7 +75,6 @@ app.use(function* (next) {
   };
   yield* next;
 });
-
 
 // Configure router
 const router  = new Router({
@@ -97,45 +102,19 @@ router.use(bouncer.middleware());
 // Body Parser
 router.use(bodyParser());
 
-// Error Handling
-router.use(function* (next) {
-  try {
-    yield* next;
-  } catch (err) {
-
-    if (err.status === 401) {
-      this.status = 401;
-      this.body = {
-        message: this.path + '- Protected resource, use Authorization header to get access\n'
-      };
-    } else {
-      this.response.status = this.status || 500;
-      this.response.body = err;
-    }
-    this.log.info(err);
-  }
-});
-
 // JWT auth needed for API routes
 router.use(jwt({ secret: configs.getJWT() }).unless({path: [/^\/api\/v1\/login/]}));
 
 // Ensure that a user's token and subdomain match
 router.use(function* (next) {
-  try {
     // Only check if the user has a valid token
     if(this.state.user) {
       const company = yield this.models.Company.query().getCompanyBySubdomain(this.subdomain)
-      if (company[0].id !== this.state.user.companyId) throw { status: 403, message: 'User is accessing incorrect subdomain'};
+      if ( (company.length <= 0) || (company[0].id !== this.state.user.companyId) )  {
+        throw new ApiError('Token and company do not match, please login to your company', 403, 'Mismatched token and subdomain');
+      }
     }
     yield* next;
-  }
-  catch(err) {
-    this.log.info(err);
-    this.status = 403;
-    this.body = {
-      message: 'Your token and company do not match, please login to your company'
-    };
-  }
 })
 
 // Generic Response
