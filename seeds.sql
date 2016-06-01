@@ -102,15 +102,18 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
         "options": [
           {
             "id": "gqOEoUR5RHg",
-            "name": "Bootstrap Primer"
+            "name": "Bootstrap Primer",
+            "type": "youtube"
           },
           {
             "id": "qAws7eXItMk",
-            "name": "Running User Interviews"
+            "name": "Running User Interviews",
+            "type": "youtube"
           },
           {
             "id": "SqfhZk0eIdE",
-            "name": "Object Oriented CSS (OOCSS)"
+            "name": "Object Oriented CSS (OOCSS)",
+            "type": "youtube"
           }
         ]
       }
