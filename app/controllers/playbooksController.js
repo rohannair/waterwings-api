@@ -24,12 +24,16 @@ const playbooksController = () => {
     },
 
     PUT: function* () {
-      yield this.models.Playbook.query().putPlaybook(this.request.body, this.params.id);
+      let NoMatchMessage = null;
+      const updated = yield this.models.Playbook.query().putPlaybook(this.request.body, this.params.id);
+      if(updated.length <= 0) {
+        NoMatchMessage = 'Can not update becuase this playbook has been sent';
+      }
       const result = yield this.models.Playbook.query().getPlaybookById(this.params.id);
       this.status = 200;
       this.body = {
         result: result[0],
-        message: 'Successfully updated playbook.'
+        message: NoMatchMessage || 'Successfully updated playbook.'
       };
     },
 
