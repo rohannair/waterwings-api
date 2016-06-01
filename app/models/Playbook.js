@@ -129,7 +129,8 @@ MyQueryBuilder.prototype.postPlaybook = function (data) {
 
 MyQueryBuilder.prototype.putPlaybook = function (data, playbookId) {
     return this
-              .where({id: playbookId })
+              .where('current_status', '=', 'draft')
+              .where({ id: playbookId })
               .patch(data)
               .returning('id')
               .then((result) => result)
