@@ -123,6 +123,7 @@ MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
 MyQueryBuilder.prototype.postPlaybook = function (data) {
     return this
             .insert({ ...data, id: uuid.v4() } )
+            .returning('*')
             .then((result) => result)
             .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
@@ -140,7 +141,7 @@ MyQueryBuilder.prototype.putPlaybook = function (data, playbookId) {
 MyQueryBuilder.prototype.duplicatePlaybook = function (playbookId) {
     return this
               .select(
-                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc'
+                'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc'
               )
               .where('playbooks.id', '=', `${playbookId}`)
               .where('playbooks.deleted', '=', 'false')
