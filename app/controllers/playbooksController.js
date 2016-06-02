@@ -60,7 +60,7 @@ const playbooksController = () => {
       this.status = 201;
       this.body = {
         result,
-        message: 'Playbook has been duplicated'
+        message: null
       };
     }
   };
