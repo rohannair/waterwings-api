@@ -98,7 +98,7 @@ Playbook.relationMappings = {
 MyQueryBuilder.prototype.getAll = function (companyId) {
     return this
               .select(
-                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'users.first_name as firstName', 'users.last_name as lastName'
+                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
               )
               .leftJoin('users', 'playbooks.assigned', 'users.id')
               .where('playbooks.deleted', '=', 'false')
@@ -111,7 +111,7 @@ MyQueryBuilder.prototype.getAll = function (companyId) {
 MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
     return this
               .select(
-                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'users.first_name as firstName', 'users.last_name as lastName'
+                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
               )
               .leftJoin('users', 'playbooks.assigned', 'users.id')
               .where('playbooks.id', '=', `${playbookId}`)
@@ -129,7 +129,8 @@ MyQueryBuilder.prototype.postPlaybook = function (data) {
 
 MyQueryBuilder.prototype.putPlaybook = function (data, playbookId) {
     return this
-              .where({id: playbookId })
+              .where('current_status', '=', 'draft')
+              .where({ id: playbookId })
               .patch(data)
               .returning('id')
               .then((result) => result)

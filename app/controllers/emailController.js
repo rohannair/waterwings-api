@@ -33,8 +33,11 @@ const emailController = () => {
       })
       .then(resp => self.body = resp);
 
-      this.status = 201;
+      yield this.models.Playbook.query().putPlaybook({current_status: 'sent'}, playbookId);
+      const result = yield this.models.Playbook.query().getPlaybookById(playbookId);
+      this.status = 200;
       this.body = {
+        result: result[0],
         message: `Email has been sent to ${email}`
       };
     }
