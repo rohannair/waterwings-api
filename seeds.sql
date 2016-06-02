@@ -102,15 +102,18 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
         "options": [
           {
             "id": "gqOEoUR5RHg",
-            "name": "Bootstrap Primer"
+            "name": "Bootstrap Primer",
+            "type": "youtube"
           },
           {
             "id": "qAws7eXItMk",
-            "name": "Running User Interviews"
+            "name": "Running User Interviews",
+            "type": "youtube"
           },
           {
             "id": "SqfhZk0eIdE",
-            "name": "Object Oriented CSS (OOCSS)"
+            "name": "Object Oriented CSS (OOCSS)",
+            "type": "youtube"
           }
         ]
       }
@@ -163,9 +166,21 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
       },
       "type": "day1agenda",
       "position": { "lat":43.6446447, "lng": -79.39499869999997 },
-      "place": {"name": "Lighthouse Labs",
-        "formatted_address": "46 Spadina Avenue, Toronto, ON, Canada"},
+      "place": {
+        "name": "Lighthouse Labs",
+        "formatted_address": "46 Spadina Avenue, Toronto, ON, Canada"
+      },
       "heading":"Your first day",
+      "contact": {
+        "title":"",
+        "name":"",
+        "email":""
+      },
+      "couponInput": {
+        "show":false,
+        "code":""
+      },
+      "detailed_location": null,
       "date": "2016-05-24",
       "slide_number": 4
     }
@@ -268,8 +283,20 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
       },
       "type": "day1agenda",
       "position": { "lat":43.6446447, "lng": -79.39499869999997 },
-      "place": {"name": "Lighthouse Labs",
-        "formatted_address": "46 Spadina Avenue, Toronto, ON, Canada"},
+      "place": {
+        "name": "Lighthouse Labs",
+        "formatted_address": "46 Spadina Avenue, Toronto, ON, Canada"
+      },
+      "contact": {
+        "title":"",
+        "name":"",
+        "email":""
+      },
+      "couponInput": {
+        "show":false,
+        "code":""
+      },
+      "detailed_location": null,
       "heading":"Your first day",
       "date": "2016-05-24",
       "slide_number": 4

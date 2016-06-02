@@ -10,7 +10,14 @@ const emailController = () => {
       const self = this;
       const company = yield this.models.Company.query().getCompanyBySubdomain(this.subdomain);
       const { name } = company[0];
-      const { firstName, lastName, email, playbookId, emailTemplate } = this.request.body;
+      const { userId, firstName, lastName, email, playbookId, emailTemplate } = this.request.body;
+
+      // If playbook is not assigned to a user then auto assign to user that playbook is currently being
+      // sent to 
+      const playbookToSend = yield this.models.Playbook.query().getPlaybookById(playbookId);
+      if (playbookToSend[0].assigned === null) {
+        yield this.models.Playbook.query().putPlaybook({assigned: userId}, playbookId);
+      }
 
       yield fetch('http://localhost:3001/email/playbook', {
         method: 'POST',
@@ -33,8 +40,11 @@ const emailController = () => {
       })
       .then(resp => self.body = resp);
 
-      this.status = 201;
+      yield this.models.Playbook.query().putPlaybook({current_status: 'sent'}, playbookId);
+      const result = yield this.models.Playbook.query().getPlaybookById(playbookId);
+      this.status = 200;
       this.body = {
+        result: result[0],
         message: `Email has been sent to ${email}`
       };
     }
