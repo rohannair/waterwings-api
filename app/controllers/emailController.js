@@ -12,7 +12,7 @@ const emailController = () => {
       const { name } = company[0];
       const { firstName, lastName, email, playbookId, emailTemplate } = this.request.body;
 
-      yield fetch('http://localhost:3001/email/playbook', {
+      yield fetch(process.env.EMAIL_SENDER_LOCATION, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

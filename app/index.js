@@ -1,4 +1,5 @@
 // Dependencies
+require('dotenv').config();
 const cors        = require('koa-cors');
 const Koa         = require('koa');
 const Router      = require('koa-router');
@@ -10,7 +11,6 @@ const unless      = require('koa-unless');
 const logger      = require('./utils/logger');
 const chalk       = require('chalk');
 const multiTenant = require('./utils/multiTenant');
-const configs     = require('./config/app')();
 const db          = require('./knexfile');
 const ApiError    = require('./utils/customErrors');
 
@@ -103,7 +103,7 @@ router.use(bouncer.middleware());
 router.use(bodyParser());
 
 // JWT auth needed for API routes
-router.use(jwt({ secret: configs.getJWT() }).unless({path: [/^\/api\/v1\/login/]}));
+router.use(jwt({ secret: process.env.JWT_SECRET }).unless({path: [/^\/api\/v1\/login/]}));
 
 // Ensure that a user's token and subdomain match
 router.use(function* (next) {

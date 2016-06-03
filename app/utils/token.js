@@ -1,6 +1,4 @@
-const jwt      = require('jsonwebtoken');
-// Secret key contained in the config files
-const config = require('../config/app.js');
+const jwt = require('jsonwebtoken');
 
 // Utility function to create a jwt, accepts the user details to be included as the payload
 function genToken(userDetails) {
@@ -8,7 +6,7 @@ function genToken(userDetails) {
     // Payload
     { ...userDetails },
     // Secret Key
-    'shared',
+    process.env.JWT_SECRET,
     { algorithm: 'HS256'}
     // TODO: Fill in the rest of these options
     // { expiresIn: "2 days"},
