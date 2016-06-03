@@ -105,7 +105,7 @@ router.use(bodyParser());
 // JWT auth needed for API routes
 // TODO: change this asap once we have user registration working
 router.use(jwt({ secret: configs.getJWT() }).unless(function () {
-  if(this.url === '/api/v1/login' || this.method === 'POST') {
+  if(this.url === '/api/v1/login' && this.method === 'POST') {
     return true;
   } else if ( this.url.match(/\/api\/v1\/playbooks\/.*/) && this.method === 'GET') {
     return true
