@@ -103,7 +103,7 @@ router.use(bouncer.middleware());
 router.use(bodyParser());
 
 // JWT auth needed for API routes
-router.use(jwt({ secret: configs.getJWT() }).unless({path: [/^\/api\/v1\/login/]}));
+router.use(jwt({ secret: configs.getJWT() }).unless({path: ['/api/v1/login', '/api/v1/playbook/4958cfba-d713-4919-9a80-c124079cf52a']}));
 
 // Ensure that a user's token and subdomain match
 router.use(function* (next) {

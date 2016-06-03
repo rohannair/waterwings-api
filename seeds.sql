@@ -16,12 +16,14 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
   '{
     "0": {
       "slide_number": 0,
+      "submittable": false,
       "type": "intro",
       "heading": "Hi ${user}, welcome to Scotiabank!",
       "body": "<p>We are firm believers in empowering our team from day 0, so have created an online onboarding and training program to help you hit the ground running on day 1.</p><p>Here is the agenda:</p><ol><li>Fill out your user profile</li><li>Choose your equipment</li><li>Knowledge center</li><li>See the schedule for your first day</li></ol><p>If you have any questions about this process, you can contact the <a href=\"mailto:onboarding@scotiabank.com\">Onboarding Team</a>, or your manager <a href=\"mailto:billjobs@scotiabank.com\">Bill Jobs</a>.</p>"
     },
     "1": {
       "slide_number": 1,
+      "submittable": true,
       "type": "bio",
       "body": {
         "heading": "Fill out your Employee profile",
@@ -37,6 +39,7 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
     },
     "2": {
       "slide_number": 2,
+      "submittable": true,
       "type": "equipment",
       "heading": "Choose your equipment",
       "body": {
@@ -95,6 +98,7 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
     },
     "3": {
       "slide_number": 3,
+      "submittable": false,
       "type": "knowledgectr",
       "heading": "Knowledge Center",
       "body": {
@@ -165,6 +169,7 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
          ]
       },
       "type": "day1agenda",
+      "submittable": false,
       "position": { "lat":43.6446447, "lng": -79.39499869999997 },
       "place": {
         "name": "Lighthouse Labs",
@@ -191,6 +196,7 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
        "body":"<p>Welcome to Lighthouse Labs - We are really excited to have your contribution helping us teach and grow the next generation of developer talent!.As part of your on-boarding, there are a few things to do done:</p>\n<ol>\n  <li>Fill out your user profile &amp; upload docs</li>\n  <li>Access team groups</li>\n  <li>Knowledge Center</li>\n  <li>See the schedule for your first day</li>\n</ol>\n<p>If you have any questions feel free to contact <a href=\"mailto:kate@lighthouselabs.ca\">kate@lighthouselabs.ca</a></p>",
        "type":"intro",
        "heading":"Hey JerKhurram, welcome aboard!",
+       "submittable": false,
        "slide_number":0
     },
     "1":{
@@ -206,12 +212,14 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
           }
        },
        "type":"bio",
+       "submittable": true,
        "slide_number":1
     },
     "2":{
        "body":"<p><a href=\"http://compass.lighthouselabs.ca/i/ykGpp112qqnbfk67hi5ro3wll\"><ins><strong>Compass Access</strong></ins></a></p>\n<p>Use the following URL to register and gain teacher access to the LMS, curriculum, students, etc. Please do not  will want to be checking what students are learning during lectures and in assignments prior to your shifts.</p>\n<p><strong>Email</strong></p>\n<p>You’ve been added to the web-teachers-toronto@lighthouselabs.ca email (google) group, which means you’ll be getting some emails from Compass (via instructors) and staff, and have access to our important gDocs.</p>\n<p><a href=\"https://docs.google.com/a/functionalimperative.com/spreadsheets/d/1BB4e_7Ih2lkmG9oD6vIhCgtPjq2rKiLOndPEcGMr8zE/edit\"><ins><strong>Schedule</strong></ins></a></p>\n<p>This is an important document, please bookmark it and check it weekly if not more regularly for changes.</p>\n<p>You’ve been added into the Teacher Info sheet, but please complete all your details in there at your earliest convenience. It will help us with scheduling going forward.</p>\n<p><strong>Slack</strong></p>\n<p>You have been sent an invitation to join the Toronto teacher channel. &nbsp;Use this to quickly communicate with your fellow LHL teachers and staff.</p>\n<p><strong>ClockTower</strong></p>\n<p>The on-boarding document explains what this is and why it is important to you. Your account has been created and you should have another email in your inbox with your credentials. Please send your invoices, as well as any concerns or questions re payment, to Landon at <a href=\"mailto:bookkeeper@lighthouselabs.ca\">bookkeeper@lighthouselabs.ca</a></p>",
        "type":"intro",
        "heading":"Your toolkit",
+       "submittable": false,
        "slide_number":2
     },
     "3":{
@@ -233,6 +241,7 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
        },
        "type":"knowledgectr",
        "heading":"Knowledge Center",
+       "submittable": false,
        "slide_number":3
     },
     "4": {
@@ -282,6 +291,7 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
          ]
       },
       "type": "day1agenda",
+      "submittable": false,
       "position": { "lat":43.6446447, "lng": -79.39499869999997 },
       "place": {
         "name": "Lighthouse Labs",
