@@ -1,5 +1,5 @@
 const EmailTemplates = require('./emailTemplates/index.js');
-const LinkCreator = require('../mailers/linkCreator.js');
+const LinkCreator = require('./linkCreator.js');
 
 function emailCreator( { firstName, lastName, email, companyName, companySubdomain, playbookId, emailTemplate } ) {
 

@@ -1,6 +1,6 @@
 const ApiError = require('../utils/customErrors');
-const EmailCreator = require('../mailers/emailCreator');
-const EmailSender = require('../mailers/emailSender');
+const EmailCreator = require('../utils/mailer/emailCreator');
+const EmailSender = require('../utils/mailer/emailSender');
 
 // Email Controller
 // Individual Controller functions are wrapped in a larger function so that they can
