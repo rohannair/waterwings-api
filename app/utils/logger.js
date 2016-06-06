@@ -1,6 +1,3 @@
-const logLocation = process.env.NODE_ENV === 'production'
-  ? '/var/log/waterwings-api/waterwings-api.log' : 'app/logs/waterwings-api.log';
-
 // Import Logging Module
 const bunyan = require('bunyan');
 
@@ -16,7 +13,7 @@ const logger = bunyan.createLogger({
     {
       // Log all errors,requests and responses to the log file
       level: 'info',
-      path: logLocation
+      path: process.env.LOG_LOCATION
     }
   ],
   serializers: bunyan.stdSerializers, //Contains three serializers for errs, reqs and res'

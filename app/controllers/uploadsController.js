@@ -28,7 +28,7 @@ const uploadsController = (function() {
 
       let base64File = yield base64_encode(file.path);
 
-      yield fetch('http://localhost:3002/upload', {
+      yield fetch(process.env.FILE_SERVICE_LOCATION, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

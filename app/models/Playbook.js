@@ -97,7 +97,7 @@ Playbook.relationMappings = {
 MyQueryBuilder.prototype.getAll = function (companyId) {
     return this
               .select(
-                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
+                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.updated_at','playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
               )
               .leftJoin('users', 'playbooks.assigned', 'users.id')
               .where('playbooks.deleted', '=', 'false')
@@ -121,7 +121,7 @@ MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
 
 MyQueryBuilder.prototype.postPlaybook = function (data) {
     return this
-            .insert({ ...data, id: uuid.v4() } )
+            .insert(Object.assign(data, {id: uuid.v4()}))
             .returning('*')
             .then((result) => result)
             .catch((err) => { throw new ApiError('Database Error', 500, err) });
