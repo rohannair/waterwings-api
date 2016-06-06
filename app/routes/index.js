@@ -6,7 +6,6 @@ const companiesController = require('../controllers/companiesController')();
 const usersController  = require('../controllers/usersController')();
 const rolesController = require('../controllers/rolesController')();
 const playbooksController = require('../controllers/playbooksController')();
-const completedPlaybooksController = require('../controllers/completedPlaybooksController')();
 const uploadsController = require('../controllers/uploadsController');
 const emailController = require('../controllers/emailController')();
 
@@ -44,12 +43,6 @@ module.exports = function configure(router) {
   .put('/playbooks/:id', playbooksController.PUT)
   .delete('/playbooks/:id', playbooksController.DELETE)
   .post('/playbooks/duplicate', playbooksController.DUPLICATE)
-
-  // Completed Playbooks
-  .get('/completedPlaybooks', completedPlaybooksController.GET)
-  .post('/completedPlaybooks', completedPlaybooksController.POST)
-  .put('/completedPlaybooks/:id', completedPlaybooksController.PUT)
-  .delete('/completedPlaybooks/:id', completedPlaybooksController.DELETE)
 
   // Uploads
   .post('/upload', uploadsController.POST)
