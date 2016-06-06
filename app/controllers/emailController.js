@@ -1,4 +1,3 @@
-const fetch = require('node-fetch');
 const ApiError = require('../utils/customErrors');
 const EmailCreator = require('../mailers/emailCreator');
 const EmailSender = require('../mailers/emailSender');
