@@ -60,7 +60,14 @@ Playbook.jsonSchema = {
     deleted     : { type: 'boolean' },
     collaborators : { type: 'array' },
     assigned    : { type: 'string' },
-    current_status : { type: 'string' }
+    current_status : { type: 'string' },
+    submitted_doc : {
+                    type: 'object',
+                    properties: {
+                      body: 'string'
+                    },
+                    additionalProperties: true
+                  }
   }
 };
 
@@ -98,7 +105,7 @@ Playbook.relationMappings = {
 MyQueryBuilder.prototype.getAll = function (companyId) {
     return this
               .select(
-                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
+                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
               )
               .leftJoin('users', 'playbooks.assigned', 'users.id')
               .where('playbooks.deleted', '=', 'false')
@@ -111,7 +118,7 @@ MyQueryBuilder.prototype.getAll = function (companyId) {
 MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
     return this
               .select(
-                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
+                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
               )
               .leftJoin('users', 'playbooks.assigned', 'users.id')
               .where('playbooks.id', '=', `${playbookId}`)

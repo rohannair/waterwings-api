@@ -103,7 +103,19 @@ router.use(bouncer.middleware());
 router.use(bodyParser());
 
 // JWT auth needed for API routes
-router.use(jwt({ secret: process.env.JWT_SECRET }).unless({path: [/^\/api\/v1\/login/]}));
+// TODO: change this asap once we have user registration working
+router.use(jwt({ secret: configs.getJWT() }).unless(function () {
+  if(this.url === '/api/v1/login' && this.method === 'POST') {
+    return true;
+  } else if ( this.url.match(/\/api\/v1\/playbooks\/.*/) && this.method === 'GET') {
+    return true
+  } else if ( this.url.match(/\/api\/v1\/playbooks\/.*/) && this.method === 'PUT') {
+    return true
+  }
+   else {
+    return false
+  }
+}));
 
 // Ensure that a user's token and subdomain match
 router.use(function* (next) {

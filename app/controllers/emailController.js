@@ -1,6 +1,8 @@
 const ApiError = require('../utils/customErrors');
 const EmailCreator = require('../utils/mailer/emailCreator');
 const EmailSender = require('../utils/mailer/emailSender');
+const createEmptySubmittedPlaybook = require('../utils/createEmptySubmittedPlaybook');
+
 
 // Email Controller
 // Individual Controller functions are wrapped in a larger function so that they can
@@ -32,12 +34,19 @@ const emailController = () => {
       // Send the email through SparkPost with the correct template
       yield EmailSender(EmailToSend);
 
+      // Create an empty submitted playbook and insert it into the database
+      const PlaybookToBeSent = yield this.models.Playbook.query().getPlaybookById(playbookId);
+      const newSubmittedDoc = yield createEmptySubmittedPlaybook(PlaybookToBeSent[0]);
+      yield this.models.Playbook.query().putPlaybook({submitted_doc: newSubmittedDoc }, playbookId);
+
+
       yield this.models.Playbook.query().putPlaybook({current_status: 'sent'}, playbookId);
       const result = yield this.models.Playbook.query().getPlaybookById(playbookId);
 
       this.status = 200;
       this.body = {
         result: result[0],
+        newSubmittedDoc,
         message: `Email has been sent to ${email}`
       };
     }
