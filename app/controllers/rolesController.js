@@ -12,7 +12,7 @@ const rolesController = () => {
     },
 
     POST: function* () {
-      const result = yield this.models.Role.query().postRole({ ...this.request.body, company_id: this.state.user.companyId });
+      const result = yield this.models.Role.query().postRole(Object.assign(this.request.body, {company_id: this.state.user.companyId}));
       this.status = 201;
       this.body = result;
     },

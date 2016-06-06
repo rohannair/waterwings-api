@@ -129,7 +129,7 @@ MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
 
 MyQueryBuilder.prototype.postPlaybook = function (data) {
     return this
-            .insert({ ...data, id: uuid.v4() } )
+            .insert(Object.assign(data, {id: uuid.v4()}))
             .returning('*')
             .then((result) => result)
             .catch((err) => { throw new ApiError('Database Error', 500, err) });

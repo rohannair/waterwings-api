@@ -1,16 +1,14 @@
-const hostLocation = process.env.NODE_ENV === 'production' ? '172.31.20.4' : 'localhost';
 const knex = require('knex');
 
 module.exports = function () {
-  console.log(hostLocation);
   return knex(
     {
       client: 'pg',
       connection: {
-        host     : hostLocation,
-        user     : 'root',
-        password : 'password',
-        database : 'quartermasterdb',
+        host     : process.env.DB_HOST,
+        user     : process.env.DB_USER,
+        password : process.env.DB_PASSWORD,
+        database : process.env.DB_NAME,
         charset  : 'utf8'
       },
       pool: {

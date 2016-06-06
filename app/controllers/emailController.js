@@ -1,6 +1,8 @@
-const fetch = require('node-fetch');
 const ApiError = require('../utils/customErrors');
+const EmailCreator = require('../utils/mailer/emailCreator');
+const EmailSender = require('../utils/mailer/emailSender');
 const createEmptySubmittedPlaybook = require('../utils/createEmptySubmittedPlaybook');
+
 
 // Email Controller
 // Individual Controller functions are wrapped in a larger function so that they can
@@ -8,38 +10,29 @@ const createEmptySubmittedPlaybook = require('../utils/createEmptySubmittedPlayb
 const emailController = () => {
   return {
     POST: function* () {
-      const self = this;
       const company = yield this.models.Company.query().getCompanyBySubdomain(this.subdomain);
       const { name } = company[0];
       const { userId, firstName, lastName, email, playbookId, emailTemplate } = this.request.body;
 
       // If playbook is not assigned to a user then auto assign to user that playbook is currently being
-      // sent to 
+      // sent to
       const playbookToSend = yield this.models.Playbook.query().getPlaybookById(playbookId);
       if (playbookToSend[0].assigned === null) {
         yield this.models.Playbook.query().putPlaybook({assigned: userId}, playbookId);
       }
 
-      yield fetch('http://localhost:3001/email/playbook', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+      const EmailToSend = yield EmailCreator({
           companyName: name,
-          companySubdomain: self.subdomain,
+          companySubdomain: this.subdomain,
           firstName,
           lastName,
           email,
           playbookId,
           emailTemplate
-        })
-      })
-      .then(resp => {
-        if (!resp.ok) throw new ApiError('Error sending email, please try again', resp.status, resp.statusText);
-        return resp.json();
-      })
-      .then(resp => self.body = resp);
+        });
+
+      // Send the email through SparkPost with the correct template
+      yield EmailSender(EmailToSend);
 
       // Create an empty submitted playbook and insert it into the database
       const PlaybookToBeSent = yield this.models.Playbook.query().getPlaybookById(playbookId);
@@ -49,6 +42,7 @@ const emailController = () => {
 
       yield this.models.Playbook.query().putPlaybook({current_status: 'sent'}, playbookId);
       const result = yield this.models.Playbook.query().getPlaybookById(playbookId);
+
       this.status = 200;
       this.body = {
         result: result[0],

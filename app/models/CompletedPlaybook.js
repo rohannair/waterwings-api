@@ -111,7 +111,7 @@ MyQueryBuilder.prototype.getCompletedPlaybookById = function (completedPlaybookI
 
 MyQueryBuilder.prototype.postCompletedPlaybook = function (data) {
     return this
-            .insert({ ...data, id: uuid.v4() } )
+            .insert(Object.assign(data, {id: uuid.v4()}))
             .then((result) => result)
             .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
