@@ -1,5 +1,8 @@
-// Dependencies
+// Configs
 require('dotenv').config();
+global.Promise = require('bluebird');
+
+// Dependencies
 const cors        = require('koa-cors');
 const Koa         = require('koa');
 const Router      = require('koa-router');
