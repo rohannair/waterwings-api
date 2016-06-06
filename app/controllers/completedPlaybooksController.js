@@ -14,7 +14,7 @@ const completedPlaybooksController = () => {
     POST: function* () {
       // TODO: Need to figure out how playbook results will be sent back to database
       this.log.info('--- INCOMING COMPLETED PLAYBOOK', JSON.stringify(this.request.body.results));
-      const result = yield this.models.CompletedPlaybook.query().postCompletedPlaybook({ ...this.request.body.results, company_id: this.state.user.companyId });
+      const result = yield this.models.CompletedPlaybook.query().postCompletedPlaybook(Object.assign(this.request.body.results, {company_id: this.state.user.companyId }));
       this.status = 201;
       this.body = result;
     },

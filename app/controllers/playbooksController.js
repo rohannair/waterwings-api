@@ -18,7 +18,7 @@ const playbooksController = () => {
     },
 
     POST: function* () {
-      const newPlaybook = yield this.models.Playbook.query().postPlaybook({ ...this.request.body, company_id: this.state.user.companyId });
+      const newPlaybook = yield this.models.Playbook.query().postPlaybook(Object.assign(this.request.body, {company_id: this.state.user.companyId}));
       const result = yield this.models.Playbook.query().getPlaybookById(newPlaybook);
       this.status = 201;
       this.body = {
