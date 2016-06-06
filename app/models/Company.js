@@ -85,16 +85,8 @@ Company.relationMappings = {
       from: 'companies.id',
       to: 'playbooks.company_id'
     }
-  },
-
-  completed_playbooks: {
-    relation: Model.OneToManyRelation,
-    modelClass: __dirname + '/CompletedPlaybook',
-    join: {
-      from: 'companies.id',
-      to: 'completed_playbooks.company_id'
-    }
   }
+
 };
 
 // Custom Queries

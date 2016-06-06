@@ -88,16 +88,8 @@ Playbook.relationMappings = {
       from: 'playbooks.role_id',
       to: 'roles.id'
     }
-  },
-
-  completed_playbooks: {
-    relation: Model.OneToManyRelation,
-    modelClass: __dirname + '/CompletedPlaybook',
-    join: {
-      from: 'playbooks.id',
-      to: 'completed_playbooks.playbook_id'
-    }
   }
+  
 };
 
 // Custom Queries
