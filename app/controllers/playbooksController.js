@@ -18,9 +18,13 @@ const playbooksController = () => {
     },
 
     POST: function* () {
-      const result = yield this.models.Playbook.query().postPlaybook({ ...this.request.body, company_id: this.state.user.companyId });
+      const newPlaybook = yield this.models.Playbook.query().postPlaybook({ ...this.request.body, company_id: this.state.user.companyId });
+      const result = yield this.models.Playbook.query().getPlaybookById(newPlaybook);
       this.status = 201;
-      this.body = result;
+      this.body = {
+        result: result[0],
+        message: 'Playbook was added'
+      };
     },
 
     PUT: function* () {
@@ -52,9 +56,12 @@ const playbooksController = () => {
 
     DUPLICATE: function* () {
       const playbookCopy = yield this.models.Playbook.query().duplicatePlaybook(this.request.body.id);
-      const result = yield this.models.Playbook.query().postPlaybook(playbookCopy);
+      const  result = yield this.models.Playbook.query().postPlaybook(playbookCopy);
       this.status = 201;
-      this.body = result;
+      this.body = {
+        result,
+        message: null
+      };
     }
   };
 }
