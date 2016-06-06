@@ -132,3 +132,20 @@ $ babel-node usersController.test.js
 Here usersController.test.js is an example but each test can be run in this way.
 
 After a test has been run you need to use `ctrl-c` to end the test and then run the next one.
+
+
+## Email Sender
+API to wrap requests to SparkPost and send emails out to users
+
+The API will accept a POST request
+to the following URI
+
+```
+http://localhost:3000/api/v1/playbook/send
+```
+
+It will then send a personalized email out to the user with a link on the
+bottom directing the user to the specific playbook
+
+Currently only the following email templates are available
+* welcomeEmail
