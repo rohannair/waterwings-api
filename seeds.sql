@@ -309,5 +309,5 @@ INSERT INTO users (id, username, password, is_admin, first_name, last_name, pers
   ('a4bd224f-9aa6-4f15-b3c9-cb7551cd797f', 'rn@qrtrmstr.com', crypt('password', gen_salt('bf')), true, 'Rohan', 'Nair', 'r@rohannair.ca', 'nGLHsVI', 1, 'https://s3.amazonaws.com/qrtrmstr-images/kitten_face.png'),
   ('a24b4195-4a49-450b-9b30-81632ef4c245', 'usersname2@email.com', crypt('password', gen_salt('bf')), false, 'Ron', 'Swanson', 'rs@parks.rec', 'nGLHsVI', 2, null),
   ('2bd3d5b7-e013-40af-b236-770844e55124', 'usersname3@email.com', crypt('password', gen_salt('bf')), false, 'Lesley', 'Knope', 'lk@parks.rec', 'nGLHsVI', 3, null),
-  ('376e0300-22d4-4d66-ad31-caf91882964d', 'kate@lighthouselabs.ca', crypt('kate123', gen_salt('bf')), true, 'Kate', 'Ciborowski', 'kate@lighthouselabs.ca', 'OeUMkxw', 5, 'https://s3.amazonaws.com/qrtrmstr-images/kitten_face.png'),
-  ('4f0eefc6-dbee-4974-bacb-9f02c112718e', 'jeremy@lighthouselabs.ca', crypt('jeremy123', gen_salt('bf')), false, 'Jeremy', 'Shaki', 'jeremy@lighthouselabs.ca', 'OeUMkxw', 5, null);
+  ('376e0300-22d4-4d66-ad31-caf91882964d', 'kate@lighthouse.labs', crypt('kate123', gen_salt('bf')), true, 'Kate', 'Ciborowski', 'kate@lighthouse.labs', 'OeUMkxw', 5, 'https://s3.amazonaws.com/qrtrmstr-images/kitten_face.png'),
+  ('4f0eefc6-dbee-4974-bacb-9f02c112718e', 'jeremy@lighthouse.labs', crypt('jeremy123', gen_salt('bf')), false, 'Jeremy', 'Shaki', 'jeremy@lighthouse.labs', 'OeUMkxw', 5, null);
