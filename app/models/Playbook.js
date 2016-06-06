@@ -105,7 +105,7 @@ Playbook.relationMappings = {
 MyQueryBuilder.prototype.getAll = function (companyId) {
     return this
               .select(
-                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
+                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.updated_at','playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
               )
               .leftJoin('users', 'playbooks.assigned', 'users.id')
               .where('playbooks.deleted', '=', 'false')
