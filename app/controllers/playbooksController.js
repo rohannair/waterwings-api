@@ -65,38 +65,18 @@ const playbooksController = () => {
     },
 
     SUBMIT: function* () {
-      let NoMatchMessage = null;
-      const updated = yield this.models.Playbook.query().submitPlaybook(this.request.body, this.params.id);
-      if(updated.length <= 0) {
-        NoMatchMessage = 'Can not update becuase this playbook has not been sent';
-      }
+      const numSubmittedSlides = Object.keys(this.request.body.submitted_doc).filter((val, ind) => this.request.body.submitted_doc[val].submitted === true ).length;
+      const percent_submitted =  numSubmittedSlides / Object.keys(this.request.body.submitted_doc).length;
+      console.log(percent_submitted);
+      const updated = yield this.models.Playbook.query().submitPlaybook(Object.assign(this.request.body, { percent_submitted }), this.params.id);
       const result = yield this.models.Playbook.query().getPlaybookById(this.params.id);
       this.status = 200;
       this.body = {
         result: result[0],
-        message: NoMatchMessage || 'Successfully updated playbook.'
+        message: 'Successfully submit.'
       };
     }
   };
 }
 
 module.exports = playbooksController;
-
-
-
-
-// Need to determine the percent complete for a Playbook
-
-const numSubmittedSlides = Object.keys(playbook.submitted_doc).filter((val, ind) => playbook.submitted_doc[val].submitted === true ).length;
-const percent_submitted =  numSubmittedSlides / Object.keys(submitted_doc).length;
-console.log(percent_submitted);
-yield this.models.Playbook.query().putPlaybook({ percent_submitted },this.params.id)
-
-// submited_doc = {
-//   "1" : {
-//     submitted: true
-//   },
-//   "2" : {
-//
-//   }
-// }
