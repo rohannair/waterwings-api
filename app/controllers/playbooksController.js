@@ -62,6 +62,20 @@ const playbooksController = () => {
         result,
         message: null
       };
+    },
+
+    SUBMIT: function* () {
+      let NoMatchMessage = null;
+      const updated = yield this.models.Playbook.query().submitPlaybook(this.request.body, this.params.id);
+      if(updated.length <= 0) {
+        NoMatchMessage = 'Can not update becuase this playbook has not been sent';
+      }
+      const result = yield this.models.Playbook.query().getPlaybookById(this.params.id);
+      this.status = 200;
+      this.body = {
+        result: result[0],
+        message: NoMatchMessage || 'Successfully updated playbook.'
+      };
     }
   };
 }
