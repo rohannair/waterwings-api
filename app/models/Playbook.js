@@ -156,4 +156,14 @@ MyQueryBuilder.prototype.duplicatePlaybook = function (playbookId) {
               .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
+MyQueryBuilder.prototype.submitPlaybook = function (data, playbookId) {
+    return this
+              .where('current_status', '>=', 'sent')
+              .where({ id: playbookId })
+              .patch(data)
+              .returning('id')
+              .then((result) => result)
+              .catch((err) => { throw new ApiError('Database Error', 500, err) });
+};
+
 module.exports = Playbook;

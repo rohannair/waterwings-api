@@ -20,6 +20,7 @@ module.exports = (playbook) => {
 
             newSubmittedDoc[val] = {
               type: slide.type,
+              submitted: false,
               slide_number: slide.slide_number,
               body: {
                 heading: "Profile",
@@ -32,6 +33,7 @@ module.exports = (playbook) => {
             let newEquipOptions = slide.body.options.map((val, index) =>  Object.assign(val, { opts: ''}, { optNames: ''}) );
             newSubmittedDoc[val] = {
               type: slide.type,
+              submitted: false,
               slide_number: slide.slide_number,
               heading: "Tools",
               body: {
