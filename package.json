@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": "4.2.3"
+    "node": "6.2.1"
   },
   "scripts": {
     "db:migrate": "export PGPASSWORD=password; ./migrations/migrations.sh localhost quartermasterdb root",
