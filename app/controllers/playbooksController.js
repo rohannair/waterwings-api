@@ -67,3 +67,22 @@ const playbooksController = () => {
 }
 
 module.exports = playbooksController;
+
+
+
+
+// Need to determine the percent complete for a Playbook
+
+const numSubmittedSlides = Object.keys(playbook.submitted_doc).filter((val, ind) => playbook.submitted_doc[val].submitted === true ).length;
+const percent_submitted =  numSubmittedSlides / Object.keys(submitted_doc).length;
+console.log(percent_submitted);
+yield this.models.Playbook.query().putPlaybook({ percent_submitted },this.params.id)
+
+// submited_doc = {
+//   "1" : {
+//     submitted: true
+//   },
+//   "2" : {
+//
+//   }
+// }
