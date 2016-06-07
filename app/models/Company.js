@@ -93,37 +93,37 @@ Company.relationMappings = {
 
 MyQueryBuilder.prototype.getAll = function () {
     return this
-              .select(
-                'companies.id', 'companies.name'
-              )
-              .where('companies.deleted', '=', 'false')
-              .orderBy('companies.created_at', 'asc')
-              .then((result) => result)
-              .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .select(
+        'companies.id', 'companies.name'
+      )
+      .where('companies.deleted', '=', 'false')
+      .orderBy('companies.created_at', 'asc')
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.getCompanyBySubdomain = function (subdomain) {
     return this
-              .where('companies.deleted', '=', 'false')
-              .where('companies.subdomain', '=', `${subdomain}`)
-              .then((result) => result)
-              .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .where('companies.deleted', '=', 'false')
+      .where('companies.subdomain', '=', `${subdomain}`)
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 
 MyQueryBuilder.prototype.postCompany = function (data) {
     return this
-            .insert(Object.assign(data, {id: uuid.v4()}))
-            .then((result) => result)
-            .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .insert(Object.assign(data, {id: uuid.v4()}))
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.putCompany = function (data, companyId) {
     return this
-              .where({ id: companyId })
-              .patch(data)
-              .then((result) => result)
-              .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .where({ id: companyId })
+      .patch(data)
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 module.exports = Company;

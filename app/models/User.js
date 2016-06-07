@@ -90,66 +90,66 @@ User.relationMappings = {
 
 MyQueryBuilder.prototype.getAll = function (companyId) {
     return this
-              .select(
-                'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.profile_img', 'users.is_admin', 'r.name as rolename'
-              )
-              .leftJoin('roles as r', 'users.role_id', 'r.id')
-              .where('users.deleted', '=', 'false')
-              .where('users.company_id', '=', `${companyId}`)
-              .orderBy('users.updated_at', 'desc')
-              .then((result) => result)
-              .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .select(
+        'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.profile_img', 'users.is_admin', 'r.name as rolename'
+      )
+      .leftJoin('roles as r', 'users.role_id', 'r.id')
+      .where('users.deleted', '=', 'false')
+      .where('users.company_id', '=', `${companyId}`)
+      .orderBy('users.updated_at', 'desc')
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.getUserById = function (userId, companyId) {
     return this
-              .select(
-                'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
-              )
-              .leftJoin('roles as r', 'users.role_id', 'r.id')
-              .where('users.id', '=', `${userId}`)
-              .where('users.company_id', '=', `${companyId}`)
-              .where('users.deleted', '=', 'false')
-              .then((result) => result[0])
-              .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .select(
+        'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
+      )
+      .leftJoin('roles as r', 'users.role_id', 'r.id')
+      .where('users.id', '=', `${userId}`)
+      .where('users.company_id', '=', `${companyId}`)
+      .where('users.deleted', '=', 'false')
+      .then((result) => result[0])
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.getUserwithPasswordById = function (userId) {
     return this
-            .select(
-                'users.id', 'users.username', 'users.password', 'users.first_name', 'users.last_name', 'users.is_admin','users.company_id', 'r.name as rolename'
-              )
-              .where('users.id', '=', `${userId}`)
-              .where('users.deleted', '=', 'false')
-              .then((result) => result)
-              .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .select(
+          'users.id', 'users.username', 'users.password', 'users.first_name', 'users.last_name', 'users.is_admin','users.company_id', 'r.name as rolename'
+        )
+        .where('users.id', '=', `${userId}`)
+        .where('users.deleted', '=', 'false')
+        .then((result) => result)
+        .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.getUserwithPasswordByUsername = function (name, companyId) {
     return this
-              .select(
-                'users.id', 'users.username', 'users.password', 'users.is_admin', 'users.company_id'
-              )
-              .where('users.username', '=', `${name}`)
-              .where('users.company_id', '=', `${companyId}`)
-              .where('users.deleted', '=', 'false')
-              .then((result) => result)
-              .catch((err) => { throw new ApiError('Can not find a user with that username', 500, err) });
+      .select(
+        'users.id', 'users.username', 'users.password', 'users.is_admin', 'users.company_id'
+      )
+      .where('users.username', '=', `${name}`)
+      .where('users.company_id', '=', `${companyId}`)
+      .where('users.deleted', '=', 'false')
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Can not find a user with that username', 500, err) });
 };
 
 MyQueryBuilder.prototype.postUser = function (data) {
     return this
-            .insert(Object.assign(data, {id: uuid.v4()} ))
-            .then((result) => result)
-            .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .insert(Object.assign(data, {id: uuid.v4()} ))
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.putUser = function (data, userId) {
     return this
-              .where({ id: userId })
-              .patch(data)
-              .then((result) => result)
-              .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .where({ id: userId })
+      .patch(data)
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 module.exports = User;
