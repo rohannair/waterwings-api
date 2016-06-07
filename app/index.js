@@ -1,5 +1,7 @@
 // Configs
-require('dotenv').config();
+if( process.env.NODE_ENV === 'development') {
+  require('dotenv').config();
+}
 global.Promise = require('bluebird');
 
 // Dependencies
