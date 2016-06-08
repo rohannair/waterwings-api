@@ -89,63 +89,73 @@ Playbook.relationMappings = {
       to: 'roles.id'
     }
   }
-  
+
 };
 
 // Custom Queries
 
 MyQueryBuilder.prototype.getAll = function (companyId) {
     return this
-              .select(
-                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.updated_at','playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
-              )
-              .leftJoin('users', 'playbooks.assigned', 'users.id')
-              .where('playbooks.deleted', '=', 'false')
-              .where('playbooks.company_id', '=', `${companyId}`)
-              .orderBy('playbooks.created_at', 'asc')
-              .then((result) => result)
-              .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .select(
+        'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.updated_at','playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
+      )
+      .leftJoin('users', 'playbooks.assigned', 'users.id')
+      .where('playbooks.deleted', '=', 'false')
+      .where('playbooks.company_id', '=', `${companyId}`)
+      .orderBy('playbooks.created_at', 'asc')
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
     return this
-              .select(
-                'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
-              )
-              .leftJoin('users', 'playbooks.assigned', 'users.id')
-              .where('playbooks.id', '=', `${playbookId}`)
-              .where('playbooks.deleted', '=', 'false')
-              .then((result) => result)
-              .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .select(
+        'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
+      )
+      .leftJoin('users', 'playbooks.assigned', 'users.id')
+      .where('playbooks.id', '=', `${playbookId}`)
+      .where('playbooks.deleted', '=', 'false')
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.postPlaybook = function (data) {
     return this
-            .insert(Object.assign(data, {id: uuid.v4()}))
-            .returning('*')
-            .then((result) => result)
-            .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .insert(Object.assign(data, {id: uuid.v4()}))
+      .returning('*')
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.putPlaybook = function (data, playbookId) {
     return this
-              .where('current_status', '=', 'draft')
-              .where({ id: playbookId })
-              .patch(data)
-              .returning('id')
-              .then((result) => result)
-              .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .where('current_status', '=', 'draft')
+      .where({ id: playbookId })
+      .patch(data)
+      .returning('id')
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.duplicatePlaybook = function (playbookId) {
     return this
-              .select(
-                'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc'
-              )
-              .where('playbooks.id', '=', `${playbookId}`)
-              .where('playbooks.deleted', '=', 'false')
-              .then((data) => { return merge(data[0], { name: data[0].name + ' (Copy)' }) })
-              .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .select(
+        'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc'
+      )
+      .where('playbooks.id', '=', `${playbookId}`)
+      .where('playbooks.deleted', '=', 'false')
+      .then((data) => { return merge(data[0], { name: data[0].name + ' (Copy)' }) })
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
+};
+
+MyQueryBuilder.prototype.submitPlaybook = function (data, playbookId) {
+    return this
+      .where('current_status', '>=', 'sent')
+      .where({ id: playbookId })
+      .patch(data)
+      .returning('id')
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 module.exports = Playbook;

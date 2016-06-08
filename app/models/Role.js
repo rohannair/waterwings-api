@@ -80,28 +80,28 @@ Role.relationMappings = {
 
 MyQueryBuilder.prototype.getAll = function (companyId) {
     return this
-              .select(
-                'roles.id', 'roles.name'
-              )
-              .where('roles.deleted', '=', 'false')
-              .where('roles.company_id', '=', `${companyId}`)
-              .then((result) => result)
-              .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .select(
+        'roles.id', 'roles.name'
+      )
+      .where('roles.deleted', '=', 'false')
+      .where('roles.company_id', '=', `${companyId}`)
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.postRole = function (data) {
     return this
-            .insert(data)
-            .then((result) => result)
-            .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .insert(data)
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.putRole = function (data, roleId) {
     return this
-              .where({ id: roleId })
-              .patch(data)
-              .then((result) => result)
-              .catch((err) => { throw new ApiError('Database Error', 500, err) });
+      .where({ id: roleId })
+      .patch(data)
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 module.exports = Role;

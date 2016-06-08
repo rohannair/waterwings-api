@@ -7,7 +7,7 @@ function emailCreator( { firstName, lastName, email, companyName, companySubdoma
   const selectedTemplate = EmailTemplates.filter((item) => item.name === emailTemplate);
 
   // Create the custom link to send in the email
-  const linkToSend = LinkCreator(companySubdomain, playbookId);
+  const linkToSend = LinkCreator(companySubdomain, playbookId, email);
 
   // Now Passing in variables in order to fill in the email template
   const completedEmail = selectedTemplate[0].template(firstName, lastName, companyName, email, linkToSend );

@@ -115,10 +115,12 @@ router.use(jwt({ secret: process.env.JWT_SECRET }).unless(function () {
     return true
   } else if ( this.url.match(/\/api\/v1\/playbooks\/.*/) && this.method === 'PUT') {
     return true
+  } else if ( this.url.match(/\/api\/v1\/playbooks\/submit\/.*/) && this.method === 'POST' ) {
+    return true
+  } else if ( this.url.match(/\/api\/v1\/playbooks\/statusUpdate\/.*/) && this.method === 'POST' ) {
+    return true
   }
-   else {
-    return false
-  }
+  return false
 }));
 
 // Ensure that a user's token and subdomain match

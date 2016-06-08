@@ -43,6 +43,8 @@ module.exports = function configure(router) {
   .put('/playbooks/:id', playbooksController.PUT)
   .delete('/playbooks/:id', playbooksController.DELETE)
   .post('/playbooks/duplicate', playbooksController.DUPLICATE)
+  .post('/playbooks/submit/:id', playbooksController.SUBMIT)
+  .post('/playbooks/statusUpdate/:id', playbooksController.STATUS_UPDATE)
 
   // Uploads
   .post('/upload', uploadsController.POST)
