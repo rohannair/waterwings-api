@@ -5,6 +5,7 @@ const authorize = require('../utils/middleware/authorize');
 
 // Controllers
 const loginController  = require('../controllers/loginController')();
+const registerController = require('../controllers/registerController')();
 const companiesController = require('../controllers/companiesController')();
 const usersController  = require('../controllers/usersController')();
 const rolesController = require('../controllers/rolesController')();
@@ -28,32 +29,34 @@ module.exports = function configure(router) {
   // Login
   .post('/login', loginController.LOGIN)
 
+  // New Customer Registration
+  .post('/register', registerController.REGISTER)
+
   // Companies
-  .get('/companies', authorize, companiesController.GET)
-  .post('/companies', authorize, companiesController.POST)
-  .put('/companies/:id', authorize, companiesController.PUT)
+  .get('/companies', companiesController.GET)
+  .put('/companies/:id', companiesController.PUT)
 
   // Users
-  .get('/users', authorize, usersController.GET)
+  .get('/users', usersController.GET)
   .get('/users/:id', usersController.GET_ONE)
-  .post('/users', authorize, usersController.POST)
-  .put('/users/:id', authorize, usersController.PUT)
-  .delete('/users/:id', authorize, usersController.DELETE)
+  .post('/users', usersController.POST)
+  .put('/users/:id', usersController.PUT)
+  .delete('/users/:id', usersController.DELETE)
   .post('/users/changePassword', usersController.CHANGE_PASSWORD)
 
   // Roles
-  .get('/roles', authorize, rolesController.GET)
-  .post('/roles', authorize, rolesController.POST)
-  .put('/roles/:id', authorize, rolesController.PUT)
-  .delete('/roles/:id', authorize, rolesController.DELETE)
+  .get('/roles', rolesController.GET)
+  .post('/roles', rolesController.POST)
+  .put('/roles/:id', rolesController.PUT)
+  .delete('/roles/:id', rolesController.DELETE)
 
   // Playbooks
-  .get('/playbooks', authorize, playbooksController.GET)
+  .get('/playbooks', playbooksController.GET)
   .get('/playbooks/:id', playbooksController.GET_ONE)
   .post('/playbooks', playbooksController.POST)
   .put('/playbooks/:id', playbooksController.PUT)
-  .delete('/playbooks/:id', authorize, playbooksController.DELETE)
-  .post('/playbooks/duplicate', authorize, playbooksController.DUPLICATE)
+  .delete('/playbooks/:id', playbooksController.DELETE)
+  .post('/playbooks/duplicate', playbooksController.DUPLICATE)
   .post('/playbooks/submit/:id', playbooksController.SUBMIT)
   .post('/playbooks/statusUpdate/:id', playbooksController.STATUS_UPDATE)
 
@@ -61,6 +64,6 @@ module.exports = function configure(router) {
   .post('/upload', fileServiceController.UPLOAD)
 
   // Emails
-  .post('/playbook/send', authorize, emailController.POST)
+  .post('/playbook/send', emailController.POST)
 
 };
