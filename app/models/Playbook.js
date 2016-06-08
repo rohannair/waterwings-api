@@ -67,7 +67,8 @@ Playbook.jsonSchema = {
                       body: 'string'
                     },
                     additionalProperties: true
-                  }
+                  },
+    percent_submitted: { type: 'number' }
   }
 };
 
