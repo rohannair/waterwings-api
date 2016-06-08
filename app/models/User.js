@@ -125,13 +125,12 @@ MyQueryBuilder.prototype.getUserwithPasswordById = function (userId) {
         .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
-MyQueryBuilder.prototype.getUserwithPasswordByUsername = function (name, companyId) {
+MyQueryBuilder.prototype.getUserwithPasswordByUsername = function (name) {
     return this
       .select(
         'users.id', 'users.username', 'users.password', 'users.is_admin', 'users.company_id'
       )
       .where('users.username', '=', `${name}`)
-      .where('users.company_id', '=', `${companyId}`)
       .where('users.deleted', '=', 'false')
       .then((result) => result)
       .catch((err) => { throw new ApiError('Can not find a user with that username', 500, err) });

@@ -15,7 +15,6 @@ const jwt         = require('koa-jwt');
 const unless      = require('koa-unless');
 const logger      = require('./utils/logger');
 const chalk       = require('chalk');
-const multiTenant = require('./utils/multiTenant');
 const db          = require('./knexfile');
 const ApiError    = require('./utils/customErrors');
 
@@ -62,13 +61,6 @@ app.use(function* (next) {
   }
 });
 
-// Subdomain catching
-// Grabs the subdomin of the incoming request
-app.use(function* (next) {
-    this.subdomain = yield multiTenant.getSubdomain(this.request.header.host);
-    yield* next;
-});
-
 // Database routing
 app.use(function* (next) {
   // Models are added on each incoming request
@@ -97,18 +89,6 @@ app.use(jwt({ secret: process.env.JWT_SECRET }).unless(function () {
   }
   return false
 }));
-
-// Ensure that a user's token and subdomain match
-app.use(function* (next) {
-    // Only check if the user has a valid token
-    if(this.state.user) {
-      const company = yield this.models.Company.query().getCompanyBySubdomain(this.subdomain)
-      if ( (company.length <= 0) || (company[0].id !== this.state.user.companyId) )  {
-        throw new ApiError('Token and company do not match, please login to your company', 403, 'Mismatched token and subdomain');
-      }
-    }
-    yield* next;
-})
 
 // Configure router
 const router  = new Router({ prefix: '/api/v1' });

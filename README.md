@@ -55,23 +55,13 @@ In Production Mode
 $ npm start
 ```
 
-## Subdomains
-The API now requires a subdomain to be in the url in order to access the specific company's database
-Therefore all requests must come from a url like this
-```
-http://companyname.localhost:3000/api/v1/whatever
-```
-
-What ever the subdomain is will grant you access to that company's database, given your request
-is also accompanied by a valid token (keep reading for token info)
-
 ## Token Information
 The API now requires tokens in order to return data
 The only open endpoints without a valid token are
 ```bash
 /api/v1/login
 ```
-In order to generate a token you must first hit the login endpoint at the correct subdomain with a post request that contains the following information
+In order to generate a token you must first hit the login endpoint with a post request that contains the following information
 ```JSON
 {
   "username": "user@workmail.com",
