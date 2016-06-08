@@ -30,8 +30,10 @@ app.use(cors({
 // Add database connection
 app.context.db = db();
 
-// Helmet
+// App Middleware
 app.use(helmet());
+app.use(bodyParser());
+app.use(bouncer.middleware());
 
 // Add logger to app
 app.use(function* (next) {
@@ -61,8 +63,7 @@ app.use(function* (next) {
 });
 
 // Subdomain catching
-// Grabs the subdomin of the incoming request in order to properly identify to which company
-// the request should be routed too
+// Grabs the subdomin of the incoming request
 app.use(function* (next) {
     this.subdomain = yield multiTenant.getSubdomain(this.request.header.host);
     yield* next;
@@ -80,35 +81,9 @@ app.use(function* (next) {
   yield* next;
 });
 
-// Configure router
-const router  = new Router({
-  prefix: '/api/v1'
-});
-
-router.use(cors({
-  origin: '*'
-}));
-
-// Add routes to router
-const configureRoutes = require('./routes/');
-configureRoutes(router);
-
-// Tell app to use router
-app
-  .use(router.routes())
-  .use(router.allowedMethods());
-
-// Middleware
-
-// Validation
-router.use(bouncer.middleware());
-
-// Body Parser
-router.use(bodyParser());
-
 // JWT auth needed for API routes
 // TODO: change this asap once we have user registration working
-router.use(jwt({ secret: process.env.JWT_SECRET }).unless(function () {
+app.use(jwt({ secret: process.env.JWT_SECRET }).unless(function () {
   if(this.url === '/api/v1/login' && this.method === 'POST') {
     return true;
   } else if ( this.url.match(/\/api\/v1\/playbooks\/.*/) && this.method === 'GET') {
@@ -124,7 +99,7 @@ router.use(jwt({ secret: process.env.JWT_SECRET }).unless(function () {
 }));
 
 // Ensure that a user's token and subdomain match
-router.use(function* (next) {
+app.use(function* (next) {
     // Only check if the user has a valid token
     if(this.state.user) {
       const company = yield this.models.Company.query().getCompanyBySubdomain(this.subdomain)
@@ -135,10 +110,23 @@ router.use(function* (next) {
     yield* next;
 })
 
-// Generic Response
+// Configure router
+const router  = new Router({ prefix: '/api/v1' });
+
+// Add routes to router
+const configureRoutes = require('./routes/');
+configureRoutes(router);
+
+// Tell app to use router
+app
+  .use(router.routes())
+  .use(router.allowedMethods());
+
+// Generic 404 Response
 app.use(function* (next) {
+  this.status = 404;
   this.body = {
-    message: 'Welcome to the Waterwings v1 API.'
+    message: 'Are you lost? There is no information here'
   };
 });
 

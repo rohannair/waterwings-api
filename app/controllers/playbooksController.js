@@ -42,16 +42,11 @@ const playbooksController = () => {
     },
 
     DELETE: function* () {
-      if(this.state.user.isAdmin) {
-        const result = yield this.models.Playbook.query().putPlaybook({ deleted: true }, this.params.id);
-        this.status = 201;
-        this.body = {
-          message: 'Playbook has been deleted'
-        };
-      }
-      else {
-        throw new ApiError('Not Able to Delete', 403, 'Unauthorized user attempted to delete a playbook');
-      }
+      const result = yield this.models.Playbook.query().putPlaybook({ deleted: true }, this.params.id);
+      this.status = 201;
+      this.body = {
+        message: 'Playbook has been deleted'
+      };
     },
 
     DUPLICATE: function* () {
