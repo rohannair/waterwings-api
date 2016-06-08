@@ -5,6 +5,7 @@ const middleware = require('../utils/middleware/index');
 
 // Controllers
 const loginController  = require('../controllers/loginController')();
+const registerController = require('../controllers/registerController')();
 const companiesController = require('../controllers/companiesController')();
 const usersController  = require('../controllers/usersController')();
 const rolesController = require('../controllers/rolesController')();
@@ -35,11 +36,16 @@ module.exports = function configure(router) {
   // File Service
   .post('/upload', fileServiceController.UPLOAD)
 
+  // Playbooks
   .get('/playbooks/:id', playbooksController.GET_ONE)
   .post('/playbooks', playbooksController.POST)
   .put('/playbooks/:id', playbooksController.PUT)
   .post('/playbooks/submit/:id', playbooksController.SUBMIT)
   .post('/playbooks/statusUpdate/:id', playbooksController.STATUS_UPDATE)
+
+  // New Customer Registration
+  .post('/register', registerController.REGISTER)
+
 
   // TOKEN Routes (Require a Token)
 
@@ -53,7 +59,6 @@ module.exports = function configure(router) {
 
   // Companies
   .get('/companies', middleware.tokenCheck, middleware.adminCheck, companiesController.GET)
-  .post('/companies', middleware.tokenCheck, middleware.adminCheck, companiesController.POST)
   .put('/companies/:id', middleware.tokenCheck, middleware.adminCheck, companiesController.PUT)
 
   // Roles
