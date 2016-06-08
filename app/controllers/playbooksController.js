@@ -74,7 +74,18 @@ const playbooksController = () => {
         result: result[0],
         message: 'Successfully submit.'
       };
+    },
+
+    STATUS_UPDATE: function* () {
+      const updated = yield this.models.Playbook.query().submitPlaybook(this.request.body, this.params.id);
+      const result = yield this.models.Playbook.query().getPlaybookById(this.params.id);
+      this.status = 200;
+      this.body = {
+        result: result[0],
+        message: 'Successfully changed status.'
+      };
     }
+
   };
 }
 
