@@ -49,8 +49,8 @@ module.exports = function configure(router) {
   // Playbooks
   .get('/playbooks', authorize, playbooksController.GET)
   .get('/playbooks/:id', playbooksController.GET_ONE)
-  .post('/playbooks', authorize, playbooksController.POST)
-  .put('/playbooks/:id', authorize, playbooksController.PUT)
+  .post('/playbooks', playbooksController.POST)
+  .put('/playbooks/:id', playbooksController.PUT)
   .delete('/playbooks/:id', authorize, playbooksController.DELETE)
   .post('/playbooks/duplicate', authorize, playbooksController.DUPLICATE)
   .post('/playbooks/submit/:id', playbooksController.SUBMIT)

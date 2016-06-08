@@ -1,3 +1,3 @@
-module.exports = (companySubdomain, playbookID, email) => {
+module.exports = (playbookID, email) => {
   return ("http://www." + process.env.DOMAIN + `/playbook/${playbookID}` + `?from_email=${email}`);
 }
