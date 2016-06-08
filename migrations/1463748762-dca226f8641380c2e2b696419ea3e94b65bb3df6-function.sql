@@ -24,35 +24,34 @@ INSERT INTO users (id, username, password, is_admin, first_name, last_name, pers
 
 -- Insert in default playbook
 INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
-  (gen_random_uuid(), 'Playbook Template', 'Template Playbook for new hire', new_company_id,
-  '{
+  (gen_random_uuid(), 'Playbook Template', 'Playbook Template', new_company_id,
+    '{
     "0": {
-      "slide_number": 0,
+      "body": "<p>This is an onboarding template for you to customize.</p>\n<p>Use this card to welcome new hires with a personalized message explaining how excited you are that they\'re joining your team.</p>\n<p>This is also a great place to highlight tasks related to this playbook you would like new hires to complete before their first day.</p>\n<p>Example task list:</p>\n<ol>\n  <li>Fill out your user profile</li>\n  <li>Choose your equipment</li>\n  <li>Knowledge center for you to learn about our culture and processes</li>\n  <li>Check out the schedule for your first day</li>\n</ol>\n<p>You can also include web and mailto links in this card. If you have any questions you can contact our support team at <a href=\"mailto:support@qrtrmstr.com?Subject=Playbook%20Help\">support@qrtrmstr.com</a> [mailto:support@qrtrmstr.com]</p>",
       "type": "intro",
-      "heading": "Hi ${user}, welcome to Scotiabank!",
-      "body": "<p>We are firm believers in empowering our team from day 0, so have created an online onboarding and training program to help you hit the ground running on day 1.</p><p>Here is the agenda:</p><ol><li>Fill out your user profile</li><li>Choose your equipment</li><li>Knowledge center</li><li>See the schedule for your first day</li></ol><p>If you have any questions about this process, you can contact the <a href=\"mailto:onboarding@scotiabank.com\">Onboarding Team</a>, or your manager <a href=\"mailto:billjobs@scotiabank.com\">Bill Jobs</a>.</p>"
+      "heading": "Welcome :)",
+      "submittable": false,
+      "slide_number": 0
     },
     "1": {
-      "slide_number": 1,
-      "type": "bio",
       "body": {
-        "heading": "Fill out your Employee profile",
+        "heading": "Fill out your profile",
         "options": {
-          "name": true,
           "bio": true,
-          "profile_image": true,
-          "linkedin": true,
+          "name": true,
           "twitter": true,
-          "facebook": false
+          "facebook": false,
+          "linkedin": true,
+          "profile_image": true
         }
-      }
+      },
+      "type": "bio",
+      "submittable": true,
+      "slide_number": 1
     },
     "2": {
-      "slide_number": 2,
-      "type": "equipment",
-      "heading": "Choose your equipment",
       "body": {
-        "desc": "We want to make sure that you have all the tools you need to work at your best. If something you want is not on this list, let us know.",
+        "desc": "<p>We want to make sure that you have all the tools you need to work at your best. Select from our tool catalogue and hit submit when you\'re happy.</p>",
         "options": [
           {
             "id": "laptop",
@@ -74,7 +73,7 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
               "cinemadisp"
             ],
             "optNames": [
-              "2x Dell Utrasharp 24\"",
+              "2x Dell Utrasharp 24",
               "Apple Cinema Display"
             ]
           },
@@ -103,71 +102,106 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
             ]
           }
         ]
-      }
+      },
+      "type": "equipment",
+      "heading": "Choose your equipment",
+      "submittable": true,
+      "slide_number": 2
     },
     "3": {
-      "slide_number": 3,
-      "type": "knowledgectr",
-      "heading": "Knowledge Center",
       "body": {
-        "desc": "We have got a lot of learning content to get you ready for your role. We recommend that you go through the following lesssons before your first day, to hit the ground running:",
+        "desc": "<p>We recommend that you go through the following lesssons before your first day, to hit the ground running:</p>",
         "options": [
           {
             "id": "gqOEoUR5RHg",
-            "name": "Bootstrap Primer"
+            "name": "Bootstrap Primer",
+            "type": "youtube"
           },
           {
             "id": "qAws7eXItMk",
-            "name": "Running User Interviews"
+            "name": "Running User Interviews",
+            "type": "youtube"
           },
           {
             "id": "SqfhZk0eIdE",
-            "name": "Object Oriented CSS (OOCSS)"
+            "name": "Object Oriented CSS (OOCSS)",
+            "type": "youtube"
           }
         ]
-      }
+      },
+      "type": "knowledgectr",
+      "heading": "Knowledge Center",
+      "submittable": false,
+      "slide_number": 3
     },
     "4": {
-      "slide_number": 4,
-      "type": "day1agenda",
-      "heading": "Your first day - February 29th, 2016",
       "body": {
-        "map": "<div><iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.943199942455!2d-79.38169928447599!3d43.64935007912145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b34d28cfad4bf%3A0x5f2a34991d2bacb5!2sScotia+Plaza!5e0!3m2!1sen!2sca!4v1455674281242\" frameborder=\"0\" allowfullscreen></iframe><div><span class=\"fa fa-building\"></span> 40 King St W, Toronto, ON M5H 3Y2 <a href=\"#\">Get Directions</a></div><div><span class=\"fa fa-user\"></span> Office Manager - <a href=\"#\">John Smith</a></div><div><span class=\"fa fa-envelope\"></span><a href=\"#\">J.Smith@scotiabank.com</a></div><div><div class=\"uber-promo\"> Complimentary UBER Code <strong>Welcome2ScotiaBank</strong></div></div></div>",
         "agenda": [
           {
-            "time": 1456754400000,
-            "desc": "Meet Bill Jobs at 11th floor"
+            "desc": "Meet Bill Jobs at 11th floor",
+            "startTime": 1464094800000,
+            "finishTime": 1464096600000
           },
           {
-            "time": 1456756200000,
-            "desc": "Meet and greet with UX team"
+            "desc": "Meet and greet with UX team",
+            "startTime": 1464096600000,
+            "finishTime": 1464098400000
           },
           {
-            "time": 1456758000000,
-            "desc": "Stand-up meeting with Mobile Application team"
+            "desc": "Stand-up meeting with Mobile Application team",
+            "startTime": 1464098400000,
+            "finishTime": 1464102000000
           },
           {
-            "time": 1456761600000,
-            "desc": "One-on-One with Bill Jobs"
+            "desc": "One-on-One with Bill Jobs",
+            "startTime": 1464102000000,
+            "finishTime": 1464105600000
           },
           {
-            "time": 1456765200000,
-            "desc": "Lunch with Bill Jobs and UX team"
+            "desc": "Lunch with Bill Jobs and UX team",
+            "startTime": 1464105600000,
+            "finishTime": 1464107400000
           },
           {
-            "time": 1456767000000,
-            "desc": "Mix and Mingle"
+            "desc": "Mix and Mingle",
+            "startTime": 1464109200000,
+            "finishTime": 1464111000000
           },
           {
-            "time": 1456777800000,
-            "desc": "Planning meeting with Mobile Application team"
+            "desc": "Planning meeting with Mobile Application team",
+            "startTime": 1464118200000,
+            "finishTime": 1464123600000
           },
           {
-            "time": 1456785000000,
-            "desc": "(optional) Social with team @ The Duke of Richmond"
+            "desc": "(optional) Social with team @ The Duke of Richmond",
+            "startTime": 1464125400000,
+            "finishTime": 1464130800000
           }
         ]
-      }
+      },
+      "date": "2016-05-24",
+      "type": "day1agenda",
+      "position": {
+        "lat": 43.6446447,
+        "lng": -79.39499869999997
+      },
+      "place": {
+        "name": "Lighthouse Labs",
+        "formatted_address": "46 Spadina Avenue, Toronto, ON M5H 3Y2, ON, Canada"
+      },
+      "contact": {
+        "title":"Office Manager",
+        "name":"John Smith",
+        "email":"J.Smith@email.com"
+      },
+      "couponInput": {
+        "show": true,
+        "code": "Welcome2PiedPiper"
+      },
+      "detailed_location": null,
+      "heading":"Your first day",
+      "submittable": false,
+      "slide_number": 4
     }
   }'
 );

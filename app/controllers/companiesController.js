@@ -11,7 +11,8 @@ const companiesController = () => {
       this.status = 200;
     },
 
-    POST: function* () {
+    CREATE: function* () {
+      // This will create a new company in the database
       const result = yield this.models.Company.query().postCompany(this.request.body);
       this.status = 201;
       this.body = result;
