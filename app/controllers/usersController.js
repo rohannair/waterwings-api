@@ -37,16 +37,11 @@ const usersController = () => {
     },
 
     DELETE: function* () {
-      if(this.state.user.isAdmin) {
-        const result = yield this.models.User.query().putUser({ deleted: true }, this.params.id);
-        this.status = 201;
-        this.body = {
-          message: 'User has been deleted'
-        };
-      }
-      else {
-        throw new ApiError('Not Able to Delete', 403, 'Unauthorized user attempted to delete another user');
-      }
+      const result = yield this.models.User.query().putUser({ deleted: true }, this.params.id);
+      this.status = 201;
+      this.body = {
+        message: 'User has been deleted'
+      };
     }
 
   };

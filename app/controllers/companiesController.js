@@ -21,10 +21,6 @@ const companiesController = () => {
       const result = yield this.models.Company.query().putCompany(this.request.body, this.params.id);
       this.status = 200;
       this.body = result;
-    },
-
-    DELETE: function* () {
-      throw new ApiError('Not Able to Delete', 403, 'User attempted to delete a company');
     }
 
   };

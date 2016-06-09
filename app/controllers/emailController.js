@@ -10,7 +10,7 @@ const createEmptySubmittedPlaybook = require('../utils/createEmptySubmittedPlayb
 const emailController = () => {
   return {
     POST: function* () {
-      const company = yield this.models.Company.query().getCompanyBySubdomain(this.subdomain);
+      const company = yield this.models.Company.query().getCompanyById(this.state.user.companyId);
       const { name } = company[0];
       const { userId, firstName, lastName, email, playbookId, emailTemplate } = this.request.body;
 
@@ -23,7 +23,6 @@ const emailController = () => {
 
       const EmailToSend = yield EmailCreator({
           companyName: name,
-          companySubdomain: this.subdomain,
           firstName,
           lastName,
           email,

@@ -102,10 +102,10 @@ MyQueryBuilder.prototype.getAll = function () {
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
-MyQueryBuilder.prototype.getCompanyBySubdomain = function (subdomain) {
+MyQueryBuilder.prototype.getCompanyById = function (id) {
     return this
       .where('companies.deleted', '=', 'false')
-      .where('companies.subdomain', '=', `${subdomain}`)
+      .where('companies.id', '=', `${id}`)
       .then((result) => result)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };

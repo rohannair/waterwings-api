@@ -9,13 +9,9 @@ const ApiError = require('../utils/customErrors');
 const loginController = () => {
   return {
     LOGIN: function* () {
-      // Find the company based on the incoming subdomain
-      const company = yield this.models.Company.query().getCompanyBySubdomain(this.subdomain);
-      if(company.length === 0) throw new ApiError('Can not find company', 404, 'Can not find company');
-
       // Find user in specific company
-      const user = yield this.models.User.query().getUserwithPasswordByUsername(this.request.body.username, company[0].id);
-      if(user.length === 0) throw new ApiError('Can not find a user with that username within this company', 404, 'Can not find a user with that username within this company');
+      const user = yield this.models.User.query().getUserwithPasswordByUsername(this.request.body.username);
+      if(user.length === 0) throw new ApiError('Can not find a user with that username', 404, 'Can not find a user with that username');
 
       // Use utility function to check a user's password and return a boolean
       const result = yield encrypt.checkPassword(this.request.body.password, user[0].password);
