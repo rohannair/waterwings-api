@@ -9,7 +9,7 @@ const companiesController = require('../controllers/companiesController')();
 const usersController  = require('../controllers/usersController')();
 const rolesController = require('../controllers/rolesController')();
 const playbooksController = require('../controllers/playbooksController')();
-const uploadsController = require('../controllers/uploadsController');
+const fileServiceController = require('../controllers/fileServiceController')();
 const emailController = require('../controllers/emailController')();
 
 
@@ -56,9 +56,8 @@ module.exports = function configure(router) {
   .post('/playbooks/submit/:id', playbooksController.SUBMIT)
   .post('/playbooks/statusUpdate/:id', playbooksController.STATUS_UPDATE)
 
-
-  // Uploads
-  .post('/upload', uploadsController.POST)
+  // File Service
+  .post('/upload', fileServiceController.UPLOAD)
 
   // Emails
   .post('/playbook/send', authorize, emailController.POST)
