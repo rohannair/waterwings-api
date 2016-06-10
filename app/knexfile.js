@@ -9,11 +9,12 @@ module.exports = function () {
         user     : process.env.DB_USER,
         password : process.env.DB_PASSWORD,
         database : process.env.DB_NAME,
-        charset  : 'utf8'
+        charset  : 'utf8',
+        ssl : true
       },
       pool: {
         min: 0,
-        max: 7
+        max: 10
       }
     }
   )

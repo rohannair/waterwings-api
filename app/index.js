@@ -5,22 +5,25 @@ if( process.env.NODE_ENV === 'development') {
 global.Promise = require('bluebird');
 
 // Dependencies
-const cors        = require('koa-cors');
-const Koa         = require('koa');
-const Router      = require('koa-router');
-const bouncer     = require('koa-bouncer');
-const bodyParser  = require('koa-bodyparser');
-const helmet      = require('koa-helmet');
-const jwt         = require('koa-jwt');
-const unless      = require('koa-unless');
-const logger      = require('./utils/logger');
-const chalk       = require('chalk');
-const db          = require('./knexfile');
-const ApiError    = require('./utils/customErrors');
+const cors       = require('koa-cors');
+const Koa        = require('koa');
+const Router     = require('koa-router');
+const bouncer    = require('koa-bouncer');
+const bodyParser = require('koa-bodyparser');
+const helmet     = require('koa-helmet');
+const jwt        = require('koa-jwt');
+const unless     = require('koa-unless');
+const logger     = require('./utils/logger');
+const chalk      = require('chalk');
+const db         = require('./knexfile');
+const ApiError   = require('./utils/customErrors');
+const fs         = require('fs');
+const http       = require('http');
+const Promise    = require('bluebird').Promise;
 
 // Instantiate app
 const app     = module.exports = Koa();
-const appPort = process.argv[2] || 3000;
+const appPort = process.env.PORT || 3000;
 app.poweredBy = false;
 app.use(cors({
   origin: '*'
@@ -113,5 +116,24 @@ app.use(function* (next) {
 });
 
 // Turn on the server
-if (!module.parent) app.listen(appPort);
-console.log('--- Listening at port', appPort);
+// if (!module.parent) app.listen(appPort, function() {
+//   console.log('--- Listening at port', appPort);
+//   if (process.env.NODE_ENV === 'production') {
+//     fs.openSync('/tmp/app-initialized', 'w');
+//   }
+// });
+
+
+// write nginx tmp
+fs.writeFile("/tmp/app-initialized", "Ready to launch nginx", function(err) {
+  if(err) {
+    console.log(err);
+  } else {
+    console.log("The file was saved!");
+  }
+});
+
+// listen on the nginx socket
+app.listen('/tmp/nginx.socket', function() {
+  console.log("Listening ");
+});

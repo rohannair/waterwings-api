@@ -11,7 +11,7 @@ const loginController = () => {
     LOGIN: function* () {
       // Find user in specific company
       const user = yield this.models.User.query().getUserwithPasswordByUsername(this.request.body.username);
-      if(user.length === 0) throw new ApiError('Can not find a user with that username', 404, 'Can not find a user with that username');
+      if(user.length === 0) throw new ApiError('Can not find a user with that username', 404, 'Cannot find a user with that username');
 
       // Use utility function to check a user's password and return a boolean
       const result = yield encrypt.checkPassword(this.request.body.password, user[0].password);
