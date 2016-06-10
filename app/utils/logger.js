@@ -9,11 +9,6 @@ const logger = bunyan.createLogger({
       // Log all errors,requests and responses to the console
       level: 'info',
       stream: process.stdout
-    },
-    {
-      // Log all errors,requests and responses to the log file
-      level: 'info',
-      path: process.env.LOG_LOCATION
     }
   ],
   serializers: bunyan.stdSerializers, //Contains three serializers for errs, reqs and res'
