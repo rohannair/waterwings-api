@@ -79,24 +79,19 @@ app.use(function* (next) {
 // JWT auth needed for API routes
 // TODO: change this asap once we have user registration working
 app.use(jwt({ secret: process.env.JWT_SECRET }).unless(function () {
-  if(this.url === '/api/v1/login' && this.method === 'POST') {
+  console.log(this.url);
+  if((this.url.indexOf('login') > -1) && (this.method === 'POST')) {
     return true;
-  } else if ( this.url.match(/\/api\/v1\/playbooks\/.*/) && this.method === 'GET') {
+  } else if ( this.url.match(/\/v1\/playbooks\/.*/)) {
     return true
-  } else if ( this.url.match(/\/api\/v1\/playbooks\/.*/) && this.method === 'PUT') {
-    return true
-  } else if ( this.url.match(/\/api\/v1\/playbooks\/submit\/.*/) && this.method === 'POST' ) {
-    return true
-  } else if ( this.url.match(/\/api\/v1\/playbooks\/statusUpdate\/.*/) && this.method === 'POST' ) {
-    return true
-  } else if ( this.url.match(/\/api\/v1\/upload\//) && this.method === 'POST' ) {
+  } else if ( this.url.match(/\/v1\/upload\//) && this.method === 'POST' ) {
     return true
   }
   return false
 }));
 
 // Configure router
-const router  = new Router({ prefix: '/api/v1' });
+const router  = new Router({ prefix: '/v1' });
 
 // Add routes to router
 const configureRoutes = require('./routes/');
@@ -107,6 +102,14 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
+app.use(function* () {
+  this.status = 200;
+  this.body = {
+    ctx: this,
+    message: 'Welcome to the Quartermaster API'
+  };
+});
+
 // Generic 404 Response
 app.use(function* (next) {
   this.status = 404;
@@ -115,25 +118,7 @@ app.use(function* (next) {
   };
 });
 
-// Turn on the server
-// if (!module.parent) app.listen(appPort, function() {
-//   console.log('--- Listening at port', appPort);
-//   if (process.env.NODE_ENV === 'production') {
-//     fs.openSync('/tmp/app-initialized', 'w');
-//   }
-// });
-
-
-// write nginx tmp
-fs.writeFile("/tmp/app-initialized", "Ready to launch nginx", function(err) {
-  if(err) {
-    console.log(err);
-  } else {
-    console.log("The file was saved!");
-  }
+app.listen(process.env.PORT || '3000', function() {
+  console.log("Listening at port 3000");
 });
 
-// listen on the nginx socket
-app.listen('/tmp/nginx.socket', function() {
-  console.log("Listening ");
-});
