@@ -39,6 +39,7 @@ module.exports = function configure(router) {
   .post('/users', authorize, usersController.POST)
   .put('/users/:id', authorize, usersController.PUT)
   .delete('/users/:id', authorize, usersController.DELETE)
+  .post('/users/changePassword', usersController.CHANGE_PASSWORD)
 
   // Roles
   .get('/roles', authorize, rolesController.GET)
