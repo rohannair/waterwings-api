@@ -96,7 +96,9 @@ app.use(jwt({ secret: process.env.JWT_SECRET }).unless(function () {
 }));
 
 // Configure router
-const router  = new Router({ prefix: '/v1' });
+const router = process.env.NODE_ENV === 'production'
+  ? new Router({ prefix: '/v1' })
+  : new Router({ prefix: '/api/v1' })
 
 // Add routes to router
 const configureRoutes = require('./routes/');
