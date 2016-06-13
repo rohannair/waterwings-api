@@ -1,6 +1,6 @@
 // Dependencies
 const encrypt = require('../utils/encryption');
-const genToken = require('../utils/token');
+const token = require('../utils/token');
 const ApiError = require('../utils/customErrors');
 
 // Login Controller
@@ -18,9 +18,9 @@ const loginController = () => {
       if(result === false) throw new ApiError('Wrong Password', 401, 'Wrong Password');
 
       // If user has been succesfully authenticated return a token
-      const token = genToken({userId: user[0].id, isAdmin: user[0].is_admin, companyId: user[0].company_id });
+      const new_token = yield token.genToken({userId: user[0].id, isAdmin: user[0].is_admin, companyId: user[0].company_id });
       this.status = 200;
-      this.body = { token };
+      this.body = { token: new_token };
     }
   }
 }
