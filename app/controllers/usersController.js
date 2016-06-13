@@ -36,6 +36,14 @@ const usersController = () => {
       this.body = result;
     },
 
+    CHANGE_PASSWORD: function* () {
+      const hash = yield encrypt.encryptPassword(this.request.body.password);
+      const newUser = yield this.models.User.query().putUser({password: hash }, this.state.user.userId);
+      const result = yield this.models.User.query().getUserById(this.state.user.userId, this.state.user.companyId);
+      this.status = 201;
+      this.body = result;
+    },
+
     DELETE: function* () {
       const result = yield this.models.User.query().putUser({ deleted: true }, this.params.id);
       this.status = 201;
