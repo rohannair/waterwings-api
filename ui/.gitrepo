@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/qrtrmstr/qrtrmstr-ui.git
+	branch = master
+	commit = c7622bfc3b6f639047c0f42297f75658d4d0e67e
+	parent = d6bdc5d10c56d2bbef387b8772eef074872eba13
+	cmdver = 0.3.0
