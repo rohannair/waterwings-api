@@ -1,0 +1,61 @@
+.slideEquipmentHeader {
+  display: flex;
+
+  .tab {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    border: 1px solid #ECF5FF;
+    overflow: hidden;
+
+    cursor: pointer;
+    margin-right: -1px;
+    align-items: top;
+
+    &:hover {
+      background: #DBEBFE;
+    }
+
+    &.active {
+      background: #ECF5FF;
+    }
+
+    .tabText {
+      display: block;
+      padding: 10px 20px;
+
+      &:hover {
+        background: #DBEBFE;
+      }
+    }
+
+    &.newTab {
+      padding: 10px 20px;
+      color: #bbb;
+      font-weight: bold;
+
+      &:hover {
+        color: #444;
+      }
+    }
+  }
+
+  .actionButtons {
+    display: flex;
+    flex-direction: column;
+
+    .removeBtn, .editBtn {
+      text-align: center;
+      padding: 0 5px;
+      flex-grow: 1;
+
+      .oi {
+        margin-right: 0;
+      }
+
+      &:hover {
+        background: #DBEBFE;
+      }
+    }
+  }
+}
