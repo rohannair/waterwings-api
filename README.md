@@ -139,3 +139,13 @@ bottom directing the user to the specific playbook
 
 Currently only the following email templates are available
 * welcomeEmail
+
+## Build & Deploy:
+1. Get Heroku toolbelt (`$ brew install heroku-toolbelt`)
+2. Make sure you have Heroku credentials for API repo
+3. `$ heroku login`
+4. `$ heroku git:remote -a waterwings`
+4. From master: `$ git push heroku master`
+5. From other branches `$ git push heroku <branch>:master -f`
+
+If master push fails on a conflict, use the `-f`.
