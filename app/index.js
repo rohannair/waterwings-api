@@ -79,20 +79,8 @@ app.use(function* (next) {
 // JWT auth needed for API routes
 // TODO: change this asap once we have user registration working
 app.use(jwt({ secret: process.env.JWT_SECRET }).unless(function () {
-  if(this.url === '/api/v1/login' && this.method === 'POST') {
-    return true;
-  } else if ( this.url.match(/\/api\/v1\/playbooks\/.*/) && this.method === 'GET') {
-    return true
-  } else if ( this.url.match(/\/api\/v1\/playbooks\/.*/) && this.method === 'PUT') {
-    return true
-  } else if ( this.url.match(/\/api\/v1\/playbooks\/submit\/.*/) && this.method === 'POST' ) {
-    return true
-  } else if ( this.url.match(/\/api\/v1\/playbooks\/statusUpdate\/.*/) && this.method === 'POST' ) {
-    return true
-  } else if ( this.url.match(/\/api\/v1\/upload\//) && this.method === 'POST' ) {
-    return true
-  }
-  return false
+  if (this.url.indexOf('dashboard') > -1) return false;
+  return true;
 }));
 
 // Configure router
@@ -125,15 +113,24 @@ app.use(function* (next) {
 
 
 // write nginx tmp
-fs.writeFile("/tmp/app-initialized", "Ready to launch nginx", function(err) {
-  if(err) {
-    console.log(err);
-  } else {
-    console.log("The file was saved!");
-  }
-});
+if( process.env.NODE_ENV === 'production') {
+  fs.writeFile("/tmp/app-initialized", "Ready to launch nginx", function(err) {
+    if(err) {
+      console.log(err);
+    } else {
+      console.log("The file was saved!");
+    }
+  });
 
-// listen on the nginx socket
-app.listen('/tmp/nginx.socket', function() {
-  console.log("Listening ");
-});
+  // listen on the nginx socket
+  app.listen('/tmp/nginx.socket', function() {
+    console.log("Listening ");
+  });
+}
+
+
+if( process.env.NODE_ENV === 'development') {
+  app.listen('3000', function() {
+    console.log("Listening at port 3000");
+  });
+}
