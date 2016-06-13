@@ -79,7 +79,7 @@ app.use(function* (next) {
 // JWT auth needed for API routes
 // TODO: change this asap once we have user registration working
 app.use(jwt({ secret: process.env.JWT_SECRET }).unless(function () {
-  if(this.url === '/v1/login' && this.method === 'POST') {
+  if (this.url.indexOf('v1/login') > -1 && this.method === 'POST') {
     return true;
   } else if ( this.url.match(/\/v1\/playbooks\/.*/) && this.method === 'GET') {
     return true
