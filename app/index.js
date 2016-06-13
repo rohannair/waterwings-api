@@ -79,17 +79,17 @@ app.use(function* (next) {
 // JWT auth needed for API routes
 // TODO: change this asap once we have user registration working
 app.use(jwt({ secret: process.env.JWT_SECRET }).unless(function () {
-  if(this.url === '/api/v1/login' && this.method === 'POST') {
+  if(this.url === '/v1/login' && this.method === 'POST') {
     return true;
-  } else if ( this.url.match(/\/api\/v1\/playbooks\/.*/) && this.method === 'GET') {
+  } else if ( this.url.match(/\/v1\/playbooks\/.*/) && this.method === 'GET') {
     return true
-  } else if ( this.url.match(/\/api\/v1\/playbooks\/.*/) && this.method === 'PUT') {
+  } else if ( this.url.match(/\/v1\/playbooks\/.*/) && this.method === 'PUT') {
     return true
-  } else if ( this.url.match(/\/api\/v1\/playbooks\/submit\/.*/) && this.method === 'POST' ) {
+  } else if ( this.url.match(/\/v1\/playbooks\/submit\/.*/) && this.method === 'POST' ) {
     return true
-  } else if ( this.url.match(/\/api\/v1\/playbooks\/statusUpdate\/.*/) && this.method === 'POST' ) {
+  } else if ( this.url.match(/\/v1\/playbooks\/statusUpdate\/.*/) && this.method === 'POST' ) {
     return true
-  } else if ( this.url.match(/\/api\/v1\/upload\//) && this.method === 'POST' ) {
+  } else if ( this.url.match(/\/v1\/upload\//) && this.method === 'POST' ) {
     return true
   }
   return false
