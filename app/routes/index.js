@@ -30,6 +30,9 @@ module.exports = function configure(router) {
   // Login
   .post('/login', loginController.LOGIN)
 
+  // New Customer Registration
+  .post('/register', registerController.REGISTER)
+
   // Users
   .get('/users/:id', usersController.GET_ONE)
 
