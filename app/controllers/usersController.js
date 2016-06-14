@@ -37,7 +37,13 @@ const usersController = () => {
     },
 
     CHANGE_PASSWORD: function* () {
-      const hash = yield encrypt.encryptPassword(this.request.body.password);
+      // First need to check user's old password
+      const user = yield this.models.User.query().getUserwithPasswordById(this.state.user.userId);
+      const passwordCheck = yield encrypt.checkPassword(this.request.body.oldPassword, user[0].password);
+      if(passwordCheck === false) throw new ApiError('Wrong old Password', 401, 'Wrong old Password');
+
+      // Now create new user password
+      const hash = yield encrypt.encryptPassword(this.request.body.newPassword);
       const newUser = yield this.models.User.query().putUser({password: hash }, this.state.user.userId);
       const result = yield this.models.User.query().getUserById(this.state.user.userId, this.state.user.companyId);
       this.status = 201;
