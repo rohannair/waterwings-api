@@ -7,7 +7,7 @@ function genToken(userDetails) {
     jwt.sign(Object.assign({}, userDetails), process.env.JWT_SECRET,
       {
         algorithm: 'HS256',
-        expiresIn: 432000,
+        expiresIn: 5184000,
         audience: 'user',
         issuer: 'qrtrmstr',
         subject: 'user-token'
