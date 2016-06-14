@@ -13,7 +13,7 @@ function genToken(userDetails) {
         subject: 'user-token'
       },
       (err, decoded) => {
-        if(err) reject(new ApiError('Error with JWT', 400, err));
+        if(err) reject(new ApiError('Error creating JWT', 500, err));
         resolve (decoded);
     });
   })
@@ -31,7 +31,7 @@ function verifyToken(token) {
         clockTolerance: 60
      },
      (err, decoded) => {
-       if(err) reject (new ApiError('Error with JWT', 400, err));
+       if(err) reject (new ApiError('JWT can not be verified', 401, err));
        resolve(decoded);
     });
   })
