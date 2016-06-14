@@ -133,58 +133,17 @@ const registerController = () => {
           },
           "4": {
             "body": {
-              "agenda": [
-                {
-                  "desc": "Meet Bill Jobs at 11th floor",
-                  "startTime": 1464094800000,
-                  "finishTime": 1464096600000
-                },
-                {
-                  "desc": "Meet and greet with UX team",
-                  "startTime": 1464096600000,
-                  "finishTime": 1464098400000
-                },
-                {
-                  "desc": "Stand-up meeting with Mobile Application team",
-                  "startTime": 1464098400000,
-                  "finishTime": 1464102000000
-                },
-                {
-                  "desc": "One-on-One with Bill Jobs",
-                  "startTime": 1464102000000,
-                  "finishTime": 1464105600000
-                },
-                {
-                  "desc": "Lunch with Bill Jobs and UX team",
-                  "startTime": 1464105600000,
-                  "finishTime": 1464107400000
-                },
-                {
-                  "desc": "Mix and Mingle",
-                  "startTime": 1464109200000,
-                  "finishTime": 1464111000000
-                },
-                {
-                  "desc": "Planning meeting with Mobile Application team",
-                  "startTime": 1464118200000,
-                  "finishTime": 1464123600000
-                },
-                {
-                  "desc": "(optional) Social with team @ The Duke of Richmond",
-                  "startTime": 1464125400000,
-                  "finishTime": 1464130800000
-                }
-              ]
+              "agenda": []
             },
             "date": "2016-05-24",
             "type": "day1agenda",
             "position": {
-              "lat": 43.6446447,
-              "lng": -79.39499869999997
+              "lat": 43.7181557,
+              "lng": -79.5181402
             },
             "place": {
-              "name": "Lighthouse Labs",
-              "formatted_address": "46 Spadina Avenue, Toronto, ON M5H 3Y2, ON, Canada"
+              "name": "Toronto",
+              "formatted_address": "Toronto, ON, Canada"
             },
             "contact": {
               "title":"Office Manager",
