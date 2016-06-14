@@ -84,7 +84,7 @@ app.use(function* (next) {
 });
 
 // Configure router
-const router = new Router({ prefix: '/v1' });
+const router = new Router({ prefix: process.env.ROUTER_PREFIX });
 
 // Add routes to router
 const configureRoutes = require('./routes/');
