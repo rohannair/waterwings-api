@@ -117,7 +117,7 @@ MyQueryBuilder.prototype.getUserById = function (userId, companyId) {
 MyQueryBuilder.prototype.getUserwithPasswordById = function (userId) {
     return this
       .select(
-          'users.id', 'users.username', 'users.password', 'users.first_name', 'users.last_name', 'users.is_admin','users.company_id', 'r.name as rolename'
+          'users.id', 'users.username', 'users.password', 'users.first_name', 'users.last_name', 'users.is_admin','users.company_id'
         )
         .where('users.id', '=', `${userId}`)
         .where('users.deleted', '=', 'false')
