@@ -35,13 +35,16 @@ $ npm install
 
 ## Migrate the database
 ```bash
-$ export PGPASSWORD=password; sh migrations/migrations.sh localhost quartermasterdb root
+$ npm run db:migrate
+
 ```
 
 ## Seed the database
 Only necessary if you require mock data in the database
+
+To insert an example company into the database
 ```bash
-$ npm run db:seed
+$ npm run seed:company
 ```
 
 ## Start application

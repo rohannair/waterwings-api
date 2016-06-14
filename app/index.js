@@ -95,6 +95,14 @@ app
   .use(router.routes())
   .use(router.allowedMethods());
 
+app.use(function* () {
+  this.status = 200;
+  this.body = {
+    ctx: this,
+    message: 'Welcome to the Quartermaster API'
+  };
+});
+
 // Generic 404 Response
 app.use(function* (next) {
   this.status = 404;
