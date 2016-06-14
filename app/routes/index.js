@@ -1,7 +1,7 @@
 // Router
 
 // Middleware
-const authorize = require('../utils/middleware/authorize');
+const middleware = require('../utils/middleware/index');
 
 // Controllers
 const loginController  = require('../controllers/loginController')();
@@ -12,10 +12,11 @@ const playbooksController = require('../controllers/playbooksController')();
 const fileServiceController = require('../controllers/fileServiceController')();
 const emailController = require('../controllers/emailController')();
 
-
 module.exports = function configure(router) {
 
   router
+
+  // PUBLIC Routes
 
   // General Home Message
   .get('/', function* () {
@@ -28,39 +29,50 @@ module.exports = function configure(router) {
   // Login
   .post('/login', loginController.LOGIN)
 
-  // Companies
-  .get('/companies', authorize, companiesController.GET)
-  .post('/companies', authorize, companiesController.POST)
-  .put('/companies/:id', authorize, companiesController.PUT)
-
   // Users
-  .get('/users', authorize, usersController.GET)
   .get('/users/:id', usersController.GET_ONE)
-  .post('/users', authorize, usersController.POST)
-  .put('/users/:id', authorize, usersController.PUT)
-  .delete('/users/:id', authorize, usersController.DELETE)
-  .post('/users/changePassword', usersController.CHANGE_PASSWORD)
-
-  // Roles
-  .get('/roles', authorize, rolesController.GET)
-  .post('/roles', authorize, rolesController.POST)
-  .put('/roles/:id', authorize, rolesController.PUT)
-  .delete('/roles/:id', authorize, rolesController.DELETE)
-
-  // Playbooks
-  .get('/playbooks', authorize, playbooksController.GET)
-  .get('/playbooks/:id', playbooksController.GET_ONE)
-  .post('/playbooks', playbooksController.POST)
-  .put('/playbooks/:id', playbooksController.PUT)
-  .delete('/playbooks/:id', authorize, playbooksController.DELETE)
-  .post('/playbooks/duplicate', authorize, playbooksController.DUPLICATE)
-  .post('/playbooks/submit/:id', playbooksController.SUBMIT)
-  .post('/playbooks/statusUpdate/:id', playbooksController.STATUS_UPDATE)
 
   // File Service
   .post('/upload', fileServiceController.UPLOAD)
 
+  .get('/playbooks/:id', playbooksController.GET_ONE)
+  .post('/playbooks', playbooksController.POST)
+  .put('/playbooks/:id', playbooksController.PUT)
+  .post('/playbooks/submit/:id', playbooksController.SUBMIT)
+  .post('/playbooks/statusUpdate/:id', playbooksController.STATUS_UPDATE)
+
+  // TOKEN Routes (Require a Token)
+
+  // Roles
+  .get('/roles', middleware.tokenCheck, rolesController.GET)
+
+  // Users
+  .post('/users/changePassword', middleware.tokenCheck, usersController.CHANGE_PASSWORD)
+
+  // ADMIN Routes (Require a Token and admin privileges)
+
+  // Companies
+  .get('/companies', middleware.tokenCheck, middleware.adminCheck, companiesController.GET)
+  .post('/companies', middleware.tokenCheck, middleware.adminCheck, companiesController.POST)
+  .put('/companies/:id', middleware.tokenCheck, middleware.adminCheck, companiesController.PUT)
+
+  // Roles
+  .post('/roles', middleware.tokenCheck, middleware.adminCheck, rolesController.POST)
+  .put('/roles/:id', middleware.tokenCheck, middleware.adminCheck, rolesController.PUT)
+  .delete('/roles/:id', middleware.tokenCheck, middleware.adminCheck, rolesController.DELETE)
+
+  // Users
+  .get('/users', middleware.tokenCheck, middleware.adminCheck, usersController.GET)
+  .post('/users', middleware.tokenCheck, middleware.adminCheck, usersController.POST)
+  .put('/users/:id', middleware.tokenCheck, middleware.adminCheck, usersController.PUT)
+  .delete('/users/:id', middleware.tokenCheck, middleware.adminCheck, usersController.DELETE)
+
   // Emails
-  .post('/playbook/send', authorize, emailController.POST)
+  .post('/playbook/send', middleware.tokenCheck, middleware.adminCheck, emailController.POST)
+
+  // Playbooks
+  .get('/playbooks', middleware.tokenCheck, middleware.adminCheck, playbooksController.GET)
+  .delete('/playbooks/:id', middleware.tokenCheck, middleware.adminCheck, playbooksController.DELETE)
+  .post('/playbooks/duplicate', middleware.tokenCheck, middleware.adminCheck, playbooksController.DUPLICATE)
 
 };
