@@ -37,7 +37,7 @@ module.exports = function configure(router) {
 
   .get('/playbooks/:id', playbooksController.GET_ONE)
   .post('/playbooks', playbooksController.POST)
-  .put('/playbooks/:id', playbooksController.PUT)
+  .post('/playbooks/:id', playbooksController.PUT)
   .post('/playbooks/submit/:id', playbooksController.SUBMIT)
   .post('/playbooks/statusUpdate/:id', playbooksController.STATUS_UPDATE)
 
@@ -54,25 +54,25 @@ module.exports = function configure(router) {
   // Companies
   .get('/companies', middleware.tokenCheck, middleware.adminCheck, companiesController.GET)
   .post('/companies', middleware.tokenCheck, middleware.adminCheck, companiesController.POST)
-  .put('/companies/:id', middleware.tokenCheck, middleware.adminCheck, companiesController.PUT)
+  .post('/companies/:id', middleware.tokenCheck, middleware.adminCheck, companiesController.PUT)
 
   // Roles
   .post('/roles', middleware.tokenCheck, middleware.adminCheck, rolesController.POST)
-  .put('/roles/:id', middleware.tokenCheck, middleware.adminCheck, rolesController.PUT)
-  .delete('/roles/:id', middleware.tokenCheck, middleware.adminCheck, rolesController.DELETE)
+  .post('/roles/:id', middleware.tokenCheck, middleware.adminCheck, rolesController.PUT)
+  .post('/roles/delete/:id', middleware.tokenCheck, middleware.adminCheck, rolesController.DELETE)
 
   // Users
   .get('/users', middleware.tokenCheck, middleware.adminCheck, usersController.GET)
   .post('/users', middleware.tokenCheck, middleware.adminCheck, usersController.POST)
-  .put('/users/:id', middleware.tokenCheck, middleware.adminCheck, usersController.PUT)
-  .delete('/users/:id', middleware.tokenCheck, middleware.adminCheck, usersController.DELETE)
+  .post('/users/:id', middleware.tokenCheck, middleware.adminCheck, usersController.PUT)
+  .post('/users/delete/:id', middleware.tokenCheck, middleware.adminCheck, usersController.DELETE)
 
   // Emails
   .post('/playbook/send', middleware.tokenCheck, middleware.adminCheck, emailController.POST)
 
   // Playbooks
   .get('/playbooks', middleware.tokenCheck, middleware.adminCheck, playbooksController.GET)
-  .delete('/playbooks/:id', middleware.tokenCheck, middleware.adminCheck, playbooksController.DELETE)
+  .post('/playbooks/delete/:id', middleware.tokenCheck, middleware.adminCheck, playbooksController.DELETE)
   .post('/playbooks/duplicate', middleware.tokenCheck, middleware.adminCheck, playbooksController.DUPLICATE)
 
 };
