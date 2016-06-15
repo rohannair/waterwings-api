@@ -111,9 +111,12 @@ MyQueryBuilder.prototype.getAll = function (companyId) {
 MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
     return this
       .select(
-        'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
+        'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.current_status', 'playbooks.percent_submitted',
+        'users.id as userId', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin',
+        'roles.name as rolename'
       )
       .leftJoin('users', 'playbooks.assigned', 'users.id')
+      .leftJoin('roles', 'users.role_id', 'roles.id')
       .where('playbooks.id', '=', `${playbookId}`)
       .where('playbooks.deleted', '=', 'false')
       .then((result) => result)
