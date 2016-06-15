@@ -29,9 +29,6 @@ module.exports = function configure(router) {
   // Login
   .post('/login', loginController.LOGIN)
 
-  // Users
-  .get('/users/:id', usersController.GET_ONE)
-
   // File Service
   .post('/upload', fileServiceController.UPLOAD)
 
@@ -48,6 +45,7 @@ module.exports = function configure(router) {
 
   // Users
   .post('/users/changePassword', middleware.tokenCheck, usersController.CHANGE_PASSWORD)
+  .get('/users/:id', middleware.tokenCheck, usersController.GET_ONE)
 
   // ADMIN Routes (Require a Token and admin privileges)
 
