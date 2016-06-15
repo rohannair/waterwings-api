@@ -7,13 +7,13 @@ function genToken(userDetails) {
     jwt.sign(Object.assign({}, userDetails), process.env.JWT_SECRET,
       {
         algorithm: 'HS256',
-        expiresIn: 432000,
+        expiresIn: 5184000,
         audience: 'user',
         issuer: 'qrtrmstr',
         subject: 'user-token'
       },
       (err, decoded) => {
-        if(err) reject(new ApiError('Error with JWT', 400, err));
+        if(err) reject(new ApiError('Error creating JWT', 500, err));
         resolve (decoded);
     });
   })
@@ -31,7 +31,7 @@ function verifyToken(token) {
         clockTolerance: 60
      },
      (err, decoded) => {
-       if(err) reject (new ApiError('Error with JWT', 400, err));
+       if(err) reject (new ApiError('JWT can not be verified', 401, err));
        resolve(decoded);
     });
   })

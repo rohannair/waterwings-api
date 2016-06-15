@@ -25,9 +25,12 @@ const Promise    = require('bluebird').Promise;
 const app     = module.exports = Koa();
 const appPort = process.env.PORT || 3000;
 app.poweredBy = false;
-app.use(cors({
-  origin: '*'
-}));
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(cors({
+    origin: '*'
+  }));
+}
 
 // Add database connection
 app.context.db = db();
