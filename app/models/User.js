@@ -91,7 +91,7 @@ User.relationMappings = {
 MyQueryBuilder.prototype.getAll = function (companyId) {
     return this
       .select(
-        'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.profile_img', 'users.is_admin', 'r.name as rolename'
+        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.profile_img', 'users.is_admin', 'r.name as rolename'
       )
       .leftJoin('roles as r', 'users.role_id', 'r.id')
       .where('users.deleted', '=', 'false')
@@ -104,7 +104,7 @@ MyQueryBuilder.prototype.getAll = function (companyId) {
 MyQueryBuilder.prototype.getUserById = function (userId, companyId) {
     return this
       .select(
-        'users.id', 'users.username', 'users.first_name', 'users.last_name', 'users.is_admin', 'r.name as rolename'
+        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.is_admin', 'r.name as rolename'
       )
       .leftJoin('roles as r', 'users.role_id', 'r.id')
       .where('users.id', '=', `${userId}`)
@@ -117,7 +117,7 @@ MyQueryBuilder.prototype.getUserById = function (userId, companyId) {
 MyQueryBuilder.prototype.getUserwithPasswordById = function (userId) {
     return this
       .select(
-          'users.id', 'users.username', 'users.password', 'users.first_name', 'users.last_name', 'users.is_admin','users.company_id'
+          'users.id', 'users.username', 'users.password', 'users.first_name as firstName', 'users.last_name as lastName', 'users.is_admin','users.company_id'
         )
         .where('users.id', '=', `${userId}`)
         .where('users.deleted', '=', 'false')
