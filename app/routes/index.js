@@ -42,9 +42,7 @@ module.exports = function configure(router) {
   .post('/playbooks/:id', playbooksController.PUT)
   .post('/playbooks/submit/:id', playbooksController.SUBMIT)
   .post('/playbooks/statusUpdate/:id', playbooksController.STATUS_UPDATE)
-
-  // New Customer Registration
-  .post('/register', registerController.REGISTER)
+  
 
   // TOKEN Routes (Require a Token)
 
