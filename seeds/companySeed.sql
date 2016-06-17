@@ -1,7 +1,7 @@
 -- Seed file for database
 
 INSERT INTO companies(id, name, address, subdomain, database_host) VALUES
-  ('nGLHsVI', 'Pied Piper', '{"street_address": [28, "Ted Rogers", "Way", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M4Y2J4", "country": "CA"}', NULL, 'localhost');
+  ('nGLHsVI', 'Pied Piper', '{"street_address": [28, "Ted Rogers", "Way", ""], "city": "Toronto", "province_or_state": "ON", "postal_code": "M4Y2J4", "country": "CA"}', 'piedpiper', 'public');
 
 INSERT INTO roles(name, company_id) VALUES
   ('CEO', 'nGLHsVI'),

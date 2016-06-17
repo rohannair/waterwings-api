@@ -48,7 +48,7 @@ Company.jsonSchema = {
     updated_at    : { type: 'object' },
     deleted       : { type: 'boolean' },
     subdomain     : { type: 'string' },
-    domain_host   : { type: 'string' }
+    database_host   : { type: 'string' }
   }
 };
 
