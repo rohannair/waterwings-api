@@ -42,20 +42,13 @@ Company.jsonSchema = {
     name          : { type: 'string', minLength: 1, maxLength: 255},
     address       : {
                       type: 'object',
-                      properties: {
-                        street_address : { type: 'array' },
-                        city                    : { type: 'string' },
-                        province_or_state       : { type: 'string', minLength: 2, maxLength: 2},
-                        postal_code             : { type: 'string', minLength: 1, maxLength: 10},
-                        country                 : { type: 'string', minLength: 2, maxLength: 50}
-                      },
                       additionalProperties: true
                     },
     created_at    : { type: 'object' },
     updated_at    : { type: 'object' },
     deleted       : { type: 'boolean' },
-    subdomain     : { type: 'text' },
-    domain_host   : { type: 'text' }
+    subdomain     : { type: 'string' },
+    database_host   : { type: 'string' }
   }
 };
 
