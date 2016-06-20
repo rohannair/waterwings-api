@@ -11,12 +11,6 @@ const companiesController = () => {
       this.status = 200;
     },
 
-    POST: function* () {
-      const result = yield this.models.Company.query().postCompany(this.request.body);
-      this.status = 201;
-      this.body = result;
-    },
-
     PUT: function* () {
       const result = yield this.models.Company.query().putCompany(this.request.body, this.params.id);
       this.status = 200;

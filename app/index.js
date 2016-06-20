@@ -25,9 +25,12 @@ const Promise    = require('bluebird').Promise;
 const app     = module.exports = Koa();
 const appPort = process.env.PORT || 3000;
 app.poweredBy = false;
-app.use(cors({
-  origin: '*'
-}));
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(cors({
+    origin: '*'
+  }));
+}
 
 // Add database connection
 app.context.db = db();
@@ -76,29 +79,15 @@ app.use(function* (next) {
   yield* next;
 });
 
-// JWT auth needed for API routes
-// TODO: change this asap once we have user registration working
-app.use(jwt({ secret: process.env.JWT_SECRET }).unless(function () {
-  if (this.url.indexOf('v1/login') > -1 && this.method === 'POST') {
-    return true;
-  } else if ( this.url.match(/\/v1\/playbooks\/.*/) && this.method === 'GET') {
-    return true
-  } else if ( this.url.match(/\/v1\/playbooks\/.*/) && this.method === 'PUT') {
-    return true
-  } else if ( this.url.match(/\/v1\/playbooks\/submit\/.*/) && this.method === 'POST' ) {
-    return true
-  } else if ( this.url.match(/\/v1\/playbooks\/statusUpdate\/.*/) && this.method === 'POST' ) {
-    return true
-  } else if ( this.url.match(/\/v1\/upload\//) && this.method === 'POST' ) {
-    return true
-  }
-  return false
-}));
+// Collect token from request headers
+app.use(function* (next) {
+  this.state.user = { userId: null, companyId: null, isAdmin: null};
+  this.token = this.request.header.authorization ? this.request.header.authorization.slice(7) : null;
+  yield* next;
+});
 
 // Configure router
-const router = process.env.NODE_ENV === 'production'
-  ? new Router({ prefix: '/v1' })
-  : new Router({ prefix: '/api/v1' })
+const router = new Router({ prefix: process.env.ROUTER_PREFIX });
 
 // Add routes to router
 const configureRoutes = require('./routes/');
