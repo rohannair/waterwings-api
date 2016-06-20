@@ -14,7 +14,7 @@
     "db:recreate": "npm run db:drop; npm run db:migrate; npm run seed:company",
     "start": "NODE_ENV=production node ./app/index.js | ./node_modules/.bin/bunyan -o short",
     "dev": "NODE_ENV=development ./node_modules/.bin/nodemon ./app/index.js | ./node_modules/.bin/bunyan -o short",
-    "test": "babel-node app/controllers/__TESTS__/*.test.js"
+    "test": "echo 'Currently no tests' && exit 0"
   },
   "author": "Rohan Nair",
   "dependencies": {
