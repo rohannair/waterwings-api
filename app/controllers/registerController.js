@@ -2,7 +2,6 @@
 const ApiError = require('../utils/customErrors');
 const encrypt = require('../utils/encryption');
 const dns = require('../utils/dns');
-const fetch = require('node-fetch');
 
 // Register Controller
 // Individual Controller functions are wrapped in a larger function so that they can
