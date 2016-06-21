@@ -88,7 +88,9 @@ User.relationMappings = {
 
 // Custom Queries
 
-MyQueryBuilder.prototype.getAll = function (companyId) {
+// Set a limit of 1000 users per call if no limit is provided
+// TODO: Need to figure out what limit we should use
+MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000) {
     return this
       .select(
         'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.profile_img', 'users.is_admin', 'r.name as rolename'
@@ -97,6 +99,7 @@ MyQueryBuilder.prototype.getAll = function (companyId) {
       .where('users.deleted', '=', 'false')
       .where('users.company_id', '=', `${companyId}`)
       .orderBy('users.updated_at', 'desc')
+      .range(+offset, (+offset) + limit - 1)
       .then((result) => result)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
