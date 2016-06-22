@@ -11,7 +11,6 @@ const registerController = () => {
     REGISTER: function* () {
       const { companyName, address, subdomain } = this.request.body.company;
       const { username, password, first_name, last_name } = this.request.body.user;
-      const { roleName } = this.request.body.role;
 
       // Create a new DNS Record with Cloud Flare
       yield dns.createCloudFlareDomainRecord(subdomain);
@@ -21,18 +20,18 @@ const registerController = () => {
       // Insert Company into database
       const newCompany = yield this.models.Company.query().postCompany({name: companyName, address, subdomain, database_host: 'public' });
       // Insert Roles into Database
-      const newRole = yield this.models.Role.query().postRole({name: roleName, company_id: newCompany.id});
       yield this.models.Role.query().postRole({name: 'Sales', company_id: newCompany.id});
+      yield this.models.Role.query().postRole({name: 'Marketing', company_id: newCompany.id});
       yield this.models.Role.query().postRole({name: 'Developer', company_id: newCompany.id});
       // Insert Admin User into Database
       const hash = yield encrypt.encryptPassword(password);
-      const newAdminUser = yield this.models.User.query().postUser({username, password: hash, is_admin: true, first_name, last_name, company_id: newCompany.id, role_id: +newRole.id});
+      const newAdminUser = yield this.models.User.query().postUser({username, password: hash, is_admin: true, first_name, last_name, company_id: newCompany.id });
       // Insert new Playbook Template
       const newPlaybook = yield this.models.Playbook.query().postPlaybook({name: 'Template Playbook', description: 'Playbook for new hire', company_id: newCompany.id,
       doc:
           {
           "0": {
-            "body": "<p>This is an onboarding template for you to customize.</p>\n<p>Use this card to welcome new hires with a personalized message explaining how excited you are that they are joining your team.</p>\n<p>This is also a great place to highlight tasks related to this playbook you would like new hires to complete before their first day.</p>\n<p>Example task list:</p>\n<ol>\n  <li>Fill out your user profile</li>\n  <li>Choose your equipment</li>\n  <li>Knowledge center for you to learn about our culture and processes</li>\n  <li>Check out the schedule for your first day</li>\n</ol>\n<p>You can also include web and mailto links in this card. If you have any questions you can contact our support team at <a href=\"mailto:support@qrtrmstr.com?Subject=Playbook%20Help\">support@qrtrmstr.com</a> [mailto:support@qrtrmstr.com]</p>",
+            "body": "<p>This is an onboarding template for you to customize.</p>\n<p>Use this card to welcome new hires with a personalized message explaining how excited you are that they are joining your team.</p>\n<p>This is also a great place to highlight information that you would like new hires to be familiar with before their first day.</p>\n<p>Example list:</p>\n<ol>\n  <li>Fill out your user profile</li>\n  <li>Choose your equipment</li>\n  <li>Knowledge center for you to learn about our culture and processes</li>\n  <li>Check out the schedule for your first day</li>\n</ol>\n<p>You can also include web and mailto links in this card. If you have any questions you can contact our support team at <a href=\"mailto:support@qrtrmstr.com?Subject=Playbook%20Help\">support@qrtrmstr.com</a> [mailto:support@qrtrmstr.com]</p>",
             "type": "intro",
             "heading": "Welcome :)",
             "submittable": false,
@@ -115,7 +114,7 @@ const registerController = () => {
           },
           "3": {
             "body": {
-              "desc": "<p>We recommend that you go through the following lesssons before your first day, to hit the ground running:</p>",
+              "desc": "<p>We suggest that you go through the following lessons before your first day, to hit the ground running:</p>",
               "options": [
                 {
                   "id": "gqOEoUR5RHg",
