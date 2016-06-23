@@ -54,9 +54,10 @@ const emailController = () => {
       // Need to check that the username is in the database
       const user = yield this.models.User.query().getUserwithPasswordByUsername(email);
       if(user.length === 0) throw new ApiError('Can not find a user with that username', 404, 'Cannot find a user with that username');
-      const {firstName, lastName } = user[0];
+      const {firstName, lastName, id } = user[0];
 
       const EmailToSend = yield EmailCreator({
+        userId: id,
         firstName,
         lastName,
         email,

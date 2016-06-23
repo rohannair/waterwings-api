@@ -18,8 +18,7 @@ module.exports = (payload) => {
 
     case 'forgotPasswordEmail':
       // Create link
-      // TODO: Figure out what link should go here
-      const forgotPasswordLink = `http://www.${process.env.DOMAIN}/passwordReset/${payload.userId}`;
+      const forgotPasswordLink = `http://www.${process.env.DOMAIN}/users/resetPassword/${payload.userId}`;
       // Construct Email
       return selectedTemplate[0].template(payload.firstName, payload.lastName, payload.email, forgotPasswordLink);
       break;

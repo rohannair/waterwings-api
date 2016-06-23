@@ -50,6 +50,15 @@ const usersController = () => {
       this.body = result;
     },
 
+    RESET_PASSWORD: function* () {
+      const hash = yield encrypt.encryptPassword(this.request.body.password);
+      const newUser = yield this.models.User.query().putUser({password: hash }, this.params.userId);
+      this.status = 201;
+      this.body = {
+        message: 'Password has been updated, please log in again.'
+      };
+    },
+
     DELETE: function* () {
       const result = yield this.models.User.query().putUser({ deleted: true }, this.params.id);
       this.status = 201;
