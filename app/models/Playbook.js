@@ -106,7 +106,7 @@ MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000)
       .where('playbooks.deleted', '=', 'false')
       .where('playbooks.company_id', '=', `${companyId}`)
       .orderBy('playbooks.created_at', 'asc')
-      .range(+offset, (+offset) + limit - 1)
+      .range(+offset, (+offset) + (+limit) - 1)
       .then((result) => result)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
