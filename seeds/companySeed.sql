@@ -5,9 +5,10 @@ INSERT INTO companies(id, name, address, subdomain, database_host) VALUES
 
 INSERT INTO roles(name, company_id) VALUES
   ('CEO', 'nGLHsVI'),
-  ('CTO', 'nGLHsVI'),
-  ('Software Engineer', 'nGLHsVI'),
-  ('Business Manager', 'nGLHsVI');
+  ('PR Manager', 'nGLHsVI'),
+  ('Business Manager', 'nGLHsVI'),
+  ('Software Engineer', 'nGLHsVI');
+
 
 INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
   ('4958cfba-d713-4919-9a80-c124079cf52a', 'Pied Piper Software Engineer', 'Pied Piper playbook for new software engineer', 'nGLHsVI',
@@ -197,9 +198,18 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
 );
 
 INSERT INTO users (id, username, password, is_admin, first_name, last_name, personal_email, company_id, role_id, profile_img) VALUES
-
-  ('a4bd224f-9aa6-4f15-b3c9-cb7551cd797f', 'richard@pied.piper', crypt('password', gen_salt('bf')), true, 'Richard', 'Hendricks', 'richard@example.com', 'nGLHsVI', 1, null),
-  ('a24b4195-4a49-450b-9b30-81632ef4c245', 'erlich@pied.piper', crypt('password', gen_salt('bf')), false, 'Erlich', 'Bachman', 'erlich@example.com', 'nGLHsVI', 2, null),
-  ('2bd3d5b7-e013-40af-b236-770844e55124', 'gilfoyle@pied.piper', crypt('password', gen_salt('bf')), false, 'Bertram', 'Gilfoyle', 'gilfoyle@example.com', 'nGLHsVI', 3, null),
-  ('376e0300-22d4-4d66-ad31-caf91882964d', 'dinesh@pied.piper', crypt('password', gen_salt('bf')), false, 'Dinesh', 'Chugtai', 'dinesh@example.com', 'nGLHsVI', 3, null),
-  ('4f0eefc6-dbee-4974-bacb-9f02c112718e', 'jared@pied.piper', crypt('password', gen_salt('bf')), true, 'Jared', 'Dunn', 'jared@example.', 'nGLHsVI', 4, null);
+  (gen_random_uuid(), 'richard@pied.piper', crypt('password', gen_salt('bf')), true, 'Richard', 'Hendricks', 'richard@example.com', 'nGLHsVI', 1, null),
+  (gen_random_uuid(), 'erlich@pied.piper', crypt('password', gen_salt('bf')), false, 'Erlich', 'Bachman', 'erlich@example.com','nGLHsVI', 2, null),
+  (gen_random_uuid(), 'jared@pied.piper', crypt('password', gen_salt('bf')), true, 'Jared', 'Dunn', 'jared@example.com','nGLHsVI', 3, null),
+  (gen_random_uuid(), 'gilfoyle@pied.piper', crypt('password', gen_salt('bf')), false, 'Bertram', 'Gilfoyle', 'gilfoyle@example.com', 'nGLHsVI', 4, null),
+  (gen_random_uuid(), 'dinesh@pied.piper', crypt('password', gen_salt('bf')), false, 'Dinesh', 'Chugtai', 'dinesh@example.com', 'nGLHsVI', 4, null),
+  (gen_random_uuid(), 'krishna@pied.piper', crypt('password', gen_salt('bf')), false, 'Krishna', 'Ticknor', 'krishna@example.com', 'nGLHsVI', 4, null),
+  (gen_random_uuid(), 'joellen@pied.piper', crypt('password', gen_salt('bf')), false, 'Joellen', 'Mask', 'joellen@example.com', 'nGLHsVI', 4, null),
+  (gen_random_uuid(), 'nina@pied.piper', crypt('password', gen_salt('bf')), false, 'Nina', 'Ashford', 'nina@example.com', 'nGLHsVI', 4, null),
+  (gen_random_uuid(), 'lisette@pied.piper', crypt('password', gen_salt('bf')), false, 'Lisette', 'Hoff', 'lisette@example.com', 'nGLHsVI', 4, null),
+  (gen_random_uuid(), 'stanford@pied.piper', crypt('password', gen_salt('bf')), false, 'Stanford', 'Pfau', 'stanford@example.com','nGLHsVI', 4, null),
+  (gen_random_uuid(), 'etha@pied.piper', crypt('password', gen_salt('bf')), false, 'Etha', 'Skillings', 'etha@example.com', 'nGLHsVI', 4, null),
+  (gen_random_uuid(), 'stevie@pied.piper', crypt('password', gen_salt('bf')), false, 'Stevie', 'Wimsatt', 'stevie@example.com', 'nGLHsVI', 4, null),
+  (gen_random_uuid(), 'rhona@pied.piper', crypt('password', gen_salt('bf')), false, 'Rhona', 'Dessert', 'rhona@example.com', 'nGLHsVI', 4, null),
+  (gen_random_uuid(), 'renata@pied.piper', crypt('password', gen_salt('bf')), false, 'Renata', 'Rashid', 'renata@example.com', 'nGLHsVI', 4, null),
+  (gen_random_uuid(), 'paris@pied.piper', crypt('password', gen_salt('bf')), false, 'Paris', 'Manuelito', 'paris@example.com', 'nGLHsVI', 4, null);

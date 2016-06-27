@@ -9,7 +9,7 @@ const usersController = () => {
 
   return {
     GET: function* () {
-      this.body = yield this.models.User.query().getAll(this.state.user.companyId);
+      this.body = yield this.models.User.query().getAll(this.state.user.companyId, this.request.query.offset, this.request.query.limit);
       this.status = 200;
     },
 
