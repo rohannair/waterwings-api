@@ -212,4 +212,5 @@ INSERT INTO users (id, username, password, is_admin, first_name, last_name, pers
   (gen_random_uuid(), 'stevie@pied.piper', crypt('password', gen_salt('bf')), false, 'Stevie', 'Wimsatt', 'stevie@example.com', 'nGLHsVI', 4, null),
   (gen_random_uuid(), 'rhona@pied.piper', crypt('password', gen_salt('bf')), false, 'Rhona', 'Dessert', 'rhona@example.com', 'nGLHsVI', 4, null),
   (gen_random_uuid(), 'renata@pied.piper', crypt('password', gen_salt('bf')), false, 'Renata', 'Rashid', 'renata@example.com', 'nGLHsVI', 4, null),
-  (gen_random_uuid(), 'paris@pied.piper', crypt('password', gen_salt('bf')), false, 'Paris', 'Manuelito', 'paris@example.com', 'nGLHsVI', 4, null);
+  (gen_random_uuid(), 'paris@pied.piper', crypt('password', gen_salt('bf')), false, 'Paris', 'Manuelito', 'paris@example.com', 'nGLHsVI', 4, null),
+  (gen_random_uuid(), 'stosh@qrtrmstr.com', crypt('password', gen_salt('bf')), true, 'Stosh', 'Fabricius', 'stosh@example.com', 'nGLHsVI', 1, null);

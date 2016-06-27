@@ -48,8 +48,13 @@ module.exports = function configure(router) {
 
   // Users
   .post('/users/resetPassword/:userId', usersController.RESET_PASSWORD)
+  .post('/auth/google', loginController.GOOGLE_AUTH_CODE)
 
   // TOKEN Routes (Require a Token)
+
+  // Login to other Services
+  .get('/auth/google', middleware.tokenCheck, loginController.GOOGLE_LOGIN)
+
 
   // Roles
   .get('/roles', middleware.tokenCheck, rolesController.GET)

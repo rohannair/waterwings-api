@@ -152,3 +152,15 @@ Currently only the following email templates are available
 5. From other branches `$ git push heroku <branch>:master -f`
 
 If master push fails on a conflict, use the `-f`.
+
+
+## Staging Environment
+The first time you are setting up your repos you will need to go the following
+
+1. `$ heroku login`
+2. `$ heroku git:remote -a waterwings-staging -r staging`
+3. git push staging dev:master
+
+From then on You will be able to use just
+1. `$ heroku login`
+3. `$ git push staging dev:master`
