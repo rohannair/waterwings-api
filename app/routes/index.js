@@ -33,6 +33,9 @@ module.exports = function configure(router) {
   // New Customer Registration
   .post('/register', registerController.REGISTER)
 
+  // Forgotten Password Email
+  .post('/forgotPassword/send', emailController.FORGOT_PASSWORD)
+
   // File Service
   .post('/upload', fileServiceController.UPLOAD)
 
@@ -42,6 +45,9 @@ module.exports = function configure(router) {
   .post('/playbooks/:id', playbooksController.PUT)
   .post('/playbooks/submit/:id', playbooksController.SUBMIT)
   .post('/playbooks/statusUpdate/:id', playbooksController.STATUS_UPDATE)
+
+  // Users
+  .post('/users/resetPassword/:userId', usersController.RESET_PASSWORD)
 
   // TOKEN Routes (Require a Token)
 
@@ -70,7 +76,7 @@ module.exports = function configure(router) {
   .post('/users/delete/:id', middleware.tokenCheck, middleware.adminCheck, usersController.DELETE)
 
   // Emails
-  .post('/playbook/send', middleware.tokenCheck, middleware.adminCheck, emailController.POST)
+  .post('/playbook/send', middleware.tokenCheck, middleware.adminCheck, emailController.PLAYBOOK)
 
   // Playbooks
   .get('/playbooks', middleware.tokenCheck, middleware.adminCheck, playbooksController.GET)
