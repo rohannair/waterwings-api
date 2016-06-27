@@ -95,7 +95,9 @@ Playbook.relationMappings = {
 
 // Custom Queries
 
-MyQueryBuilder.prototype.getAll = function (companyId) {
+// Set a limit of 1000 users per call if no limit is provided
+// TODO: Need to figure out what limit we should use
+MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000) {
     return this
       .select(
         'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.updated_at','playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
@@ -104,6 +106,7 @@ MyQueryBuilder.prototype.getAll = function (companyId) {
       .where('playbooks.deleted', '=', 'false')
       .where('playbooks.company_id', '=', `${companyId}`)
       .orderBy('playbooks.created_at', 'asc')
+      .range(+offset, (+offset) + (+limit) - 1)
       .then((result) => result)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
