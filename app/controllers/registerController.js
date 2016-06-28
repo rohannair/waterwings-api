@@ -12,6 +12,9 @@ const registerController = () => {
       const { companyName, address, subdomain } = this.request.body.company;
       const { username, password, first_name, last_name } = this.request.body.user;
 
+      // Check for authCode
+      if(this.request.body.authCode !== process.env.ADD_CUSTOMER_SECRET)  throw new ApiError('Auth Code is not correct', 403, 'Unauthorized attempt to add new customer');
+
       // Create a new DNS Record with Cloud Flare
       yield dns.createCloudFlareDomainRecord(subdomain);
       // Create a new Domain Record with Heroku

@@ -178,7 +178,8 @@ The format of the POST request is
     "password": "password",
     "first_name": "Stosh",
     "last_name": "Fabricius"
-  }
+  },
+  "authCode": "qrtrmstr2016"
 }
 ```
 
