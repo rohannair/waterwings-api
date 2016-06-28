@@ -77,6 +77,8 @@ module.exports = function configure(router) {
 
   // Emails
   .post('/playbook/send', middleware.tokenCheck, middleware.adminCheck, emailController.PLAYBOOK)
+  .get('/emails', emailController.GET_ALL)
+  .get('/emails/:id', emailController.GET_ONE)
 
   // Playbooks
   .get('/playbooks', middleware.tokenCheck, middleware.adminCheck, playbooksController.GET)

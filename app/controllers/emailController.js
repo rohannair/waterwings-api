@@ -70,7 +70,17 @@ const emailController = () => {
       this.body = {
         message: `Password reset email has been sent to ${email}`
       };
+    },
 
+
+    GET_ALL: function* () {
+      this.body = yield this.models.Email.query().getAll(this.state.user.companyId, this.request.query.offset, this.request.query.limit);
+      this.status = 200;
+    },
+
+    GET_ONE: function* () {
+      this.body = yield this.models.Email.query().getAll(this.state.user.companyId, this.request.query.offset, this.request.query.limit);
+      this.status = 200;
     }
 
   };
