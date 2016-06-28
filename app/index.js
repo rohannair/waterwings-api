@@ -74,7 +74,9 @@ app.use(function* (next) {
     Company: require('./models/Company').bindKnex(this.db),
     User: require('./models/User').bindKnex(this.db),
     Role: require('./models/Role').bindKnex(this.db),
-    Playbook: require('./models/Playbook').bindKnex(this.db)
+    Playbook: require('./models/Playbook').bindKnex(this.db),
+    Email: require('./models/Email').bindKnex(this.db)
+
   };
   yield* next;
 });
