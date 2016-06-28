@@ -9,7 +9,7 @@ const usersController = () => {
 
   return {
     GET: function* () {
-      this.body = yield this.models.User.query().getAll(this.state.user.companyId);
+      this.body = yield this.models.User.query().getAll(this.state.user.companyId, this.request.query.offset, this.request.query.limit);
       this.status = 200;
     },
 
@@ -48,6 +48,15 @@ const usersController = () => {
       const result = yield this.models.User.query().getUserById(this.state.user.userId, this.state.user.companyId);
       this.status = 201;
       this.body = result;
+    },
+
+    RESET_PASSWORD: function* () {
+      const hash = yield encrypt.encryptPassword(this.request.body.password);
+      const newUser = yield this.models.User.query().putUser({password: hash }, this.params.userId);
+      this.status = 201;
+      this.body = {
+        message: 'Password has been updated, please log in again.'
+      };
     },
 
     DELETE: function* () {

@@ -3,13 +3,12 @@ const EmailCreator = require('../utils/mailer/emailCreator');
 const EmailSender = require('../utils/mailer/emailSender');
 const createEmptySubmittedPlaybook = require('../utils/createEmptySubmittedPlaybook');
 
-
 // Email Controller
 // Individual Controller functions are wrapped in a larger function so that they can
 // can be exported using modules.exports and then easily imported into the routes file
 const emailController = () => {
   return {
-    POST: function* () {
+    PLAYBOOK: function* () {
       const company = yield this.models.Company.query().getCompanyById(this.state.user.companyId);
       const { name } = company[0];
       const { userId, firstName, lastName, email, playbookId, emailTemplate } = this.request.body;
@@ -48,6 +47,30 @@ const emailController = () => {
         newSubmittedDoc,
         message: `Email has been sent to ${email}`
       };
+    },
+
+    FORGOT_PASSWORD: function* () {
+      const {email, emailTemplate} = this.request.body;
+      // Need to check that the username is in the database
+      const user = yield this.models.User.query().getUserwithPasswordByUsername(email);
+      if(user.length === 0) throw new ApiError('Can not find a user with that username', 404, 'Cannot find a user with that username');
+      const {firstName, lastName, id } = user[0];
+
+      const EmailToSend = yield EmailCreator({
+        userId: id,
+        firstName,
+        lastName,
+        email,
+        emailTemplate
+      });
+
+      yield EmailSender(EmailToSend);
+
+      this.status = 200;
+      this.body = {
+        message: `Password reset email has been sent to ${email}`
+      };
+
     }
 
   };

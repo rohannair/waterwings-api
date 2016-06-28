@@ -1,18 +1,29 @@
 const EmailTemplates = require('./emailTemplates/index.js');
-const LinkCreator = require('./linkCreator.js');
+const ApiError = require('./../customErrors');
 
-function emailCreator( { firstName, lastName, email, companyName, playbookId, emailTemplate } ) {
+module.exports = (payload) => {
+  // Get email template from request
+  const { emailTemplate } = payload;
 
-  // Now select a template from the list of templates, based on the requested playbook type
+  // Select template based on the requested playbook type
   const selectedTemplate = EmailTemplates.filter((item) => item.name === emailTemplate);
 
-  // Create the custom link to send in the email
-  const linkToSend = LinkCreator(playbookId, email);
+  switch(emailTemplate) {
+    case 'welcomeEmail':
+      // Create link
+      const welcomeLink = `http://www.${process.env.DOMAIN}/playbook/${payload.playbookId}?from_email=${payload.email}`;
+      // Construct email
+      return selectedTemplate[0].template(payload.firstName, payload.lastName, payload.companyName, payload.email, welcomeLink );
 
-  // Now Passing in variables in order to fill in the email template
-  const completedEmail = selectedTemplate[0].template(firstName, lastName, companyName, email, linkToSend );
+    case 'forgotPasswordEmail':
+      // Create link
+      const forgotPasswordLink = `http://www.${process.env.DOMAIN}/users/resetPassword/${payload.userId}`;
+      // Construct Email
+      return selectedTemplate[0].template(payload.firstName, payload.lastName, payload.email, forgotPasswordLink);
 
-  return completedEmail;
+    default:
+      throw new ApiError('Error sending email', 400, 'Selected Email template does not exist');
+  }
+
+  // return completedEmail;
 }
-
-module.exports = emailCreator;
