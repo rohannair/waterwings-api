@@ -82,6 +82,6 @@ module.exports = function configure(router) {
   .get('/playbooks', middleware.tokenCheck, middleware.adminCheck, playbooksController.GET)
   .post('/playbooks/delete/:id', middleware.tokenCheck, middleware.adminCheck, playbooksController.DELETE)
   .post('/playbooks/duplicate', middleware.tokenCheck, middleware.adminCheck, playbooksController.DUPLICATE)
-
+  .post('/playbooks/addNewSlide/:id', middleware.tokenCheck, middleware.adminCheck, playbooksController.INSERT_SLIDE)
 
 };

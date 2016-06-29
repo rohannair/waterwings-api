@@ -83,6 +83,28 @@ const playbooksController = () => {
         result: result[0],
         message: 'Successfully changed status.'
       };
+    },
+
+    INSERT_SLIDE: function* () {
+      let introSlideTemplate = {
+          "slide_number": 0,
+          "type": "intro",
+          "heading": "",
+          "body": "<p></p>"
+        };
+      const playbook = yield this.models.Playbook.query().getPlaybookById(this.params.id);
+      const newSlideNumber =  Object.keys(playbook[0].doc).length;
+      introSlideTemplate.slide_number = newSlideNumber;
+      const newSlide = {};
+      newSlide[`${newSlideNumber.toString()}`] = introSlideTemplate;
+      const newPlaybook = Object.assign(playbook[0].doc, newSlide);
+      yield this.models.Playbook.query().putPlaybook({doc: newPlaybook}, this.params.id);
+      const result = yield this.models.Playbook.query().getPlaybookById(this.params.id);
+      this.status = 200;
+      this.body = {
+        result: result[0],
+        message: 'Successfully inserted a new slide.'
+      };
     }
 
   };
