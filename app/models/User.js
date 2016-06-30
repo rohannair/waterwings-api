@@ -93,7 +93,7 @@ User.relationMappings = {
 MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000) {
     return this
       .select(
-        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.profile_img', 'users.is_admin', 'r.name as rolename'
+        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.profile_img', 'users.is_admin', 'users.google_account_linked', 'r.name as rolename'
       )
       .leftJoin('roles as r', 'users.role_id', 'r.id')
       .where('users.deleted', '=', 'false')
@@ -107,7 +107,7 @@ MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000)
 MyQueryBuilder.prototype.getUserById = function (userId, companyId) {
     return this
       .select(
-        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.is_admin', 'r.name as rolename'
+        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.is_admin', 'users.google_account_linked', 'r.name as rolename'
       )
       .leftJoin('roles as r', 'users.role_id', 'r.id')
       .where('users.id', '=', `${userId}`)
