@@ -48,9 +48,9 @@ module.exports = function configure(router) {
 
   // Users
   .post('/users/resetPassword/:userId', usersController.RESET_PASSWORD)
-  .post('/auth/google', loginController.GOOGLE_AUTH_CODE)
-  .post('/auth/slack', loginController.SLACK_AUTH_CODE)
-  .post('/auth/linkedIn', loginController.LINKEDIN_AUTH_CODE)
+  .get('/callback/auth/google', loginController.GOOGLE_AUTH_CODE)
+  .get('/callback/auth/linkedIn', loginController.LINKEDIN_AUTH_CODE)
+  .get('/callback/auth/slack', loginController.SLACK_AUTH_CODE)
 
   // TOKEN Routes (Require a Token)
 

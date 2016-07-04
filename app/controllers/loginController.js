@@ -37,31 +37,23 @@ const loginController = () => {
     },
 
     GOOGLE_AUTH_CODE: function* () {
-      console.log('In the auth function');
-      const tokens = yield googleAuth.getTokens(this.request.body.authCode);
-      const result = yield this.models.User.query().putUser({ google_user_token: token.access_token, google_account_linked: true }, this.request.body.userId);
-      this.status = 201;
-      this.body = {
-        message: 'Google Account Linked'
-      };
+      console.log('here in the callback');
+      console.log(this.query);
+      const token = yield googleAuth.getTokens(this.query.code);
+      console.log('Token', token);
+      const result = yield this.models.User.query().putUser(
+        {
+          google_user_token: token.access_token,
+          google_refresh_token: token.refresh_token,
+          google_account_linked: true
+        },
+        this.query.state
+      );
+      const user = yield this.models.User.query().getUserById(this.query.state);
+      this.status = 301;
+      this.redirect(`http://${user.companyDomain}.${process.env.DOMAIN}/dashboard`);
     },
 
-    SLACK_LOGIN: function* () {
-      const url = yield slackAuth.urlGenerator(this.state.user.userId);
-      this.status = 200;
-      this.body = {
-        message: url
-      };
-    },
-
-    SLACK_AUTH_CODE: function* () {
-      const token = yield slackAuth.getTokens(this.request.body.authCode);
-      const result = yield this.models.User.query().putUser({ slack_user_token: token.access_token, slack_account_linked: true }, this.request.body.userId);
-      this.status = 201;
-      this.body = {
-        message: 'Slack Account Linked'
-      };
-    },
 
     LINKEDIN_LOGIN: function* () {
       const url = yield linkedInAuth.urlGenerator(this.state.user.userId);
@@ -72,11 +64,34 @@ const loginController = () => {
     },
 
     LINKEDIN_AUTH_CODE: function* () {
-      const token = yield linkedInAuth.getTokens(this.request.body.authCode);
-      const result = yield this.models.User.query().putUser({ linkedIn_user_token: token.access_token, linkedIn_account_linked: true }, this.request.body.userId);
+      const token = yield linkedInAuth.getTokens(this.query.code);
+      const result = yield this.models.User.query().putUser(
+        {
+          linkedin_user_token: token.access_token,
+          linkedin_account_linked: true
+        },
+        this.query.state
+      );
+      const user = yield this.models.User.query().getUserById(this.query.state);
+      this.status = 301;
+      this.redirect(`http://${user.companyDomain}.${process.env.DOMAIN}/dashboard`);
+    },
+
+    SLACK_LOGIN: function* () {
+      const url = yield slackAuth.urlGenerator(this.state.user.userId);
+      this.status = 200;
+      this.body = {
+        message: url
+      };
+    },
+
+    // TODO: Fix this up once we have a working slack bot
+    SLACK_AUTH_CODE: function* () {
+      const token = yield slackAuth.getTokens(this.request.body.authCode);
+      const result = yield this.models.User.query().putUser({ slack_user_token: token.access_token, slack_account_linked: true }, this.request.body.userId);
       this.status = 201;
       this.body = {
-        message: 'LinkedIn Account Linked'
+        message: 'Slack Account Linked'
       };
     }
 

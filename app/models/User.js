@@ -61,7 +61,14 @@ User.jsonSchema = {
     role_id        : { type: 'integer' },
     created_at     : { type: 'object' },
     updated_at     : { type: 'object' },
-    deleted        : { type: 'boolean' }
+    deleted        : { type: 'boolean' },
+    google_user_token : { type: 'string' },
+    google_refresh_token : { type: 'string' },
+    google_account_linked : { type: 'boolean' },
+    slack_user_token : { type: 'string' },
+    slack_account_linked : { type: 'boolean' },
+    linkedin_user_token : { type: 'string' },
+    linkedin_account_linked : { type: 'boolean' }
   }
 };
 
@@ -104,14 +111,14 @@ MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
-MyQueryBuilder.prototype.getUserById = function (userId, companyId) {
+MyQueryBuilder.prototype.getUserById = function (userId) {
     return this
       .select(
-        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.is_admin', 'users.google_account_linked', 'r.name as rolename'
+        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.is_admin', 'users.google_account_linked', 'r.name as rolename', 'c.id as companyId', 'c.name as companyName', 'c.subdomain as companyDomain'
       )
       .leftJoin('roles as r', 'users.role_id', 'r.id')
+      .leftJoin('companies as c', 'users.company_id', 'c.id')
       .where('users.id', '=', `${userId}`)
-      .where('users.company_id', '=', `${companyId}`)
       .where('users.deleted', '=', 'false')
       .then((result) => result[0])
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
