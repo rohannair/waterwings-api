@@ -37,10 +37,7 @@ const loginController = () => {
     },
 
     GOOGLE_AUTH_CODE: function* () {
-      console.log('here in the callback');
-      console.log(this.query);
       const token = yield googleAuth.getTokens(this.query.code);
-      console.log('Token', token);
       const result = yield this.models.User.query().putUser(
         {
           google_user_token: token.access_token,
