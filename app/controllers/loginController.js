@@ -41,7 +41,7 @@ const loginController = () => {
       const result = yield this.models.User.query().putUser(
         {
           google_user_token: token.access_token,
-          google_refresh_token: token.refresh_token,
+          google_refresh_token: token.refresh_token || null,
           google_account_linked: true
         },
         this.query.state
