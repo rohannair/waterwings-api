@@ -48,8 +48,17 @@ module.exports = function configure(router) {
 
   // Users
   .post('/users/resetPassword/:userId', usersController.RESET_PASSWORD)
+  .get('/callback/auth/google', loginController.GOOGLE_AUTH_CODE)
+  .get('/callback/auth/linkedIn', loginController.LINKEDIN_AUTH_CODE)
+  .get('/callback/auth/slack', loginController.SLACK_AUTH_CODE)
 
   // TOKEN Routes (Require a Token)
+
+  // Login to other Services
+  .get('/auth/google', middleware.tokenCheck, loginController.GOOGLE_LOGIN)
+  .get('/auth/slack', middleware.tokenCheck, loginController.SLACK_LOGIN)
+  .get('/auth/linkedIn', middleware.tokenCheck, loginController.LINKEDIN_LOGIN)
+
 
   // Roles
   .get('/roles', middleware.tokenCheck, rolesController.GET)
