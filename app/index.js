@@ -19,7 +19,6 @@ const ApiError   = require('./utils/customErrors');
 const fs         = require('fs');
 const http       = require('http');
 const Promise    = require('bluebird').Promise;
-const passport = require('koa-passport');
 
 // Instantiate app
 const app     = module.exports = Koa();
@@ -33,7 +32,6 @@ app.context.db = db();
 app.use(helmet());
 app.use(bodyParser());
 app.use(bouncer.middleware());
-app.use(passport.initialize());
 
 // Add logger to app
 app.use(function* (next) {
