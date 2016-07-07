@@ -190,6 +190,7 @@ INSERT INTO playbooks (id, name, description, company_id, doc) VALUES
         "show": true,
         "code": "welcome2piedpiper"
       },
+      "detailed_location": null,
       "date": "2016-06-01",
       "slide_number": 5
     }
