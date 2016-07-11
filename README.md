@@ -152,3 +152,49 @@ Currently only the following email templates are available
 5. From other branches `$ git push heroku <branch>:master -f`
 
 If master push fails on a conflict, use the `-f`.
+
+
+## Staging Environment
+The first time you are setting up your repos you will need to go the following
+
+1. `$ heroku login`
+2. `$ heroku git:remote -a waterwings-staging -r staging`
+3. git push staging dev:master
+
+From then on You will be able to use just
+1. `$ heroku login`
+3. `$ git push staging dev:master`
+
+## Registering a new Customer
+
+In order to register a new customer the following api endpoint must be hit with a POST request
+```
+api/v1/register
+```
+The format of the POST request is
+```javascript
+{
+  "company": {
+    "companyName": "Evil Corp",
+    "address": {
+        "city": "Toronto",
+        "country": "CAN",
+        "postal_code": "M5V3Y4",
+        "street_address": ["46", "Spadina", "Av"],
+        "province_or_state": "ON"
+    },
+    "subdomain": "evilcorp"
+  },
+  "user": {
+    "username": "stosh@qrtrmstr.com",
+    "password": "password",
+    "first_name": "Stosh",
+    "last_name": "Fabricius"
+  },
+  "authCode": "qrtrmstr2016"
+}
+```
+
+This endpoint does not require a token or any Authorization.
+
+This endpoint will add the company to the database, add the subdomain to cloudflare, and add a Domain name to heroku.

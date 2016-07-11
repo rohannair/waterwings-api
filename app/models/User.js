@@ -61,7 +61,14 @@ User.jsonSchema = {
     role_id        : { type: 'integer' },
     created_at     : { type: 'object' },
     updated_at     : { type: 'object' },
-    deleted        : { type: 'boolean' }
+    deleted        : { type: 'boolean' },
+    google_user_token : { type: 'string' },
+    google_refresh_token : { type: 'string' },
+    google_account_linked : { type: 'boolean' },
+    slack_user_token : { type: 'string' },
+    slack_account_linked : { type: 'boolean' },
+    linkedin_user_token : { type: 'string' },
+    linkedin_account_linked : { type: 'boolean' }
   }
 };
 
@@ -88,27 +95,30 @@ User.relationMappings = {
 
 // Custom Queries
 
-MyQueryBuilder.prototype.getAll = function (companyId) {
+// Set a limit of 1000 users per call if no limit is provided
+// TODO: Need to figure out what limit we should use
+MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000) {
     return this
       .select(
-        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.profile_img', 'users.is_admin', 'r.name as rolename'
+        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.profile_img', 'users.is_admin', 'users.google_account_linked', 'r.name as rolename'
       )
       .leftJoin('roles as r', 'users.role_id', 'r.id')
       .where('users.deleted', '=', 'false')
       .where('users.company_id', '=', `${companyId}`)
       .orderBy('users.updated_at', 'desc')
+      .range(+offset, (+offset) + (+limit) - 1)
       .then((result) => result)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
-MyQueryBuilder.prototype.getUserById = function (userId, companyId) {
+MyQueryBuilder.prototype.getUserById = function (userId) {
     return this
       .select(
-        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.is_admin', 'r.name as rolename'
+        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.is_admin', 'users.google_account_linked', 'r.name as rolename', 'c.id as companyId', 'c.name as companyName', 'c.subdomain as companyDomain'
       )
       .leftJoin('roles as r', 'users.role_id', 'r.id')
+      .leftJoin('companies as c', 'users.company_id', 'c.id')
       .where('users.id', '=', `${userId}`)
-      .where('users.company_id', '=', `${companyId}`)
       .where('users.deleted', '=', 'false')
       .then((result) => result[0])
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
@@ -128,7 +138,7 @@ MyQueryBuilder.prototype.getUserwithPasswordById = function (userId) {
 MyQueryBuilder.prototype.getUserwithPasswordByUsername = function (name) {
     return this
       .select(
-        'users.id', 'users.username', 'users.password', 'users.is_admin', 'users.company_id'
+        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.password', 'users.is_admin', 'users.company_id'
       )
       .where('users.username', '=', `${name}`)
       .where('users.deleted', '=', 'false')

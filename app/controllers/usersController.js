@@ -9,7 +9,7 @@ const usersController = () => {
 
   return {
     GET: function* () {
-      this.body = yield this.models.User.query().getAll(this.state.user.companyId);
+      this.body = yield this.models.User.query().getAll(this.state.user.companyId, this.request.query.offset, this.request.query.limit);
       this.status = 200;
     },
 
@@ -18,20 +18,20 @@ const usersController = () => {
       const hash = yield encrypt.encryptPassword(this.request.body.password);
       this.request.body.password = hash
       const newUser = yield this.models.User.query().postUser(Object.assign(this.request.body, {company_id: this.state.user.companyId}));
-      const result = yield this.models.User.query().getUserById(newUser.id, this.state.user.companyId);
+      const result = yield this.models.User.query().getUserById(newUser.id);
       this.status = 201;
       this.body = result;
     },
 
     GET_ONE: function* () {
-      const result = yield this.models.User.query().getUserById(this.params.id, this.state.user.companyId);
+      const result = yield this.models.User.query().getUserById(this.params.id);
       this.status = 200;
       this.body = result;
     },
 
     PUT: function* () {
       const updatedUser = yield this.models.User.query().putUser(this.request.body, this.params.id);
-      const result = yield this.models.User.query().getUserById(this.params.id, this.state.user.companyId);
+      const result = yield this.models.User.query().getUserById(this.params.id);
       this.status = 200;
       this.body = result;
     },
@@ -45,9 +45,18 @@ const usersController = () => {
       // Now create new user password
       const hash = yield encrypt.encryptPassword(this.request.body.newPassword);
       const newUser = yield this.models.User.query().putUser({password: hash }, this.state.user.userId);
-      const result = yield this.models.User.query().getUserById(this.state.user.userId, this.state.user.companyId);
+      const result = yield this.models.User.query().getUserById(this.state.user.userId);
       this.status = 201;
       this.body = result;
+    },
+
+    RESET_PASSWORD: function* () {
+      const hash = yield encrypt.encryptPassword(this.request.body.password);
+      const newUser = yield this.models.User.query().putUser({password: hash }, this.params.userId);
+      this.status = 201;
+      this.body = {
+        message: 'Password has been updated, please log in again.'
+      };
     },
 
     DELETE: function* () {

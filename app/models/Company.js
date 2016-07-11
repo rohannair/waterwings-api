@@ -103,7 +103,6 @@ MyQueryBuilder.prototype.getCompanyById = function (id) {
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
-
 MyQueryBuilder.prototype.postCompany = function (data) {
     return this
       .insert(Object.assign(data, {id: uuid.v4()}))
