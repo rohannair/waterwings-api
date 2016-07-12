@@ -59,7 +59,7 @@ Playbook.jsonSchema = {
     updated_at  : { type: 'object' },
     deleted     : { type: 'boolean' },
     collaborators : { type: 'array' },
-    assigned    : { type: 'string' },
+    assigned    : { type: ['string', 'null'] },
     current_status : { type: 'string' },
     submitted_doc : {
                     type: 'object',

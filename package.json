@@ -8,6 +8,7 @@
     "node": "6.2.1"
   },
   "scripts": {
+    "db:create_migration": "touch ./migrations/$(echo $(date +%s))-migration.sql",
     "db:migrate": "export PGPASSWORD=password; ./migrations/migrations.sh localhost quartermasterdb root",
     "seed:company": "export PGPASSWORD=password; psql -h localhost -d quartermasterdb -U root -f ./seeds/companySeed.sql",
     "db:drop": "export PGPASSWORD=password; ./dropTable.sh localhost quartermasterdb root",
