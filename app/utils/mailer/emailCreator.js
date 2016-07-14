@@ -11,13 +11,13 @@ module.exports = (payload) => {
   switch(emailTemplate) {
     case 'welcomeEmail':
       // Create link
-      const welcomeLink = `http://www.${process.env.DOMAIN}/playbook/${payload.playbookId}?from_email=${payload.email}`;
+      const welcomeLink = `http://${process.env.DOMAIN}/playbook/${payload.playbookId}?from_email=${payload.email}`;
       // Construct email
       return selectedTemplate[0].template(payload.firstName, payload.lastName, payload.companyName, payload.email, welcomeLink );
 
     case 'forgotPasswordEmail':
       // Create link
-      const forgotPasswordLink = `http://www.${process.env.DOMAIN}/users/resetPassword/${payload.userId}`;
+      const forgotPasswordLink = `http://${process.env.DOMAIN}/users/resetPassword/${payload.userId}`;
       // Construct Email
       return selectedTemplate[0].template(payload.firstName, payload.lastName, payload.email, forgotPasswordLink);
 
