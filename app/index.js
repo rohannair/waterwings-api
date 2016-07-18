@@ -5,7 +5,6 @@ if( process.env.NODE_ENV === 'development') {
 global.Promise = require('bluebird');
 
 // Dependencies
-const cors       = require('koa-cors');
 const Koa        = require('koa');
 const Router     = require('koa-router');
 const bouncer    = require('koa-bouncer');
@@ -25,12 +24,6 @@ const Promise    = require('bluebird').Promise;
 const app     = module.exports = Koa();
 const appPort = process.env.PORT || 3000;
 app.poweredBy = false;
-
-if (process.env.NODE_ENV === 'development') {
-  app.use(cors({
-    origin: '*'
-  }));
-}
 
 // Add database connection
 app.context.db = db();
@@ -87,7 +80,7 @@ app.use(function* (next) {
 });
 
 // Configure router
-const router = new Router({ prefix: process.env.ROUTER_PREFIX });
+const router = new Router({ prefix: '/v1' });
 
 // Add routes to router
 const configureRoutes = require('./routes/');

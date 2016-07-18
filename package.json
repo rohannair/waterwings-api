@@ -13,7 +13,7 @@
     "db:drop": "export PGPASSWORD=password; ./dropTable.sh localhost quartermasterdb root",
     "db:recreate": "npm run db:drop; npm run db:migrate; npm run seed:company",
     "start": "NODE_ENV=production node ./app/index.js | ./node_modules/.bin/bunyan -o short",
-    "dev": "NODE_ENV=development ./node_modules/.bin/nodemon ./app/index.js | ./node_modules/.bin/bunyan -o short",
+    "dev": "NODE_ENV=development DEBUG=koa:* ./node_modules/.bin/nodemon ./app/index.js | ./node_modules/.bin/bunyan -o short",
     "test": "echo 'Currently no tests' && exit 0"
   },
   "author": "Rohan Nair",
@@ -27,6 +27,7 @@
     "co-multipart": "^2.0.0",
     "dotenv": "^2.0.0",
     "forever": "^0.15.2",
+    "googleapis": "^9.0.0",
     "jsonwebtoken": "^6.2.0",
     "knex": "^0.9.0",
     "koa": "^1.1.2",
