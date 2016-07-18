@@ -63,7 +63,8 @@ const usersController = () => {
       const result = yield this.models.User.query().putUser({ deleted: true }, this.params.id);
       this.status = 201;
       this.body = {
-        message: 'User has been deleted'
+        message: 'User has been deleted',
+        id: this.params.id
       };
     }
 
