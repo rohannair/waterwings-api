@@ -126,6 +126,15 @@ MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
+MyQueryBuilder.prototype.getPublishedPlaybookById = function (playbookId) {
+    return this
+      .select(
+        'playbooks.id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc'
+      )
+      .where('playbooks.id', '=', `${playbookId}`)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
+};
+
 MyQueryBuilder.prototype.postPlaybook = function (data) {
     return this
       .insert(Object.assign(data, {id: uuid.v4()}))
