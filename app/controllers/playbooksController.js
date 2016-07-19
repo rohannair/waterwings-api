@@ -22,6 +22,16 @@ const playbooksController = () => {
       };
     },
 
+    PUBLIC_GET_ONE: function* () {
+      const result = yield this.models.Playbook.query().getPublishedPlaybookById(this.params.id);
+      const {id, name, description, company_id, doc, assigned, submitted_doc, current_status, percent_submitted, userId, username, firstName, lastName, is_admin, rolename } = result[0];
+      this.status = 200;
+      this.body = {
+        playbook: {id, name, description, company_id, doc, assigned, submitted_doc, current_status, percent_submitted},
+        users: [{ userId, username, firstName, lastName, is_admin, rolename }]
+      };
+    },
+
     POST: function* () {
       const newPlaybook = yield this.models.Playbook.query().postPlaybook(Object.assign(this.request.body, {company_id: this.state.user.companyId}));
       const result = yield this.models.Playbook.query().getPlaybookById(newPlaybook);
