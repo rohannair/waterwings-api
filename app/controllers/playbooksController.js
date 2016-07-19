@@ -1,5 +1,6 @@
 // Deps
 const ApiError = require('../utils/customErrors');
+const { TEXT_SLIDE } = require('../constants/slides');
 
 // Playbooks Controller
 // Individual Controller functions are wrapped in a larger function so that they can
@@ -92,6 +93,36 @@ const playbooksController = () => {
       this.body = {
         result: result[0],
         message: 'Successfully changed status.'
+      };
+    },
+
+    INSERT_SLIDE: function* () {
+
+      // Retrieve Current Playbook information
+      const playbook = yield this.models.Playbook.query().getPlaybookById(this.params.id);
+      const num =  Object.keys(playbook[0].doc).length;
+
+      // Create new playbook
+      const newPlaybook = Object.assign(
+        {},
+        playbook[0].doc, {
+          [num]: Object.assign(
+            {},
+            TEXT_SLIDE,
+            { slide_number: num }
+          )
+        }
+      );
+
+      // Edit slide in db
+      yield this.models.Playbook.query().putPlaybook({doc: newPlaybook}, this.params.id);
+
+      // Retrieve updated slide
+      const result = yield this.models.Playbook.query().getPlaybookById(this.params.id);
+      this.status = 200;
+      this.body = {
+        result: result[0],
+        message: 'Successfully inserted a new slide.'
       };
     }
 
