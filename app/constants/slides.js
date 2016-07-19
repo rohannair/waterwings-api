@@ -2,7 +2,7 @@
 
 module.exports = {
   // Blank intro slide template
-  introSlideTemplate: {
+  TEXT_SLIDE: {
       "type": "intro",
       "heading": "",
       "body": "<p></p>"

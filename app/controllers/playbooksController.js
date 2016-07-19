@@ -1,6 +1,6 @@
 // Deps
 const ApiError = require('../utils/customErrors');
-const playbookSlideTemplates = require('../utils/playbookSlideTemplates');
+const { TEXT_SLIDE } = require('../constants/slides');
 
 // Playbooks Controller
 // Individual Controller functions are wrapped in a larger function so that they can
@@ -90,16 +90,19 @@ const playbooksController = () => {
 
       // Retrieve Current Playbook information
       const playbook = yield this.models.Playbook.query().getPlaybookById(this.params.id);
-      const newSlideNumber =  Object.keys(playbook[0].doc).length;
+      const num =  Object.keys(playbook[0].doc).length;
 
-      // Get new blank slide
-      let introSlideTemplate = playbookSlideTemplates.introSlideTemplate;
-      introSlideTemplate.slide_number = newSlideNumber;
-
-      // Create new slide
-      let newSlide = {};
-      newSlide[`${newSlideNumber.toString()}`] = introSlideTemplate;
-      const newPlaybook = Object.assign(playbook[0].doc, newSlide);
+      // Create new playbook
+      const newPlaybook = Object.assign(
+        {},
+        playbook[0].doc, {
+          [num]: Object.assign(
+            {},
+            TEXT_SLIDE,
+            { slide_number: num }
+          )
+        }
+      );
 
       // Edit slide in db
       yield this.models.Playbook.query().putPlaybook({doc: newPlaybook}, this.params.id);
