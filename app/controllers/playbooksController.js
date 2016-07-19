@@ -1,5 +1,6 @@
 // Deps
 const ApiError = require('../utils/customErrors');
+const playbookSlideTemplates = require('../utils/playbookSlideTemplates');
 
 // Playbooks Controller
 // Individual Controller functions are wrapped in a larger function so that they can
@@ -86,19 +87,24 @@ const playbooksController = () => {
     },
 
     INSERT_SLIDE: function* () {
-      let introSlideTemplate = {
-          "slide_number": 0,
-          "type": "intro",
-          "heading": "",
-          "body": "<p></p>"
-        };
+
+      // Retrieve Current Playbook information
       const playbook = yield this.models.Playbook.query().getPlaybookById(this.params.id);
       const newSlideNumber =  Object.keys(playbook[0].doc).length;
+
+      // Get new blank slide
+      let introSlideTemplate = playbookSlideTemplates.introSlideTemplate;
       introSlideTemplate.slide_number = newSlideNumber;
-      const newSlide = {};
+
+      // Create new slide
+      let newSlide = {};
       newSlide[`${newSlideNumber.toString()}`] = introSlideTemplate;
       const newPlaybook = Object.assign(playbook[0].doc, newSlide);
+
+      // Edit slide in db
       yield this.models.Playbook.query().putPlaybook({doc: newPlaybook}, this.params.id);
+
+      // Retrieve updated slide
       const result = yield this.models.Playbook.query().getPlaybookById(this.params.id);
       this.status = 200;
       this.body = {
