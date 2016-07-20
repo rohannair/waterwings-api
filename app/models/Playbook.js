@@ -59,7 +59,7 @@ Playbook.jsonSchema = {
     updated_at  : { type: 'object' },
     deleted     : { type: 'boolean' },
     collaborators : { type: 'array' },
-    assigned    : { type: 'string' },
+    assigned    : { type: ['string', 'null'] },
     current_status : { type: 'string' },
     submitted_doc : {
                     type: 'object',
@@ -123,6 +123,15 @@ MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
       .where('playbooks.id', '=', `${playbookId}`)
       .where('playbooks.deleted', '=', 'false')
       .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
+};
+
+MyQueryBuilder.prototype.getPublishedPlaybookById = function (playbookId) {
+    return this
+      .select(
+        'playbooks.id', 'playbooks.name', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.percent_submitted'
+      )
+      .where('playbooks.id', '=', `${playbookId}`)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 

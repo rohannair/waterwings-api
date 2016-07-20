@@ -39,12 +39,15 @@ module.exports = function configure(router) {
   // File Service
   .post('/upload', fileServiceController.UPLOAD)
 
-  // Playbooks
-  .get('/playbooks/:id', playbooksController.GET_ONE)
+  // Public Playbooks
+  .get('/get_playbook/:id', playbooksController.PUBLIC_GET_ONE)
   .post('/playbooks', playbooksController.POST)
   .post('/playbooks/:id', playbooksController.PUT)
   .post('/playbooks/submit/:id', playbooksController.SUBMIT)
   .post('/playbooks/statusUpdate/:id', playbooksController.STATUS_UPDATE)
+
+  // Playbooks
+  .get('/playbooks/:id', middleware.tokenCheck, middleware.adminCheck,playbooksController.GET_ONE)
 
   // Users
   .post('/users/resetPassword/:userId', usersController.RESET_PASSWORD)
@@ -58,7 +61,6 @@ module.exports = function configure(router) {
   .get('/auth/google', middleware.tokenCheck, loginController.GOOGLE_LOGIN)
   .get('/auth/slack', middleware.tokenCheck, loginController.SLACK_LOGIN)
   .get('/auth/linkedIn', middleware.tokenCheck, loginController.LINKEDIN_LOGIN)
-
 
   // Roles
   .get('/roles', middleware.tokenCheck, rolesController.GET)
@@ -91,6 +93,6 @@ module.exports = function configure(router) {
   .get('/playbooks', middleware.tokenCheck, middleware.adminCheck, playbooksController.GET)
   .post('/playbooks/delete/:id', middleware.tokenCheck, middleware.adminCheck, playbooksController.DELETE)
   .post('/playbooks/duplicate', middleware.tokenCheck, middleware.adminCheck, playbooksController.DUPLICATE)
-
+  .post('/playbooks/addNewSlide/:id', middleware.tokenCheck, middleware.adminCheck, playbooksController.INSERT_SLIDE)
 
 };
