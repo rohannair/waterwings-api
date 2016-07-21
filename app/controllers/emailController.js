@@ -86,6 +86,7 @@ const emailController = () => {
 
       // Send Email
       const sparkPostRes = yield EmailSender(EmailToSend);
+      console.log('Email Sent');
 
       // Create record in Email Messages table for newly scheduled email
       yield this.models.EmailMessage.query().createEmailMessage(
@@ -98,6 +99,8 @@ const emailController = () => {
           scheduled_for: sendAt
         }
       );
+
+      console.log('Created an email message Record');
 
       // Update the status of the playbook
       yield this.models.Playbook.query().putPlaybook({current_status: 'scheduled'}, playbookId);
@@ -150,12 +153,17 @@ const emailController = () => {
       // Update the email_messages table to reflect that the email has now been sent
       yield this.models.EmailMessage.query().putEmailMessageByTransmissionId({sent: true, scheduled: false, sent_at}, transmissionId)
 
+      console.log('Updated Email Message Table');
       // Retrieve the playbookid from the email messaging table
       const message = this.models.EmailMessages.query().getEmailByTransmissionId(transmissionId);
+
+      console.log('Email MEssage record', message);
 
       // Create an empty submitted playbook and insert it into the database
       const playbook = yield this.models.Playbook.query().getPlaybookById(message[0].playbook_id);
       const newSubmittedDoc = yield createEmptySubmittedPlaybook(playbook[0]);
+
+      console.log('Created submitted Doc');
 
       // Update the playbook in the playbooks table
       yield this.models.Playbook.query().putPlaybook({submitted_doc: newSubmittedDoc, current_status: 'sent'}, message[0].playbook_id);

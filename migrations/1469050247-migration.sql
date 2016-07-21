@@ -1,7 +1,7 @@
 -- Migration July 20, 2016
 
 -- Add Email Message Table
-CREATE TABLE IF NOT EXISTS email_message_list (
+CREATE TABLE IF NOT EXISTS email_messages (
   id bigserial PRIMARY KEY,
   transmission_id varchar(255) NOT NULL,
   playbook_id varchar(255) NOT NULL,
