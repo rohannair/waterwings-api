@@ -81,6 +81,7 @@ const emailController = () => {
         // Format YYYY-MM-DDTHH:MM:SS±HH:MM,  Example: ‘2015-02-11T08:00:00-04:00’.
 
       const normalizedSendTime = moment(sendAt).format('YYYY-MM-DDTHH:MM:SSZ');
+      console.log(normalizedSendTime);
 
       EmailToSend.transmissionBody.options = { start_time: normalizedSendTime};
 
@@ -115,6 +116,9 @@ const emailController = () => {
       console.log('Web hook incoming');
 
       console.log('Body of Webhook', this.request.body);
+      console.log('Unix Time Stamp', this.request.body[0].msys.message_event.timestamp);
+      console.log('Human Time Stamp', moment.unix(this.request.body[0].msys.message_event.timestamp).format('MMM Do, h:mm A'))
+      console.log('Transmission Id', this.request.body[0].msys.message_event.transmission_id);
       // This function will recieve the webhook from spark post and then update the db
       // For the speicific email
 
