@@ -130,6 +130,12 @@ const emailController = () => {
 
       // Instead
 
+      this.status = 200;
+      this.body = {
+        // result: result[0],
+        message: `Email hook has been hit`
+      };
+
 
     },
 
