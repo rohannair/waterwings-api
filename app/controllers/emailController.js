@@ -52,19 +52,17 @@ const emailController = () => {
     },
 
     SCHEDULE_PLAYBOOK: function* () {
-
       const company = yield this.models.Company.query().getCompanyById(this.state.user.companyId);
       const { name } = company[0];
       const { userId, firstName, lastName, email, playbookId, emailTemplate, sendAt } = this.request.body;
 
-      // If playbook is not assigned to a user then auto assign to user that playbook is currently being
-      // sent to
+      // If playbook is not assigned to a user then auto assign to user that playbook is currently being sent to
+      const playbookToSend = yield this.models.Playbook.query().getPlaybookById(playbookId);
+      if (playbookToSend[0].assigned === null) {
+        yield this.models.Playbook.query().putPlaybook({assigned: userId}, playbookId);
+      }
 
-      // const playbookToSend = yield this.models.Playbook.query().getPlaybookById(playbookId);
-      // if (playbookToSend[0].assigned === null) {
-      //   yield this.models.Playbook.query().putPlaybook({assigned: userId}, playbookId);
-      // }
-
+      // Create Email
       const EmailToSend = yield EmailCreator({
           companyName: name,
           firstName,
@@ -86,63 +84,87 @@ const emailController = () => {
 
       EmailToSend.transmissionBody.options = { start_time: normalizedSendTime};
 
+      // Send Email
       const sparkPostRes = yield EmailSender(EmailToSend);
 
-      console.log('Spark Post Respone', sparkPostRes);
-      // Then I need to update the email_messages tabel
+      // Create record in Email Messages table for newly scheduled email
+      yield this.models.EmailMessage.query().createEmailMessage(
+        {
+          transmission_id: sparkPostRes.results.id,
+          playbook_id: playbookId,
+          user_id: userId,
+          company_id: this.state.user.companyId,
+          scheduled: true,
+          scheduled_for: sendAt
+        }
+      );
+
+      // Update the status of the playbook
+      yield this.models.Playbook.query().putPlaybook({current_status: 'scheduled'}, playbookId);
+      const result = yield this.models.Playbook.query().getPlaybookById(playbookId);
 
       this.status = 200;
       this.body = {
-        // result: result[0],
+        result: result[0],
         message: `Email has been scheduled for ${moment(sendAt).format('MMM Do, h:mm A')}`
       };
-
     },
-
 
     CANCEL_SCHEDULED_PLAYBOOK: function* () {
       // This will remove a email from sparkpost
+      const { playbookId } = this.request.body;
+
+      // TODO: Create the function that will remove the email from the spark post tranmission queue
+      // Then If successfull I can make the changes in the database
 
       // Now if we have sucessfully removed the email from the spark post schedule then
       // We can changes the status to canceled  in the email messages table
+      yield this.models.EmailMessage.query().putEmailMessageByPlaybookId({canceled: true, scheduled: false}, playbookId);
 
-      // Then we can change the status of the playbook to draft
+      // Change the email status back to draft
+      yield this.models.Playbook.query().putPlaybook({current_status: 'draft'}, playbookId);
+      const result = yield this.models.Playbook.query().getPlaybookById(playbookId);
 
-
+      this.status = 201;
+      this.body = {
+        result: result[0],
+        message: `Email has been canceled`
+      };
     },
 
 
     SCHEDULED_PLAYBOOK_SENT: function* () {
-
+      // TODO Current testing checks
       console.log('Web hook incoming');
-
       console.log('Body of Webhook', this.request.body);
       console.log('Unix Time Stamp', this.request.body[0].msys.message_event.timestamp);
       console.log('ISO Time', moment.unix(this.request.body[0].msys.message_event.timestamp).format('YYYY-MM-DDTHH:MM:SSZ'));
       console.log('Human Time Stamp', moment.unix(this.request.body[0].msys.message_event.timestamp).format('MMM Do, h:mm A'))
       console.log('Transmission Id', this.request.body[0].msys.message_event.transmission_id);
-      // This function will recieve the webhook from spark post and then update the db
-      // For the speicific email
+
+      // Proper Function Starts Here
+
+      const transmissionId = this.request.body[0].msys.message_event.transmission_id;
+      const sent_at = this.request.body[0].msys.message_event.timestamp;
 
       // Update the email_messages table to reflect that the email has now been sent
-      // yield this.models.email_message.query().putEmailTransaction('the transcation id', {sent: true})
+      yield this.models.EmailMessage.query().putEmailMessageByTransmissionId({sent: true, scheduled: false, sent_at}, transmissionId)
 
-      // Retrieve the playbook from the table
-      // const email = this.models.email_messages.query().getEmailByTransactionId('the transaction id');
+      // Retrieve the playbookid from the email messaging table
+      const message = this.models.EmailMessages.query().getEmailByTransmissionId(transmissionId);
 
-      // Now I need to change the status in the playbooks table
-      // yield this.models.Playbook.query().putPlaybook({current_status: 'sent'}, email[0].playbook_id);
+      // Create an empty submitted playbook and insert it into the database
+      const playbook = yield this.models.Playbook.query().getPlaybookById(message[0].playbook_id);
+      const newSubmittedDoc = yield createEmptySubmittedPlaybook(playbook[0]);
 
+      // Update the playbook in the playbooks table
+      yield this.models.Playbook.query().putPlaybook({submitted_doc: newSubmittedDoc, current_status: 'sent'}, message[0].playbook_id);
 
-      // Instead
-
+      // Return Status and message
       this.status = 200;
       this.body = {
-        // result: result[0],
-        message: `Email hook has been hit`
+        message: `Email has been sent and playbook has been updated`
       };
-
-
     },
 
     FORGOT_PASSWORD: function* () {
