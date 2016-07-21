@@ -64,7 +64,7 @@ EmailMessage.relationMappings = {
 
 // Custom Queries
 
-MyQueryBuilder.prototype.getEmailByTransmissionId = function (transmissionId) {
+MyQueryBuilder.prototype.getEmailMessageByTransmissionId = function (transmissionId) {
     return this
       .select(
         '*'
