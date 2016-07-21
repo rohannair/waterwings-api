@@ -76,7 +76,11 @@ const emailController = () => {
       // Assume that incoming start time will be a unix time stamp in (milli seconds)
       // Format of the start time that spark post accepts
       // Format YYYY-MM-DDTHH:MM:SS±HH:MM,  Example: ‘2015-02-11T08:00:00-04:00’.
-      const normalizedSendTime = moment(sendAt).format('YYYY-MM-DDTHH:MM:SSZ');
+      // const normalizedSendTime = moment(sendAt).format('YYYY-MM-DDTHH:MM:SSZ');
+      const normalizedSendTime = moment(sendAt).format();
+      console.log('Normalized Send Time', normalizedSendTime);
+
+
 
       EmailToSend.transmissionBody.options = { start_time: normalizedSendTime};
 
