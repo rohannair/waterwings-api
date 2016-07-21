@@ -148,7 +148,7 @@ const emailController = () => {
       // Proper Function Starts Here
 
       const transmissionId = this.request.body[0].msys.message_event.transmission_id;
-      const sent_at = this.request.body[0].msys.message_event.timestamp;
+      const sent_at = parseInt(this.request.body[0].msys.message_event.timestamp);
 
       // Update the email_messages table to reflect that the email has now been sent
       yield this.models.EmailMessage.query().putEmailMessageByTransmissionId({sent: true, scheduled: false, sent_at}, transmissionId)
