@@ -64,6 +64,16 @@ EmailMessage.relationMappings = {
 
 // Custom Queries
 
+MyQueryBuilder.prototype.getEmailMessageByPlaybookId = function (playbookId) {
+    return this
+      .select(
+        '*'
+      )
+      .where('playbook_id', '=', `${playbookId}`)
+      .then((result) => result)
+      .catch((err) => { throw new ApiError('Database Error', 500, err) });
+};
+
 MyQueryBuilder.prototype.getEmailMessageByTransmissionId = function (transmissionId) {
     return this
       .select(

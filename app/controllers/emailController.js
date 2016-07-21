@@ -1,6 +1,7 @@
 const ApiError = require('../utils/customErrors');
 const EmailCreator = require('../utils/mailer/emailCreator');
 const EmailSender = require('../utils/mailer/emailSender');
+const EmailDeleter = require('../utils/mailer/emailDeleter');
 const createEmptySubmittedPlaybook = require('../utils/createEmptySubmittedPlaybook');
 
 const moment = require('moment');
@@ -115,18 +116,15 @@ const emailController = () => {
     },
 
     CANCEL_SCHEDULED_PLAYBOOK: function* () {
-
-      // TODO: This is still a work in progress
-      // This will remove a email from sparkpost
       const { playbookId } = this.request.body;
 
-      // TODO: Create the function that will remove the email from the spark post tranmission queue
-      // Then If successfull I can make the changes in the database
+      // Retrieve the email message
+      const message = this.models.EmailMessage.query().getEmailMessageByPlaybookId(playbookId);
+
+      // Delete the email from the sparkpost queue
+      yield EmailDeleter(message[0].transmission_id);
 
       // Now if we have sucessfully removed the email from the spark post schedule then
-      // We can changes the status to canceled  in the email messages table
-
-      // TODO: make sure that I am deleteing all of the correct stuff
       yield this.models.EmailMessage.query().putEmailMessageByPlaybookId({canceled: true, scheduled: false}, playbookId);
 
       // Change the email status back to draft
@@ -148,10 +146,10 @@ const emailController = () => {
 
       // Update the email_messages table to reflect that the email has now been sent
       yield this.models.EmailMessage.query().putEmailMessageByTransmissionId({sent: true, scheduled: false, sent_at}, transmissionId)
-      console.log(transmissionId);
+
       // Retrieve the playbook id from the email messaging table
       const message = yield this.models.EmailMessage.query().getEmailMessageByTransmissionId(transmissionId);
-      console.log(message);
+
       // Create an empty submitted playbook and insert it into the database
       const playbook = yield this.models.Playbook.query().getPlaybookById(message[0].playbook_id);
       const newSubmittedDoc = yield createEmptySubmittedPlaybook(playbook[0]);
