@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS email_messages (
   scheduled boolean DEFAULT false,
   sent boolean DEFAULT false,
   canceled boolean DEFAULT false,
-  sent_at int,
-  scheduled_for int NOT NULL,
+  sent_at bigint,
+  scheduled_for bigint NOT NULL,
   created_at timestamptz DEFAULT now()
 );
 
