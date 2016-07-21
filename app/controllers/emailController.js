@@ -3,12 +3,14 @@ const EmailCreator = require('../utils/mailer/emailCreator');
 const EmailSender = require('../utils/mailer/emailSender');
 const createEmptySubmittedPlaybook = require('../utils/createEmptySubmittedPlaybook');
 
+const moment = require('moment');
+
 // Email Controller
 // Individual Controller functions are wrapped in a larger function so that they can
 // can be exported using modules.exports and then easily imported into the routes file
 const emailController = () => {
   return {
-    PLAYBOOK: function* () {
+    SEND_PLAYBOOK: function* () {
       const company = yield this.models.Company.query().getCompanyById(this.state.user.companyId);
       const { name } = company[0];
       const { userId, firstName, lastName, email, playbookId, emailTemplate } = this.request.body;
@@ -47,6 +49,88 @@ const emailController = () => {
         newSubmittedDoc,
         message: `Email has been sent to ${email}`
       };
+    },
+
+    SCHEDULE_PLAYBOOK: function* () {
+
+      const company = yield this.models.Company.query().getCompanyById(this.state.user.companyId);
+      const { name } = company[0];
+      const { userId, firstName, lastName, email, playbookId, emailTemplate, sendAt } = this.request.body;
+
+      // If playbook is not assigned to a user then auto assign to user that playbook is currently being
+      // sent to
+
+      // const playbookToSend = yield this.models.Playbook.query().getPlaybookById(playbookId);
+      // if (playbookToSend[0].assigned === null) {
+      //   yield this.models.Playbook.query().putPlaybook({assigned: userId}, playbookId);
+      // }
+
+      const EmailToSend = yield EmailCreator({
+          companyName: name,
+          firstName,
+          lastName,
+          email,
+          playbookId,
+          emailTemplate
+        });
+
+        // Add Schedule Date to the emailer
+        // Assume that incoming start time will be a unix time stamp in (milli seconds)
+
+        // Format of the start time that spark post accepts
+        // Format YYYY-MM-DDTHH:MM:SS±HH:MM,  Example: ‘2015-02-11T08:00:00-04:00’.
+
+      const normalizedSendTime = moment(sendAt).format('YYYY-MM-DDTHH:MM:SSZ');
+
+      EmailToSend.transmissionBody.options = { start_time: normalizedSendTime};
+
+      const sparkPostRes = yield EmailSender(EmailToSend);
+
+      console.log('Spark Post Respone', sparkPostRes);
+      // Then I need to update the email_messages tabel
+
+      this.status = 200;
+      this.body = {
+        // result: result[0],
+        message: `Email has been scheduled for ${moment(sendAt).format('MMM Do, h:mm A')}`
+      };
+
+    },
+
+
+    CANCEL_SCHEDULED_PLAYBOOK: function* () {
+      // This will remove a email from sparkpost
+
+      // Now if we have sucessfully removed the email from the spark post schedule then
+      // We can changes the status to canceled  in the email messages table
+
+      // Then we can change the status of the playbook to draft
+
+
+    },
+
+
+    SCHEDULED_PLAYBOOK_SENT: function* () {
+
+      console.log('Web hook incoming');
+
+      console.log('Body of Webhook', this.request.body);
+      // This function will recieve the webhook from spark post and then update the db
+      // For the speicific email
+
+      // Update the email_messages table to reflect that the email has now been sent
+      // yield this.models.email_message.query().putEmailTransaction('the transcation id', {sent: true})
+
+      // Retrieve the playbook from the table
+      // const email = this.models.email_messages.query().getEmailByTransactionId('the transaction id');
+
+      // Now I need to change the status in the playbooks table
+      // yield this.models.Playbook.query().putPlaybook({current_status: 'sent'}, email[0].playbook_id);
+
+
+      // Instead
+
+
     },
 
     FORGOT_PASSWORD: function* () {
