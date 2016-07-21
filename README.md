@@ -163,7 +163,11 @@ The first time you are setting up your repos you will need to go the following
 
 From then on You will be able to use just
 1. `$ heroku login`
-3. `$ git push staging dev:master`
+2. `$ git push staging dev:master`
+
+To deploy to a different branch to staging
+1. `$ heroku login`
+2. `$ git push staging 'local branch':master -f`
 
 ## Registering a new Customer
 
