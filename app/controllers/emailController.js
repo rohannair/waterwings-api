@@ -158,7 +158,7 @@ const emailController = () => {
 
       console.log(transmissionId)
 
-      const message = this.models.EmailMessages.query().getEmailByTransmissionId(transmissionId);
+      const message = this.models.EmailMessage.query().getEmailByTransmissionId(transmissionId);
 
       console.log('Email MEssage record', message);
 
