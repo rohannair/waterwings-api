@@ -72,21 +72,16 @@ const emailController = () => {
           emailTemplate
         });
 
-        // Add Schedule Date to the emailer
-        // Assume that incoming start time will be a unix time stamp in (milli seconds)
-
-        // Format of the start time that spark post accepts
-        // Format YYYY-MM-DDTHH:MM:SS±HH:MM,  Example: ‘2015-02-11T08:00:00-04:00’.
-
+      // Add Schedule Date to the emailer
+      // Assume that incoming start time will be a unix time stamp in (milli seconds)
+      // Format of the start time that spark post accepts
+      // Format YYYY-MM-DDTHH:MM:SS±HH:MM,  Example: ‘2015-02-11T08:00:00-04:00’.
       const normalizedSendTime = moment(sendAt).format('YYYY-MM-DDTHH:MM:SSZ');
-      console.log('ISO TIME', normalizedSendTime);
-      console.log('Human Time', moment(normalizedSendTime).format('MMM Do, h:mm A'));
 
       EmailToSend.transmissionBody.options = { start_time: normalizedSendTime};
 
       // Send Email
       const sparkPostRes = yield EmailSender(EmailToSend);
-      console.log('Email Sent');
 
       // Create record in Email Messages table for newly scheduled email
       yield this.models.EmailMessage.query().createEmailMessage(
@@ -99,8 +94,6 @@ const emailController = () => {
           scheduled_for: sendAt
         }
       );
-
-      console.log('Created an email message Record');
 
       // Update the status of the playbook
       yield this.models.Playbook.query().putPlaybook({current_status: 'scheduled'}, playbookId);
@@ -158,7 +151,7 @@ const emailController = () => {
 
       console.log(transmissionId)
 
-      const message = this.models.EmailMessage.query().getEmailByTransmissionId(transmissionId);
+      const message = yield this.models.EmailMessage.query().getEmailByTransmissionId(transmissionId);
 
       console.log('Email MEssage record', message);
 
