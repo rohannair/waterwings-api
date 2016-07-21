@@ -155,6 +155,9 @@ const emailController = () => {
 
       console.log('Updated Email Message Table');
       // Retrieve the playbookid from the email messaging table
+
+      console.log(transmissionId)
+
       const message = this.models.EmailMessages.query().getEmailByTransmissionId(transmissionId);
 
       console.log('Email MEssage record', message);

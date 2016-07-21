@@ -64,12 +64,12 @@ EmailMessage.relationMappings = {
 
 // Custom Queries
 
-MyQueryBuilder.prototype.getEmailByTransmissionId= function (transmissionId) {
+MyQueryBuilder.prototype.getEmailByTransmissionId = function (transmissionId) {
     return this
       .select(
         '*'
       )
-      .where('id', '=', `${transmissionId}`)
+      .where('transmission_id', '=', `${transmissionId}`)
       .then((result) => result)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
