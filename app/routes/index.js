@@ -10,6 +10,7 @@ const companiesController = require('../controllers/companiesController')();
 const usersController  = require('../controllers/usersController')();
 const rolesController = require('../controllers/rolesController')();
 const playbooksController = require('../controllers/playbooksController')();
+const playbooksJoinsController = require('../controllers/playbookJoinsController')();
 const fileServiceController = require('../controllers/fileServiceController')();
 const emailController = require('../controllers/emailController')();
 
@@ -26,6 +27,8 @@ module.exports = function configure(router) {
       message: 'Welcome to the Quartermaster API'
     };
   })
+
+  .post('/assignPlaybook', playbooksJoinsController.POST)
 
   // Login
   .post('/login', loginController.LOGIN)
