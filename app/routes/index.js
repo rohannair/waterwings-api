@@ -92,7 +92,7 @@ module.exports = function configure(router) {
   // Emails
   .post('/playbook/send', middleware.tokenCheck, middleware.adminCheck, emailController.SEND_PLAYBOOK)
   .post('/playbook/schedule', middleware.tokenCheck, middleware.adminCheck, emailController.SCHEDULE_PLAYBOOK)
-  .post('/playbooks/schedule/cancel', middleware.tokenCheck, middleware.adminCheck, emailController.CANCEL_SCHEDULED_PLAYBOOK)
+  .post('/playbook/schedule/cancel', middleware.tokenCheck, middleware.adminCheck, emailController.CANCEL_SCHEDULED_PLAYBOOK)
 
   // Playbooks
   .get('/playbooks', middleware.tokenCheck, middleware.adminCheck, playbooksController.GET)

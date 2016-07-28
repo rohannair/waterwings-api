@@ -1,5 +1,6 @@
 const EmailClient = require('./mailerConfig');
 const ApiError = require('./../customErrors');
+const https = require('https');
 
 // Function to delete a scheduled email transmission
 module.exports = (transmissionId) => {

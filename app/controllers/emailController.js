@@ -108,7 +108,7 @@ const emailController = () => {
       yield this.models.Playbook.query().putPlaybook({current_status: 'scheduled'}, playbookId);
       const result = yield this.models.Playbook.query().getPlaybookById(playbookId);
 
-      this.status = 200;
+      this.status = 201;
       this.body = {
         result: result[0],
         message: `Email has been scheduled for ${moment(sendAt).format('MMM Do, h:mm A')}`
@@ -119,7 +119,7 @@ const emailController = () => {
       const { playbookId } = this.request.body;
 
       // Retrieve the email message
-      const message = this.models.EmailMessage.query().getEmailMessageByPlaybookId(playbookId);
+      const message = yield this.models.EmailMessage.query().getEmailMessageByPlaybookId(playbookId);
 
       // Delete the email from the sparkpost queue
       yield EmailDeleter(message[0].transmission_id);
@@ -137,7 +137,6 @@ const emailController = () => {
         message: `Email has been canceled`
       };
     },
-
 
     SCHEDULED_PLAYBOOK_SENT: function* () {
       // Retrieve the transmission id and sent at time from the request

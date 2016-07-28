@@ -100,9 +100,10 @@ Playbook.relationMappings = {
 MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000) {
     return this
       .select(
-        'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.updated_at','playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
+        'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.updated_at','playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName', 'email_messages.scheduled_for as scheduledFor'
       )
       .leftJoin('users', 'playbooks.assigned', 'users.id')
+      .leftJoin('email_messages', 'playbooks.id', 'email_messages.playbook_id')
       .where('playbooks.deleted', '=', 'false')
       .where('playbooks.company_id', '=', `${companyId}`)
       .orderBy('playbooks.created_at', 'asc')
@@ -116,10 +117,11 @@ MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
       .select(
         'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.current_status', 'playbooks.percent_submitted',
         'users.id as userId', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.is_admin',
-        'roles.name as rolename'
+        'roles.name as rolename', 'email_messages.scheduled_for as scheduledFor'
       )
       .leftJoin('users', 'playbooks.assigned', 'users.id')
       .leftJoin('roles', 'users.role_id', 'roles.id')
+      .leftJoin('email_messages', 'playbooks.id', 'email_messages.playbook_id')
       .where('playbooks.id', '=', `${playbookId}`)
       .where('playbooks.deleted', '=', 'false')
       .then((result) => result)
