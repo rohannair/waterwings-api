@@ -106,9 +106,6 @@ MyQueryBuilder.prototype.getAll = function () {
 
 MyQueryBuilder.prototype.getCompanyById = function (id) {
     return this
-      .select(
-        'name'
-      )
       .where('companies.deleted', '=', 'false')
       .where('companies.id', '=', `${id}`)
       .then((result) => result)
