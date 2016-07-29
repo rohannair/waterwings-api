@@ -71,6 +71,7 @@ app.use(function* (next) {
   }
   catch(err) {
     this.log.info('ERROR: ' + err.systemError );
+    this.log.info('ERROR: ' + err.stack );
     this.status = err.status || 500;
     this.body = {
       message: err.message || 'Internal Server Error'
