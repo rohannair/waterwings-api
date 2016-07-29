@@ -28,37 +28,47 @@ EmailMessage.jsonSchema = {
   required: ['transmission_id', 'playbook_id', 'user_id', 'company_id', 'scheduled_for'],
 
   properties: {
-    id             : { type: 'integer' },
-    transmission_id      : { type: 'string' },
-    playbook_id : { type: 'string' },
+    id              : { type: 'integer' },
+    transmission_id : { type: 'string' },
+    playbook_id     : { type: 'string' },
     user_id         : { type: 'string' },
-    company_id       : { type: 'string' },
-    scheduled     : { type: 'boolean' },
-    sent     : { type: 'boolean' },
-    canceled     : { type: 'boolean' },
-    sent_at    : { type: 'integer' },
-    scheduled_for  : { type: 'integer' }
+    company_id      : { type: 'string' },
+    scheduled       : { type: 'boolean' },
+    sent            : { type: 'boolean' },
+    canceled        : { type: 'boolean' },
+    sent_at         : { type: 'integer' },
+    scheduled_for   : { type: 'integer' }
   }
 };
 
 EmailMessage.relationMappings = {
-  // company: {
-  //   relation: Model.OneToOneRelation,
-  //   modelClass: __dirname + '/Company',
-  //   join: {
-  //     from: 'users.company_id',
-  //     to: 'companies.id'
-  //   }
-  // },
-  //
-  // role: {
-  //   relation: Model.OneToOneRelation,
-  //   modelClass: __dirname + '/Role',
-  //   join: {
-  //     from: 'users.role_id',
-  //     to: 'roles.id'
-  //   }
-  // }
+
+  company: {
+    relation: Model.OneToOneRelation,
+    modelClass: __dirname + '/Company',
+    join: {
+      from: 'email_messages.company_id',
+      to: 'companies.id'
+    }
+  },
+
+  users: {
+    relation: Model.OneToOneRelation,
+    modelClass: __dirname + '/User',
+    join: {
+      from: 'email_messages.user_id',
+      to: 'users.id'
+    }
+  },
+
+  playbooks: {
+    relation: Model.OneToOneRelation,
+    modelClass: __dirname + '/Playbook',
+    join: {
+      from: 'email_messages.playbook_id',
+      to: 'playbooks.id'
+    }
+  }
 
 };
 

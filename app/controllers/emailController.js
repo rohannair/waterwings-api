@@ -13,7 +13,7 @@ const emailController = () => {
   return {
     SEND_PLAYBOOK: function* () {
       const company = yield this.models.Company.query().getCompanyById(this.state.user.companyId);
-      const { name } = company[0];
+      const companyName = company[0].name;
       const { userId, firstName, lastName, email, playbookId, emailTemplate } = this.request.body;
 
       // If playbook is not assigned to a user then auto assign to user that playbook is currently being
@@ -24,7 +24,7 @@ const emailController = () => {
       }
 
       const EmailToSend = yield EmailCreator({
-          companyName: name,
+          companyName,
           firstName,
           lastName,
           email,
@@ -64,7 +64,7 @@ const emailController = () => {
 
     SCHEDULE_PLAYBOOK: function* () {
       const company = yield this.models.Company.query().getCompanyById(this.state.user.companyId);
-      const { name } = company[0];
+      const companyName = company[0].name;
       const { userId, firstName, lastName, email, playbookId, emailTemplate, sendAt } = this.request.body;
 
       // If playbook is not assigned to a user then auto assign to user that playbook is currently being sent to
@@ -75,7 +75,7 @@ const emailController = () => {
 
       // Create Email
       const EmailToSend = yield EmailCreator({
-          companyName: name,
+          companyName,
           firstName,
           lastName,
           email,

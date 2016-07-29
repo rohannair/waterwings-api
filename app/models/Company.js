@@ -78,6 +78,15 @@ Company.relationMappings = {
       from: 'companies.id',
       to: 'playbooks.company_id'
     }
+  },
+
+  email_messages: {
+    relation: Model.OneToManyRelation,
+    modelClass: __dirname + '/EmailMessage',
+    join: {
+      from: 'companies.id',
+      to: 'email_messages.company_id'
+    }
   }
 
 };
@@ -97,6 +106,9 @@ MyQueryBuilder.prototype.getAll = function () {
 
 MyQueryBuilder.prototype.getCompanyById = function (id) {
     return this
+      .select(
+        'name'
+      )
       .where('companies.deleted', '=', 'false')
       .where('companies.id', '=', `${id}`)
       .then((result) => result)

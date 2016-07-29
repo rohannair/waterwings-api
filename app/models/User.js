@@ -89,6 +89,15 @@ User.relationMappings = {
       from: 'users.role_id',
       to: 'roles.id'
     }
+  },
+
+  email_messages: {
+    relation: Model.OneToManyRelation,
+    modelClass: __dirname + '/EmailMessage',
+    join: {
+      from: 'users.id',
+      to: 'email_messages.user_id'
+    }
   }
 
 };
