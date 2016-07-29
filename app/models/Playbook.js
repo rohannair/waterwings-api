@@ -115,7 +115,7 @@ MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000)
       .leftJoin('email_messages', 'playbooks.id', 'email_messages.playbook_id')
       .where('playbooks.deleted', '=', 'false')
       .where('playbooks.company_id', '=', `${companyId}`)
-      .orderBy('playbooks.created_at', 'asc')
+      .orderBy('playbooks.updated_at', 'desc')
       .range(+offset, (+offset) + (+limit) - 1)
       .then((result) => result)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
