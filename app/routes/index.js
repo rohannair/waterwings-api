@@ -28,8 +28,6 @@ module.exports = function configure(router) {
     };
   })
 
-  .post('/assignPlaybook', playbooksJoinsController.POST)
-
   // Login
   .post('/login', loginController.LOGIN)
 
@@ -51,6 +49,7 @@ module.exports = function configure(router) {
 
   // Playbooks
   .get('/playbooks/:id', middleware.tokenCheck, middleware.adminCheck,playbooksController.GET_ONE)
+  .post('/assignPlaybook', middleware.tokenCheck, middleware.adminCheck,playbooksJoinsController.POST)
 
   // Users
   .post('/users/resetPassword/:userId', usersController.RESET_PASSWORD)

@@ -5,17 +5,15 @@ const playbookJoinsController = () => {
 
   return {
     POST: function* () {
-      if ((!this.request.body.userId) || (!this.request.body.playbookId)) {
-        this.status = 400;
-        this.body = {
-          message: 'Please enter both valid userId and playbookId'
-        }
-        return;
+      const { userId, playbookId } = this.request.body;
+
+      if ((!userId) || (!playbookId)) {
+        throw new ApiError('Please enter both valid userId and playbookId', 400, 'Invalid/Missing userID or playbookId ');
       }
 
       const result = yield this.models.PlaybookJoin.query().post({
-        user_id: this.request.body.userId,
-        playbook_id: this.request.body.playbookId
+        user_id: userId,
+        playbook_id: playbookId
       });
 
       this.status = 201;
