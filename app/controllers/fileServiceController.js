@@ -1,9 +1,10 @@
 // Deps
 const AWS = require('aws-sdk');
+const crypto = require('crypto');
+const Jimp = require('jimp');
 const multipart = require('co-multipart');
 const readFile = require('fs-readfile-promise');
-const Jimp = require('jimp');
-const crypto = require('crypto');
+const sanitize = require('sanitize-filename');
 
 // Utils
 const ApiError = require('../utils/customErrors');
@@ -14,9 +15,7 @@ const fileServiceController = () => {
     UPLOAD: function* () {
       const parts = yield* multipart(this);
       const file = parts.files[0];
-
       const fileType = file.mimeType.split('/');
-      console.log(JSON.stringify(fileType, null, 4));
 
       if (fileType[0] !== 'image') {
         throw new ApiError('Forbidden file type!', 400, 'Only accepting images at this time');
@@ -33,21 +32,24 @@ const fileServiceController = () => {
           })
         ));
 
-      const fileName = file.filename
+      // Sanitize
+      const fileNameArray = file.filename
         .toLowerCase()
-        .split(' ').join('_');
+        .replace(/ /g, '_')
+        .split('.')
+        .map(str => sanitize(str));
 
-      return;
-        // .split('.')
-        // .map(str => str.toLowerCase())
-        // .map(str => str.split(' ').join('_'))
-        // .join('.');
+      // Adding hash to title for caching reasons
+      const fileName = [
+        ...fileNameArray.slice(0, fileNameArray.length - 1),
+        (crypto.createHash('md5').update((new Date()).toString()).digest('hex')),
+        ...fileNameArray.slice(fileNameArray.length - 1)
+      ].join('.');
 
-      // Now we construct the S3 bucket
       const s3 = new AWS.S3();
       const params = {
         Bucket: process.env.AWS_BUCKET,
-        Key: crypto.createHash('md5').update(fileName).digest('hex'),
+        Key: fileName,
         Body: processedFile,
         ContentType: processedFile._originalMime
       };
