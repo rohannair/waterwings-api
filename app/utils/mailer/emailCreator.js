@@ -11,19 +11,24 @@ module.exports = (payload) => {
   switch(emailTemplate) {
     case 'welcomeEmail':
       // Create link
-      const welcomeLink = `http://${process.env.DOMAIN}/playbook/${payload.playbookId}?from_email=${payload.email}`;
+      let welcomeLink = `http://${process.env.DOMAIN}/playbook/${payload.playbookId}?from_email=${payload.email}`;
       // Construct email
       return selectedTemplate[0].template(payload.firstName, payload.lastName, payload.companyName, payload.email, welcomeLink );
 
     case 'forgotPasswordEmail':
       // Create link
-      const forgotPasswordLink = `http://${process.env.DOMAIN}/users/resetPassword/${payload.userId}`;
+      let forgotPasswordLink = `http://${process.env.DOMAIN}/users/resetPassword/${payload.userId}`;
       // Construct Email
       return selectedTemplate[0].template(payload.firstName, payload.lastName, payload.email, forgotPasswordLink);
+
+    case 'generalEmail':
+      // Create link
+      let generalLink = `http://${process.env.DOMAIN}/playbook/${payload.playbookId}?from_email=${payload.email}`;
+      // Construct Email
+      return selectedTemplate[0].template(payload.firstName, payload.lastName, payload.companyName, payload.email, generalLink);
 
     default:
       throw new ApiError('Error sending email', 400, 'Selected Email template does not exist');
   }
 
-  // return completedEmail;
 }
