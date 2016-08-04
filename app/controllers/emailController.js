@@ -11,6 +11,7 @@ const moment = require('moment');
 // can be exported using modules.exports and then easily imported into the routes file
 const emailController = () => {
   return {
+
     SEND_PLAYBOOK: function* () {
       const company = yield this.models.Company.query().getCompanyById(this.state.user.companyId);
       const { name } = company[0];
