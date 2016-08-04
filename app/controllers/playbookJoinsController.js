@@ -14,7 +14,11 @@ const playbookJoinsController = () => {
       const result = yield this.models.PlaybookJoin.query().destroy(playbookId
       );
 
-      this.status = 204;
+      this.status = 202;
+      this.body = {
+        message: `Deleted ${result} record`,
+        id: playbookId
+      };
     },
 
     POST: function* () {
