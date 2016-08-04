@@ -1,5 +1,6 @@
 // Functions to authenticate with Slack OAuth2 Scheme
-const https = require('https');
+const fetch = require('isomorphic-fetch');
+const fetchHelpers = require('./../http-helpers');
 
 function urlGenerator(userId) {
   return new Promise((resolve, reject) => {
@@ -23,16 +24,10 @@ function getTokens(code) {
                 $redirect_uri=${process.env.SLACK_REDIRECT_URI}
               `;
 
-  return new Promise((resolve, reject) => {
-    https.get( url, (res) => {
-      res.on('data', (d) => {
-        resolve(d);
-      });
-
-    }).on('error', (err) => {
-      reject( new ApiError('Problem linking Slack Account', 500, err));
-    });
-  })
+  return fetch(url)
+    .then(fetchHelpers.checkStatus)
+    .then(fetchHelpers.parseJSON)
+    .catch(err => new ApiError('Problem linking Slack Account', 500, err) );
 }
 
 module.exports = {

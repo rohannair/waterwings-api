@@ -1,5 +1,5 @@
 // Deps
-const fetch = require('node-fetch');
+const fetch = require('isomorphic-fetch');
 const ApiError = require('./customErrors');
 
 // Utilities to create new DNS records with DNS providers
