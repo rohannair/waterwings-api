@@ -24,9 +24,4 @@ function retry_strategy(options) {
   return Math.max(options.attempt * 100, 3000);
 }
 
-module.exports = () => {
-   return redis.createClient({
-     url: process.env.REDIS_URL,
-    retry_strategy
-  });
-};
+module.exports = () => redis.createClient({ url: process.env.REDIS_URL, retry_strategy});

@@ -34,7 +34,6 @@ function getTokens(code) {
     })
     .then(fetchHelpers.checkStatus)
     .then(fetchHelpers.parseJSON)
-    .then(res => res)
     .catch(err => new ApiError('Problem connecting to LinkedIn', 500, err) );
 }
 

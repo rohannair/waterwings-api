@@ -65,7 +65,6 @@ function getUserGoogleInfo(token) {
       })
       .then(fetchHelpers.checkStatus)
       .then(fetchHelpers.parseJSON)
-      .then(res => res)
       .catch(err => new ApiError('Problem connecting to Google', 500, err) );
 }
 

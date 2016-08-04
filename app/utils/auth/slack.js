@@ -27,7 +27,6 @@ function getTokens(code) {
   return fetch(url)
     .then(fetchHelpers.checkStatus)
     .then(fetchHelpers.parseJSON)
-    .then(res => res)
     .catch(err => new ApiError('Problem linking Slack Account', 500, err) );
 }
 
