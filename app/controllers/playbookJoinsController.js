@@ -4,6 +4,19 @@ const ApiError = require('../utils/customErrors');
 const playbookJoinsController = () => {
 
   return {
+    DELETE: function* () {
+      const { playbookId } = this.request.body;
+
+      if ((!playbookId)) {
+        throw new ApiError('Please enter valid playbookId', 400, 'Invalid/Missing playbookId ');
+      }
+
+      const result = yield this.models.PlaybookJoin.query().destroy(playbookId
+      );
+
+      this.status = 204;
+    },
+
     POST: function* () {
       const { userId, playbookId } = this.request.body;
 

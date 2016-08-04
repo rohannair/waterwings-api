@@ -49,7 +49,8 @@ module.exports = function configure(router) {
 
   // Playbooks
   .get('/playbooks/:id', middleware.tokenCheck, middleware.adminCheck,playbooksController.GET_ONE)
-  .post('/assignPlaybook', middleware.tokenCheck, middleware.adminCheck,playbooksJoinsController.POST)
+  .post('/playbooks/assign', middleware.tokenCheck, middleware.adminCheck,playbooksJoinsController.POST)
+  .post('/playbooks/assign/delete', middleware.tokenCheck, middleware.adminCheck,playbooksJoinsController.DELETE)
 
   // Users
   .post('/users/resetPassword/:userId', usersController.RESET_PASSWORD)

@@ -109,15 +109,17 @@ Playbook.relationMappings = {
 MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000) {
     return this
       .select(
-        'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.updated_at','playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName', 'email_messages.scheduled_for as scheduledFor'
+        'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'pj.user_id as assigned', 'playbooks.submitted_doc', 'playbooks.updated_at','playbooks.current_status', 'playbooks.percent_submitted',
+          'u.first_name as firstName', 'u.last_name as lastName',
+          'email_messages.scheduled_for as scheduledFor'
       )
-      .leftJoin('users', 'playbooks.assigned', 'users.id')
+      .leftJoin('playbook_joins AS pj', 'playbooks.id', 'pj.playbook_id')
+      .leftJoin('users AS u', 'pj.user_id', 'u.id')
       .leftJoin('email_messages', 'playbooks.id', 'email_messages.playbook_id')
       .where('playbooks.deleted', '=', 'false')
-      .where('playbooks.company_id', '=', `${companyId}`)
+      .where('playbooks.company_id', '=', companyId)
       .orderBy('playbooks.updated_at', 'desc')
       .range(+offset, (+offset) + (+limit) - 1)
-      .then((result) => result)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
