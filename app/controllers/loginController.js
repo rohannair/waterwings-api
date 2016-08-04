@@ -48,7 +48,7 @@ const loginController = () => {
       );
       const user = yield this.models.User.query().getUserById(this.query.state);
       this.status = 301;
-      this.redirect(`http://${user[0].companyDomain}.${process.env.DOMAIN}/dashboard`);
+      this.redirect(`http://${user.companyDomain}.${process.env.DOMAIN}/dashboard`);
     },
 
 
@@ -71,7 +71,7 @@ const loginController = () => {
       );
       const user = yield this.models.User.query().getUserById(this.query.state);
       this.status = 301;
-      this.redirect(`http://${user[0].companyDomain}.${process.env.DOMAIN}/dashboard`);
+      this.redirect(`http://${user.companyDomain}.${process.env.DOMAIN}/dashboard`);
     },
 
     SLACK_LOGIN: function* () {
