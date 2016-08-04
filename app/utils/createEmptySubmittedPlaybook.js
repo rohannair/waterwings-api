@@ -1,5 +1,5 @@
-module.exports = (playbook) => {
-  return (new Promise((resolve, reject) => {
+module.exports = (playbook) =>
+  (new Promise((resolve, reject) => {
 
     let newSubmittedDoc = {};
 
@@ -49,4 +49,3 @@ module.exports = (playbook) => {
 
     resolve(newSubmittedDoc);
   }));
-}
