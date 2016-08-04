@@ -1,7 +1,8 @@
 // Functions to authenticate with LinkedIn OAuth2 Scheme
-const https = require('https');
 const querystring = require('querystring');
 const ApiError = require('../customErrors');
+const fetch = require('isomorphic-fetch');
+const fetchHelpers = require('./../http-helpers');
 
 function urlGenerator(userId) {
   return new Promise((resolve, reject) => {
@@ -14,7 +15,7 @@ function urlGenerator(userId) {
 
 function getTokens(code) {
 
-  const payload = querystring.stringify({
+  const formData = querystring.stringify({
     'grant_type' : 'authorization_code',
     'code' : code,
     'redirect_uri' : process.env.LINKEDIN_REDIRECT_URI,
@@ -22,34 +23,18 @@ function getTokens(code) {
     'client_secret' : process.env.LINKEDIN_CLIENT_SECRET
   });
 
-  const options = {
-    hostname: 'www.linkedin.com',
-    path: '/oauth/v2/accessToken',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Accept': 'application/json',
-      'Content-Length': Buffer.byteLength(payload)
-    }
-  };
-
-  return new Promise((resolve, reject) => {
-    const req = https.request(options, (res) => {
-      res.setEncoding('utf8');
-      res.on('data', (data) => {
-        resolve(JSON.parse(data));
-      });
-      res.on('end', () => {
-      })
-    });
-
-    req.on('error', (err) => {
-      reject( new ApiError('Error accessing Linked In', 500, err));
+  return fetch('https://www.linkedin.com/oauth/v2/accessToken', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'Accept': 'application/json',
+        'Content-Length': Buffer.byteLength(formData),
+      },
+      body: formData
     })
-
-    req.write(payload);
-    req.end();
-  })
+    .then(fetchHelpers.checkStatus)
+    .then(fetchHelpers.parseJSON)
+    .catch(err => new ApiError('Problem connecting to LinkedIn', 500, err) );
 }
 
 module.exports = {
