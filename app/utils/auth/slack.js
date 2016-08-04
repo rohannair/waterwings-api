@@ -1,5 +1,4 @@
 // Functions to authenticate with Slack OAuth2 Scheme
-// const https = require('https');
 const fetch = require('isomorphic-fetch');
 const fetchHelpers = require('./../http-helpers');
 

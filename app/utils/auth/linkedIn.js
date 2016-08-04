@@ -23,7 +23,6 @@ function getTokens(code) {
     'client_secret' : process.env.LINKEDIN_CLIENT_SECRET
   });
 
-// May need to use FormData instead of stringified json in the body
   return fetch('https://www.linkedin.com/oauth/v2/accessToken', {
       method: 'POST',
       headers: {
