@@ -143,8 +143,9 @@ MyQueryBuilder.prototype.getPlaybookById = function (companyId, playbookId) {
 MyQueryBuilder.prototype.getPublishedPlaybookById = function(playbookId) {
     return this
       .select(
-        'playbooks.id', 'playbooks.name', 'playbooks.doc', 'playbooks.submitted_doc', 'playbooks.percent_submitted'
+        'playbooks.id', 'playbooks.name', 'playbooks.doc', 'playbooks.submitted_doc', 'playbooks.percent_submitted', 'pj.user_id AS assigned'
       )
+      .leftJoin('playbook_joins AS pj', 'playbooks.id', 'pj.playbook_id')
       .where('playbooks.id', '=', `${playbookId}`)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
