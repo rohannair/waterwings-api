@@ -5,7 +5,7 @@ module.exports = (firstName, lastName, email, link) => {
           {
             transmissionBody: {
               content: {
-                from: 'password_reset@qrtrmstr.com',
+                from: 'no-reply@qrtrmstr.com',
                 subject: 'Quartermaster Password Reset',
                 html:
                     `
