@@ -140,10 +140,10 @@ MyQueryBuilder.prototype.getPlaybookById = function (companyId, playbookId) {
     .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
-MyQueryBuilder.prototype.getPublishedPlaybookById = function (playbookId) {
+MyQueryBuilder.prototype.getPublishedPlaybookById = function(playbookId) {
     return this
       .select(
-        'playbooks.id', 'playbooks.name', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.percent_submitted'
+        'playbooks.id', 'playbooks.name', 'playbooks.doc', 'playbooks.submitted_doc', 'playbooks.percent_submitted'
       )
       .where('playbooks.id', '=', `${playbookId}`)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
