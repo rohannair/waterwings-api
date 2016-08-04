@@ -23,12 +23,11 @@ PlaybookJoin.QueryBuilder = MyQueryBuilder;
 PlaybookJoin.RelatedQueryBuilder = MyQueryBuilder;
 
 // Timestamp functions
-PlaybookJoin.prototype.$beforeInsert = function () {
-
+PlaybookJoin.prototype.$beforeInsert = function() {
   this.created_at = new Date().toUTCString();
 };
 
-PlaybookJoin.prototype.$beforeUpdate = function () {
+PlaybookJoin.prototype.$beforeUpdate = function() {
   this.updated_at = new Date().toUTCString();
 };
 

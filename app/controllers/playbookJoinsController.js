@@ -11,8 +11,7 @@ const playbookJoinsController = () => {
         throw new ApiError('Please enter valid playbookId', 400, 'Invalid/Missing playbookId ');
       }
 
-      const result = yield this.models.PlaybookJoin.query().destroy(playbookId
-      );
+      const result = yield this.models.PlaybookJoin.query().destroy(playbookId);
 
       this.status = 202;
       this.body = {
