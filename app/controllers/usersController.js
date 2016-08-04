@@ -1,6 +1,8 @@
 // Deps
 const encrypt = require('../utils/encryption');
 const ApiError = require('../utils/customErrors');
+const EmailCreator = require('../utils/mailer/emailCreator');
+const EmailSender = require('../utils/mailer/emailSender');
 
 // Users Controller
 // Individual Controller functions are wrapped in a larger function so that they can
@@ -14,11 +16,34 @@ const usersController = () => {
     },
 
     POST: function* () {
-      // TODO: Consider moving the password hashing into the model
       const hash = yield encrypt.encryptPassword(this.request.body.password);
       this.request.body.password = hash
       const newUser = yield this.models.User.query().postUser(Object.assign(this.request.body, {company_id: this.state.user.companyId}));
       const result = yield this.models.User.query().getUserById(newUser.id);
+
+      // If the newly created user is an admin then we send out an admin welcome email
+      if(result.is_admin) {
+
+        // Retrieve the senders information
+        const sender = yield this.models.User.query().getUserById(this.state.user.userId);
+
+        // Create email
+        const EmailToSend = yield EmailCreator({
+            companyDomain: sender.companyDomain,
+            companyName: sender.companyName,
+            senderFirstName: sender.firstName,
+            senderLastName: sender.lastName,
+            firstName: result.firstName,
+            lastName: result.lastName,
+            email: result.username,
+            password: `${result.firstName.toLowerCase()}123`,
+            emailTemplate: 'newAdminEmail'
+          });
+
+          // Send Email
+          yield EmailSender(EmailToSend);
+      }
+
       this.status = 201;
       this.body = result;
     },
