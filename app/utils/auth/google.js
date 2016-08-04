@@ -1,7 +1,8 @@
 const google = require('googleapis');
 const OAuth2 = google.auth.OAuth2;
 const ApiError = require('../customErrors');
-const https = require('https');
+const fetch = require('isomorphic-fetch');
+const fetchHelpers = require('./../http-helpers');
 
 // Create Google Auth Client
 const oauth2Client = new OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET, process.env.GOOGLE_AUTH_CALLBACK_URL);
@@ -57,22 +58,15 @@ function googleClient(tokens) {
 
 function getUserGoogleInfo(token) {
 
-  let options = {
-    hostname: 'googleapis.com',
-    path: '/oauth2/v2/userinfo',
-    method: 'GET',
-    headers: {
+  return fetch('googleapis.com/oauth2/v2/userinfo', {
       'Content-length': '0',
       'Accept': 'application/json',
       'Authorization': `Bearer ${token}`
-    }
-  };
-
-  return new Promise(function(resolve, reject) {
-    https.request( options, (res) => {
-      res.on('data', (d) =>  { resolve(JSON.parse(d)) } );
-    }).on('error', (err) => { reject( new ApiError('Problem connecting to Google', 500, err)) });
-  });
+      })
+      .then(fetchHelpers.checkStatus)
+      .then(fetchHelpers.parseJSON)
+      .then(res => res)
+      .catch(err => new ApiError('Problem connecting to Google', 500, err) );
 }
 
 module.exports = {

@@ -129,7 +129,7 @@ MyQueryBuilder.prototype.getUserById = function (userId) {
       .leftJoin('companies as c', 'users.company_id', 'c.id')
       .where('users.id', '=', `${userId}`)
       .where('users.deleted', '=', 'false')
-      .then((result) => result[0])
+      .then((result) => result)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 

@@ -41,14 +41,14 @@ const loginController = () => {
       const result = yield this.models.User.query().putUser(
         {
           google_user_token: token.access_token,
-          google_refresh_token: token.refresh_token || null,
+          google_refresh_token: token.refresh_token || '',
           google_account_linked: true
         },
         this.query.state
       );
       const user = yield this.models.User.query().getUserById(this.query.state);
       this.status = 301;
-      this.redirect(`http://${user.companyDomain}.${process.env.DOMAIN}/dashboard`);
+      this.redirect(`http://${user[0].companyDomain}.${process.env.DOMAIN}/dashboard`);
     },
 
 
@@ -71,7 +71,7 @@ const loginController = () => {
       );
       const user = yield this.models.User.query().getUserById(this.query.state);
       this.status = 301;
-      this.redirect(`http://${user.companyDomain}.${process.env.DOMAIN}/dashboard`);
+      this.redirect(`http://${user[0].companyDomain}.${process.env.DOMAIN}/dashboard`);
     },
 
     SLACK_LOGIN: function* () {
