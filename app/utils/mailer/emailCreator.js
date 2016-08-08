@@ -27,6 +27,12 @@ module.exports = (payload) => {
       // Construct Email
       return selectedTemplate[0].template(payload.firstName, payload.lastName, payload.companyName, payload.email, generalLink);
 
+    case 'newAdminEmail':
+      // Create link
+      let adminLink = `http://${payload.companyDomain}.${process.env.DOMAIN}/login`;
+      // Construct Email
+      return selectedTemplate[0].template(payload.firstName, payload.lastName, payload.email, payload.password, payload.companyName, payload.senderFirstName, payload.senderLastName, adminLink);
+
     default:
       throw new ApiError('Error sending email', 400, 'Selected Email template does not exist');
   }
