@@ -10,7 +10,6 @@ const companiesController = require('../controllers/companiesController')();
 const usersController  = require('../controllers/usersController')();
 const rolesController = require('../controllers/rolesController')();
 const playbooksController = require('../controllers/playbooksController')();
-const playbooksJoinsController = require('../controllers/playbookJoinsController')();
 const fileServiceController = require('../controllers/fileServiceController')();
 const emailController = require('../controllers/emailController')();
 
@@ -49,8 +48,6 @@ module.exports = function configure(router) {
 
   // Playbooks
   .get('/playbooks/:id', middleware.tokenCheck, middleware.adminCheck,playbooksController.GET_ONE)
-  .post('/playbooks/assign', middleware.tokenCheck, middleware.adminCheck,playbooksJoinsController.POST)
-  .post('/playbooks/assign/delete', middleware.tokenCheck, middleware.adminCheck,playbooksJoinsController.DELETE)
 
   // Users
   .post('/users/resetPassword/:userId', usersController.RESET_PASSWORD)
