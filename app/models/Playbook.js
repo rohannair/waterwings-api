@@ -109,39 +109,43 @@ Playbook.relationMappings = {
 MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000) {
     return this
       .select(
-        'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.updated_at','playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName', 'email_messages.scheduled_for as scheduledFor'
+        'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.submitted_doc', 'playbooks.updated_at','playbooks.current_status', 'playbooks.percent_submitted',
+        'pj.user_id AS assigned',
+        'e.scheduled_for AS scheduledFor'
       )
-      .leftJoin('users', 'playbooks.assigned', 'users.id')
-      .leftJoin('email_messages', 'playbooks.id', 'email_messages.playbook_id')
+      .leftJoin('playbook_joins AS pj', 'playbooks.id', 'pj.playbook_id')
+      .leftJoin('users AS u', 'pj.user_id', 'u.id')
+      .leftJoin('email_messages AS e', 'playbooks.id', 'e.playbook_id')
       .where('playbooks.deleted', '=', 'false')
-      .where('playbooks.company_id', '=', `${companyId}`)
+      .where('playbooks.company_id', '=', companyId)
       .orderBy('playbooks.updated_at', 'desc')
       .range(+offset, (+offset) + (+limit) - 1)
-      .then((result) => result)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
-MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
-    return this
-      .select(
-        'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.current_status', 'playbooks.percent_submitted',
-        'users.id as userId', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.is_admin',
-        'roles.name as rolename', 'email_messages.scheduled_for as scheduledFor'
-      )
-      .leftJoin('users', 'playbooks.assigned', 'users.id')
-      .leftJoin('roles', 'users.role_id', 'roles.id')
-      .leftJoin('email_messages', 'playbooks.id', 'email_messages.playbook_id')
-      .where('playbooks.id', '=', `${playbookId}`)
-      .where('playbooks.deleted', '=', 'false')
-      .then((result) => result)
-      .catch((err) => { throw new ApiError('Database Error', 500, err) });
+MyQueryBuilder.prototype.getPlaybookById = function (companyId, playbookId) {
+  return this
+    .select(
+      'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.submitted_doc', 'playbooks.current_status', 'playbooks.percent_submitted',
+      'pj.user_id AS assigned',
+      'email_messages.scheduled_for AS scheduledFor'
+    )
+    .leftJoin('playbook_joins AS pj', 'playbooks.id', 'pj.playbook_id')
+    .leftJoin('users AS u', 'pj.user_id', 'u.id')
+    .leftJoin('email_messages', 'playbooks.id', 'email_messages.playbook_id')
+    .where('playbooks.deleted', '=', 'false')
+    .where('playbooks.id', '=', playbookId)
+    .where('playbooks.company_id', '=', companyId)
+    .then((result) => result)
+    .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
-MyQueryBuilder.prototype.getPublishedPlaybookById = function (playbookId) {
+MyQueryBuilder.prototype.getPublishedPlaybookById = function(playbookId) {
     return this
       .select(
-        'playbooks.id', 'playbooks.name', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.percent_submitted'
+        'playbooks.id', 'playbooks.name', 'playbooks.doc', 'playbooks.submitted_doc', 'playbooks.percent_submitted', 'pj.user_id AS assigned'
       )
+      .leftJoin('playbook_joins AS pj', 'playbooks.id', 'pj.playbook_id')
       .where('playbooks.id', '=', `${playbookId}`)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
