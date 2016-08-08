@@ -89,6 +89,15 @@ Playbook.relationMappings = {
       from: 'playbooks.role_id',
       to: 'roles.id'
     }
+  },
+
+  email_messages: {
+    relation: Model.OneToManyRelation,
+    modelClass: __dirname + '/EmailMessage',
+    join: {
+      from: 'playbooks.id',
+      to: 'email_messages.playbook_id'
+    }
   }
 
 };
@@ -100,12 +109,13 @@ Playbook.relationMappings = {
 MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000) {
     return this
       .select(
-        'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.updated_at','playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName'
+        'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.updated_at','playbooks.current_status', 'playbooks.percent_submitted', 'users.first_name as firstName', 'users.last_name as lastName', 'email_messages.scheduled_for as scheduledFor'
       )
       .leftJoin('users', 'playbooks.assigned', 'users.id')
+      .leftJoin('email_messages', 'playbooks.id', 'email_messages.playbook_id')
       .where('playbooks.deleted', '=', 'false')
       .where('playbooks.company_id', '=', `${companyId}`)
-      .orderBy('playbooks.created_at', 'asc')
+      .orderBy('playbooks.updated_at', 'desc')
       .range(+offset, (+offset) + (+limit) - 1)
       .then((result) => result)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
@@ -116,10 +126,11 @@ MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
       .select(
         'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.assigned', 'playbooks.submitted_doc', 'playbooks.current_status', 'playbooks.percent_submitted',
         'users.id as userId', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.is_admin',
-        'roles.name as rolename'
+        'roles.name as rolename', 'email_messages.scheduled_for as scheduledFor'
       )
       .leftJoin('users', 'playbooks.assigned', 'users.id')
       .leftJoin('roles', 'users.role_id', 'roles.id')
+      .leftJoin('email_messages', 'playbooks.id', 'email_messages.playbook_id')
       .where('playbooks.id', '=', `${playbookId}`)
       .where('playbooks.deleted', '=', 'false')
       .then((result) => result)
@@ -145,7 +156,7 @@ MyQueryBuilder.prototype.postPlaybook = function (data) {
 
 MyQueryBuilder.prototype.putPlaybook = function (data, playbookId) {
     return this
-      .where('current_status', '=', 'draft')
+      .where('current_status', '<', 'sent')
       .where({ id: playbookId })
       .patch(data)
       .returning('id')

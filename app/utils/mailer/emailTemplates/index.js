@@ -4,6 +4,9 @@
 
 const welcomeEmail = require('./welcomeEmail');
 const forgotPasswordEmail = require('./forgotPasswordEmail');
+const generalEmail = require('./generalEmail');
+const newAdminEmail = require('./newAdminEmail');
+
 let Emails = []
 Emails.push(
   {
@@ -13,6 +16,14 @@ Emails.push(
   {
     name: 'forgotPasswordEmail',
     template: forgotPasswordEmail
+  },
+  {
+    name: 'generalEmail',
+    template: generalEmail
+  },
+  {
+    name: 'newAdminEmail',
+    template: newAdminEmail
   }
 );
 

@@ -1,8 +1,8 @@
+// If prod, add new relic monitoring
+if (process.env.NODE_ENV === 'production') require('newrelic');
+
 // Configs
-if( process.env.NODE_ENV === 'development') {
-  require('dotenv').config();
-}
-global.Promise = require('bluebird');
+if( process.env.NODE_ENV === 'development' ) require('dotenv').config();
 
 // Dependencies
 const Koa        = require('koa');
@@ -10,23 +10,26 @@ const Router     = require('koa-router');
 const bouncer    = require('koa-bouncer');
 const bodyParser = require('koa-bodyparser');
 const helmet     = require('koa-helmet');
+const ratelimit  = require('koa-ratelimit');
 const jwt        = require('koa-jwt');
 const unless     = require('koa-unless');
 const logger     = require('./utils/logger');
 const chalk      = require('chalk');
 const db         = require('./knexfile');
+const redis      = require('./redis');
 const ApiError   = require('./utils/customErrors');
 const fs         = require('fs');
 const http       = require('http');
-const Promise    = require('bluebird').Promise;
+global.Promise    = require('bluebird').Promise;
 
 // Instantiate app
 const app     = module.exports = Koa();
 const appPort = process.env.PORT || 3000;
 app.poweredBy = false;
 
-// Add database connection
-app.context.db = db();
+// Add database connections
+app.context.db = db(); // Postgres
+app.context.redis = redis(); // Redis
 
 // App Middleware
 app.use(helmet());
@@ -45,6 +48,21 @@ app.use(function* (next) {
   yield* next;
   this.log.info('RESPONSE: ' + this.response.status);
 });
+
+// Rate Limiter
+// Duration: length of limit in milliseconds
+// Max: max # of requests within duration
+app.use(ratelimit({
+  db: redis(),
+  duration: process.env.RATE_LIMIT_DURATION,
+  max: process.env.RATE_LIMIT_MAX,
+  id: (ctx) => ctx.ip,
+  headers: {
+    remaining: 'X-Rate-Limit-Remaining',
+    reset: 'X-Rate-Limit-Reset',
+    total: 'X-Rate-Limit-Total'
+  }
+}));
 
 // Central Error Handling
 app.use(function* (next) {
@@ -67,7 +85,8 @@ app.use(function* (next) {
     Company: require('./models/Company').bindKnex(this.db),
     User: require('./models/User').bindKnex(this.db),
     Role: require('./models/Role').bindKnex(this.db),
-    Playbook: require('./models/Playbook').bindKnex(this.db)
+    Playbook: require('./models/Playbook').bindKnex(this.db),
+    EmailMessage: require('./models/EmailMessage').bindKnex(this.db)
   };
   yield* next;
 });

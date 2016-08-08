@@ -55,6 +55,9 @@ module.exports = function configure(router) {
   .get('/callback/auth/linkedIn', loginController.LINKEDIN_AUTH_CODE)
   .get('/callback/auth/slack', loginController.SLACK_AUTH_CODE)
 
+  // Emails
+  .post('/sparkpost/webhook/emailSent', emailController.SCHEDULED_PLAYBOOK_SENT)
+
   // TOKEN Routes (Require a Token)
 
   // Login to other Services
@@ -87,7 +90,9 @@ module.exports = function configure(router) {
   .post('/users/delete/:id', middleware.tokenCheck, middleware.adminCheck, usersController.DELETE)
 
   // Emails
-  .post('/playbook/send', middleware.tokenCheck, middleware.adminCheck, emailController.PLAYBOOK)
+  .post('/playbook/send', middleware.tokenCheck, middleware.adminCheck, emailController.SEND_PLAYBOOK)
+  .post('/playbook/schedule', middleware.tokenCheck, middleware.adminCheck, emailController.SCHEDULE_PLAYBOOK)
+  .post('/playbook/schedule/cancel', middleware.tokenCheck, middleware.adminCheck, emailController.CANCEL_SCHEDULED_PLAYBOOK)
 
   // Playbooks
   .get('/playbooks', middleware.tokenCheck, middleware.adminCheck, playbooksController.GET)
