@@ -202,17 +202,7 @@ INSERT INTO users (id, username, password, is_admin, first_name, last_name, pers
   (gen_random_uuid(), 'erlich@pied.piper', crypt('password', gen_salt('bf')), false, 'Erlich', 'Bachman', 'erlich@example.com','nGLHsVI', 2, null),
   (gen_random_uuid(), 'jared@pied.piper', crypt('password', gen_salt('bf')), true, 'Jared', 'Dunn', 'jared@example.com','nGLHsVI', 3, null),
   (gen_random_uuid(), 'gilfoyle@pied.piper', crypt('password', gen_salt('bf')), false, 'Bertram', 'Gilfoyle', 'gilfoyle@example.com', 'nGLHsVI', 4, null),
-  (gen_random_uuid(), 'dinesh@pied.piper', crypt('password', gen_salt('bf')), false, 'Dinesh', 'Chugtai', 'dinesh@example.com', 'nGLHsVI', 4, null),
-  (gen_random_uuid(), 'krishna@pied.piper', crypt('password', gen_salt('bf')), false, 'Krishna', 'Ticknor', 'krishna@example.com', 'nGLHsVI', 4, null),
-  (gen_random_uuid(), 'joellen@pied.piper', crypt('password', gen_salt('bf')), false, 'Joellen', 'Mask', 'joellen@example.com', 'nGLHsVI', 4, null),
-  (gen_random_uuid(), 'nina@pied.piper', crypt('password', gen_salt('bf')), false, 'Nina', 'Ashford', 'nina@example.com', 'nGLHsVI', 4, null),
-  (gen_random_uuid(), 'lisette@pied.piper', crypt('password', gen_salt('bf')), false, 'Lisette', 'Hoff', 'lisette@example.com', 'nGLHsVI', 4, null),
-  (gen_random_uuid(), 'stanford@pied.piper', crypt('password', gen_salt('bf')), false, 'Stanford', 'Pfau', 'stanford@example.com','nGLHsVI', 4, null),
-  (gen_random_uuid(), 'etha@pied.piper', crypt('password', gen_salt('bf')), false, 'Etha', 'Skillings', 'etha@example.com', 'nGLHsVI', 4, null),
-  (gen_random_uuid(), 'stevie@pied.piper', crypt('password', gen_salt('bf')), false, 'Stevie', 'Wimsatt', 'stevie@example.com', 'nGLHsVI', 4, null),
-  (gen_random_uuid(), 'rhona@pied.piper', crypt('password', gen_salt('bf')), false, 'Rhona', 'Dessert', 'rhona@example.com', 'nGLHsVI', 4, null),
-  (gen_random_uuid(), 'renata@pied.piper', crypt('password', gen_salt('bf')), false, 'Renata', 'Rashid', 'renata@example.com', 'nGLHsVI', 4, null),
-  (gen_random_uuid(), 'paris@pied.piper', crypt('password', gen_salt('bf')), false, 'Paris', 'Manuelito', 'paris@example.com', 'nGLHsVI', 4, null);
+  (gen_random_uuid(), 'dinesh@pied.piper', crypt('password', gen_salt('bf')), false, 'Dinesh', 'Chugtai', 'dinesh@example.com', 'nGLHsVI', 4, null);
 
   INSERT INTO playbook_joins (user_id, playbook_id, role_id) VALUES
   (
