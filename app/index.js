@@ -113,7 +113,6 @@ app
 app.use(function* () {
   this.status = 200;
   this.body = {
-    ctx: this,
     message: 'Welcome to the Quartermaster API'
   };
 });
