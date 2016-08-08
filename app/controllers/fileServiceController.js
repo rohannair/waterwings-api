@@ -6,6 +6,8 @@ const multipart = require('co-multipart');
 const readFile = require('fs-readfile-promise');
 const sanitize = require('sanitize-filename');
 
+const config = require('../../config/imageSettings');
+
 // Utils
 const ApiError = require('../utils/customErrors');
 
@@ -23,8 +25,8 @@ const fileServiceController = () => {
 
       const processedFile = yield readFile(file.path)
         .then(buffer => Jimp.read(buffer))
-        .then(img => img.resize(450, 450))
-        .then(img => img.quality(85))
+        .then(img => img.resize(config.DEFAULTHEIGHT, config.DEFAULTWIDTH))
+        .then(img => img.quality(defaultWidth.QUALITY))
         .then(img => new Promise((resolve, reject) =>
           img.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
             if (err) return reject(err);
