@@ -11,7 +11,7 @@
     "db:create_migration": "sh ./scripts/create_migration.sh",
     "db:migrate": "export PGPASSWORD=password; ./migrations/migrations.sh localhost quartermasterdb root",
     "seed:company": "export PGPASSWORD=password; psql -h localhost -d quartermasterdb -U root -f ./seeds/companySeed.sql",
-    "db:drop": "export PGPASSWORD=password; ./dropTable.sh localhost quartermasterdb root",
+    "db:drop": "export PGPASSWORD=password; ./scripts/dropTable.sh localhost quartermasterdb root",
     "db:recreate": "npm run db:drop; npm run db:migrate; npm run seed:company",
     "start": "NODE_ENV=production node ./app/index.js | ./node_modules/.bin/bunyan -o short",
     "dev": "NODE_ENV=development DEBUG=koa:* ./node_modules/.bin/nodemon ./app/index.js | ./node_modules/.bin/bunyan -o short",
