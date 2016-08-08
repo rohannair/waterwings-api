@@ -1,8 +1,8 @@
+// If prod, add new relic monitoring
+if (process.env.NODE_ENV === 'production') require('newrelic');
+
 // Configs
-if( process.env.NODE_ENV === 'development') {
-  require('dotenv').config();
-}
-global.Promise = require('bluebird');
+if( process.env.NODE_ENV === 'development' ) require('dotenv').config();
 
 // Dependencies
 const Koa        = require('koa');
@@ -20,7 +20,7 @@ const redis      = require('./redis');
 const ApiError   = require('./utils/customErrors');
 const fs         = require('fs');
 const http       = require('http');
-const Promise    = require('bluebird').Promise;
+global.Promise    = require('bluebird').Promise;
 
 // Instantiate app
 const app     = module.exports = Koa();
