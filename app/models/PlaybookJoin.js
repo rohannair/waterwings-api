@@ -80,7 +80,6 @@ MyQueryBuilder.prototype.get = function(id) {
   return this
     .where('playbook_id', '=', id)
     .catch((err) => {
-      console.error(err.stack);
       throw new ApiError('Database Error', 500, err);
     });
 };
@@ -89,7 +88,6 @@ MyQueryBuilder.prototype.post = function(data) {
   return this
     .insert(data)
     .catch((err) => {
-      console.error(err.stack);
       throw new ApiError('Database Error', 500, err);
     });
 };
@@ -99,7 +97,6 @@ MyQueryBuilder.prototype.destroy = function(id) {
     .del()
     .where('playbook_id', '=', id)
     .catch((err) => {
-      console.error(err.stack);
       throw new ApiError('Database Error', 500, err);
     });
 };
