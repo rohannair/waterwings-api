@@ -76,10 +76,10 @@ const playbooksController = () => {
       const numSubmittedSlides = Object.keys(this.request.body.submitted_doc).filter((val, ind) => this.request.body.submitted_doc[val].submitted === true ).length;
       const percent_submitted =  Math.round((numSubmittedSlides / Object.keys(this.request.body.submitted_doc).length) * 100) / 100;
       yield this.models.Playbook.query().submitPlaybook(Object.assign(this.request.body, { percent_submitted }), this.params.id);
-      const result = yield this.models.Playbook.query().getPlaybookById(this.params.id);
+      const result = yield this.models.Playbook.query().getPublishedPlaybookById(this.params.id);
       this.status = 200;
       this.body = {
-        result: result[0],
+        playbook: result[0],
         message: 'Successfully submit.'
       };
     },
