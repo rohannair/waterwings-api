@@ -123,7 +123,7 @@ MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000)
       .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
-MyQueryBuilder.prototype.getPlaybookById = function (companyId, playbookId) {
+MyQueryBuilder.prototype.getPlaybookById = function (playbookId) {
   return this
     .select(
       'playbooks.id', 'playbooks.name', 'playbooks.description', 'playbooks.company_id', 'playbooks.doc', 'playbooks.submitted_doc', 'playbooks.current_status', 'playbooks.percent_submitted',
@@ -135,7 +135,6 @@ MyQueryBuilder.prototype.getPlaybookById = function (companyId, playbookId) {
     .leftJoin('email_messages', 'playbooks.id', 'email_messages.playbook_id')
     .where('playbooks.deleted', '=', 'false')
     .where('playbooks.id', '=', playbookId)
-    .where('playbooks.company_id', '=', companyId)
     .then((result) => result)
     .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };

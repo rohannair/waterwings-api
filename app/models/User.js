@@ -176,7 +176,7 @@ MyQueryBuilder.prototype.getUserwithPasswordByUsername = function (name) {
       .catch((err) => { throw new ApiError('Can not find a user with that username', 500, err) });
 };
 
-MyQueryBuilder.prototype.postUser = function (data) {
+MyQueryBuilder.prototype.postUser = function(data) {
     return this
       .insert(Object.assign(data, {id: uuid.v4()} ))
       .then((result) => result)

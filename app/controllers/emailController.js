@@ -43,7 +43,7 @@ const emailController = () => {
       );
 
       // Create an empty submitted playbook and insert it into the database
-      const PlaybookToBeSent = yield this.models.Playbook.query().getPlaybookById(this.state.user.companyId, playbookId);
+      const PlaybookToBeSent = yield this.models.Playbook.query().getPlaybookById(playbookId);
 
       const playbookAssignment = yield this.models.PlaybookJoin.query().get(playbookId);
       if (playbookAssignment.length === 0) {
@@ -56,7 +56,7 @@ const emailController = () => {
       const newSubmittedDoc = yield createEmptySubmittedPlaybook(PlaybookToBeSent[0]);
       yield this.models.Playbook.query().putPlaybook({submitted_doc: newSubmittedDoc, current_status: 'sent' }, playbookId);
 
-      const result = yield this.models.Playbook.query().getPlaybookById(this.state.user.companyId, playbookId);
+      const result = yield this.models.Playbook.query().getPlaybookById(playbookId);
 
       this.status = 200;
       this.body = {
@@ -72,7 +72,7 @@ const emailController = () => {
       const { userId, firstName, lastName, email, playbookId, emailTemplate, sendAt } = this.request.body;
 
       // If playbook is not assigned to a user then auto assign to user that playbook is currently being sent to
-      const playbookToSend = yield this.models.Playbook.query().getPlaybookById(this.state.user.companyId, playbookId);
+      const playbookToSend = yield this.models.Playbook.query().getPlaybookById(playbookId);
       if (playbookToSend[0].assigned === null) {
         yield this.models.Playbook.query().putPlaybook({assigned: userId}, playbookId);
       }
@@ -110,7 +110,7 @@ const emailController = () => {
 
       // Update the status of the playbook
       yield this.models.Playbook.query().putPlaybook({current_status: 'scheduled'}, playbookId);
-      const result = yield this.models.Playbook.query().getPlaybookById(this.state.user.companyId, playbookId);
+      const result = yield this.models.Playbook.query().getPlaybookById(playbookId);
 
       this.status = 201;
       this.body = {
@@ -133,7 +133,7 @@ const emailController = () => {
 
       // Change the email status back to draft
       yield this.models.Playbook.query().putPlaybook({current_status: 'draft'}, playbookId);
-      const result = yield this.models.Playbook.query().getPlaybookById(this.state.user.companyId, playbookId);
+      const result = yield this.models.Playbook.query().getPlaybookById(playbookId);
 
       this.status = 201;
       this.body = {
@@ -154,7 +154,7 @@ const emailController = () => {
       const message = yield this.models.EmailMessage.query().getEmailMessageByTransmissionId(transmissionId);
 
       // Create an empty submitted playbook and insert it into the database
-      const playbook = yield this.models.Playbook.query().getPlaybookById(this.state.user.companyId, message[0].playbook_id);
+      const playbook = yield this.models.Playbook.query().getPlaybookById(message[0].playbook_id);
       const newSubmittedDoc = yield createEmptySubmittedPlaybook(playbook[0]);
 
       // Update the playbook in the playbooks table

@@ -13,7 +13,7 @@ const playbooksController = () => {
     },
 
     GET_ONE: function* () {
-      const result = yield this.models.Playbook.query().getPlaybookById(this.state.user.companyId, this.params.id);
+      const result = yield this.models.Playbook.query().getPlaybookById(this.params.id);
 
       this.status = 200;
       this.body = {
