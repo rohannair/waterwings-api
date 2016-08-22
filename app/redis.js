@@ -8,7 +8,7 @@ bluebird.promisifyAll(redis.Multi.prototype);
 
 // Retry Strategy
 function retry_strategy(options) {
-  if (options.error.code === 'ECONNREFUSED') {
+  if (options.error && options.error.code === 'ECONNREFUSED') {
       // End reconnecting on a specific error and flush all commands with a individual error
       return new Error('The server refused the connection');
   }
