@@ -69,7 +69,8 @@ User.jsonSchema = {
     slack_user_token : { type: 'string' },
     slack_account_linked : { type: 'boolean' },
     linkedin_user_token : { type: 'string' },
-    linkedin_account_linked : { type: 'boolean' }
+    linkedin_account_linked : { type: 'boolean' },
+    start_date: { type: 'integer' }
   }
 };
 
