@@ -11,5 +11,4 @@ then
   exit 1
 fi
 
-
-psql -h $dbhost -d $db -U $dbuser -f ./dropTable.sql
+psql -h $dbhost -d $db -U $dbuser -f ./scripts/dropTable.sql

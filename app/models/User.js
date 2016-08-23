@@ -1,4 +1,5 @@
 // User model
+const knex = require('knex');
 const Model = require('objection').Model;
 const QueryBuilder = require('objection').QueryBuilder;
 const uuid = require('node-uuid');
@@ -107,17 +108,37 @@ User.relationMappings = {
 // Set a limit of 1000 users per call if no limit is provided
 // TODO: Need to figure out what limit we should use
 MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000) {
-    return this
-      .select(
-        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.profile_img', 'users.is_admin', 'users.google_account_linked', 'r.name as rolename'
-      )
-      .leftJoin('roles as r', 'users.role_id', 'r.id')
-      .where('users.deleted', '=', 'false')
-      .where('users.company_id', '=', `${companyId}`)
-      .orderBy('users.updated_at', 'desc')
-      .range(+offset, (+offset) + (+limit) - 1)
-      .then((result) => result)
-      .catch((err) => { throw new ApiError('Database Error', 500, err) });
+  return this
+    .select(
+      'users.id',
+      'users.username',
+      'users.first_name as firstName',
+      'users.last_name as lastName',
+      'users.profile_img',
+      'users.is_admin',
+      'users.google_account_linked',
+      'r.name as rolename',
+      knex.raw(`
+        (SELECT ARRAY
+          (
+            SELECT row_to_json(r)
+            FROM (
+              SELECT p.id, p.name
+              FROM playbook_joins pj
+              LEFT JOIN playbooks p
+              ON pj.playbook_id = p.id
+            ) r
+          )
+        as assigned_playbooks)
+      `)
+    )
+    .leftJoin('roles as r', 'users.role_id', 'r.id')
+    .where('users.deleted', '=', 'false')
+    .where('users.company_id', '=', companyId)
+    .orderBy('users.updated_at', 'desc')
+    .range(+offset, (+offset) + (+limit) - 1)
+    .then((result) => result)
+    .catch((err) => { throw new ApiError('Database Error', 500, err) });
 };
 
 MyQueryBuilder.prototype.getUserById = function (userId) {
@@ -155,7 +176,7 @@ MyQueryBuilder.prototype.getUserwithPasswordByUsername = function (name) {
       .catch((err) => { throw new ApiError('Can not find a user with that username', 500, err) });
 };
 
-MyQueryBuilder.prototype.postUser = function (data) {
+MyQueryBuilder.prototype.postUser = function(data) {
     return this
       .insert(Object.assign(data, {id: uuid.v4()} ))
       .then((result) => result)

@@ -14,21 +14,19 @@ const playbooksController = () => {
 
     GET_ONE: function* () {
       const result = yield this.models.Playbook.query().getPlaybookById(this.params.id);
-      const {id, name, description, company_id, doc, assigned, submitted_doc, current_status, percent_submitted, userId, username, firstName, lastName, is_admin, rolename } = result[0];
+
       this.status = 200;
       this.body = {
-        playbook: {id, name, description, company_id, doc, assigned, submitted_doc, current_status, percent_submitted},
-        users: [{ userId, username, firstName, lastName, is_admin, rolename }]
+        playbook: result[0]
       };
     },
 
     PUBLIC_GET_ONE: function* () {
       const result = yield this.models.Playbook.query().getPublishedPlaybookById(this.params.id);
-      const {id, name, description, company_id, doc, assigned, submitted_doc, current_status, percent_submitted, userId, username, firstName, lastName, is_admin, rolename } = result[0];
+
       this.status = 200;
       this.body = {
-        playbook: {id, name, description, company_id, doc, assigned, submitted_doc, current_status, percent_submitted},
-        users: [{ userId, username, firstName, lastName, is_admin, rolename }]
+        playbook: result[0]
       };
     },
 
@@ -78,10 +76,10 @@ const playbooksController = () => {
       const numSubmittedSlides = Object.keys(this.request.body.submitted_doc).filter((val, ind) => this.request.body.submitted_doc[val].submitted === true ).length;
       const percent_submitted =  Math.round((numSubmittedSlides / Object.keys(this.request.body.submitted_doc).length) * 100) / 100;
       yield this.models.Playbook.query().submitPlaybook(Object.assign(this.request.body, { percent_submitted }), this.params.id);
-      const result = yield this.models.Playbook.query().getPlaybookById(this.params.id);
+      const result = yield this.models.Playbook.query().getPublishedPlaybookById(this.params.id);
       this.status = 200;
       this.body = {
-        result: result[0],
+        playbook: result[0],
         message: 'Successfully submit.'
       };
     },

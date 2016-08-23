@@ -17,13 +17,6 @@ const emailController = () => {
       const { name } = company[0];
       const { userId, firstName, lastName, email, playbookId, emailTemplate } = this.request.body;
 
-      // If playbook is not assigned to a user then auto assign to user that playbook is currently being
-      // sent to
-      const playbookToSend = yield this.models.Playbook.query().getPlaybookById(playbookId);
-      if (playbookToSend[0].assigned === null) {
-        yield this.models.Playbook.query().putPlaybook({assigned: userId}, playbookId);
-      }
-
       const EmailToSend = yield EmailCreator({
           companyName: name,
           firstName,
@@ -51,8 +44,18 @@ const emailController = () => {
 
       // Create an empty submitted playbook and insert it into the database
       const PlaybookToBeSent = yield this.models.Playbook.query().getPlaybookById(playbookId);
+
+      const playbookAssignment = yield this.models.PlaybookJoin.query().get(playbookId);
+      if (playbookAssignment.length === 0) {
+        yield this.models.PlaybookJoin.query().post({
+          user_id: userId,
+          playbook_id: playbookId
+        });
+      }
+
       const newSubmittedDoc = yield createEmptySubmittedPlaybook(PlaybookToBeSent[0]);
       yield this.models.Playbook.query().putPlaybook({submitted_doc: newSubmittedDoc, current_status: 'sent' }, playbookId);
+
       const result = yield this.models.Playbook.query().getPlaybookById(playbookId);
 
       this.status = 200;
