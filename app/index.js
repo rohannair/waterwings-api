@@ -52,17 +52,17 @@ app.use(function* (next) {
 // Rate Limiter
 // Duration: length of limit in milliseconds
 // Max: max # of requests within duration
-app.use(ratelimit({
-  db: redis(),
-  duration: process.env.RATE_LIMIT_DURATION,
-  max: process.env.RATE_LIMIT_MAX,
-  id: (ctx) => ctx.ip,
-  headers: {
-    remaining: 'X-Rate-Limit-Remaining',
-    reset: 'X-Rate-Limit-Reset',
-    total: 'X-Rate-Limit-Total'
-  }
-}));
+// app.use(ratelimit({
+//   db: redis(),
+//   duration: process.env.RATE_LIMIT_DURATION,
+//   max: process.env.RATE_LIMIT_MAX,
+//   id: (ctx) => ctx.ip,
+//   headers: {
+//     remaining: 'X-Rate-Limit-Remaining',
+//     reset: 'X-Rate-Limit-Reset',
+//     total: 'X-Rate-Limit-Total'
+//   }
+// }));
 
 // Central Error Handling
 app.use(function* (next) {

@@ -69,7 +69,8 @@ User.jsonSchema = {
     slack_user_token : { type: 'string' },
     slack_account_linked : { type: 'boolean' },
     linkedin_user_token : { type: 'string' },
-    linkedin_account_linked : { type: 'boolean' }
+    linkedin_account_linked : { type: 'boolean' },
+    start_date: { type: 'integer' }
   }
 };
 
@@ -176,7 +177,7 @@ MyQueryBuilder.prototype.getUserwithPasswordByUsername = function (name) {
       .catch((err) => { throw new ApiError('Can not find a user with that username', 500, err) });
 };
 
-MyQueryBuilder.prototype.postUser = function (data) {
+MyQueryBuilder.prototype.postUser = function(data) {
     return this
       .insert(Object.assign(data, {id: uuid.v4()} ))
       .then((result) => result)
