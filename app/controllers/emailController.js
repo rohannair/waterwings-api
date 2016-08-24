@@ -99,7 +99,7 @@ const emailController = () => {
         }
       );
 
-      const result = yield this.models.Playbook.query().getPlaybookById(this.state.user.companyId, playbookId);
+      const result = yield this.models.Playbook.query().getPlaybookById(playbookId);
 
       this.status = 200;
       this.body = {
