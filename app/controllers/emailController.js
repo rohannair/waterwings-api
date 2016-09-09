@@ -17,13 +17,6 @@ const emailController = () => {
       const { name } = company[0];
       const { userId, firstName, lastName, email, playbookId, emailTemplate } = this.request.body;
 
-      // If playbook is not assigned to a user then auto assign to user that playbook is currently being
-      // sent to
-      const playbookToSend = yield this.models.Playbook.query().getPlaybookById(playbookId);
-      if (playbookToSend[0].assigned === null) {
-        yield this.models.Playbook.query().putPlaybook({assigned: userId}, playbookId);
-      }
-
       const EmailToSend = yield EmailCreator({
           companyName: name,
           firstName,
@@ -51,8 +44,18 @@ const emailController = () => {
 
       // Create an empty submitted playbook and insert it into the database
       const PlaybookToBeSent = yield this.models.Playbook.query().getPlaybookById(playbookId);
+
+      const playbookAssignment = yield this.models.PlaybookJoin.query().get(playbookId);
+      if (playbookAssignment.length === 0) {
+        yield this.models.PlaybookJoin.query().post({
+          user_id: userId,
+          playbook_id: playbookId
+        });
+      }
+
       const newSubmittedDoc = yield createEmptySubmittedPlaybook(PlaybookToBeSent[0]);
       yield this.models.Playbook.query().putPlaybook({submitted_doc: newSubmittedDoc, current_status: 'sent' }, playbookId);
+
       const result = yield this.models.Playbook.query().getPlaybookById(playbookId);
 
       this.status = 200;
@@ -60,6 +63,48 @@ const emailController = () => {
         result: result[0],
         newSubmittedDoc,
         message: `Email has been sent to ${email}`
+      };
+    },
+
+    RESEND_PLAYBOOK: function* () {
+      const company = yield this.models.Company.query().getCompanyById(this.state.user.companyId);
+      const { name } = company[0];
+
+      const playbookId = this.params.id;
+      const userId = this.request.body.userId;
+      const {firstName, lastName, username } = yield this.models.User.query().getUserById(userId)
+
+      const EmailToSend = yield EmailCreator({
+          companyName: name,
+          firstName,
+          lastName,
+          email: username,
+          playbookId,
+          emailTemplate: 'generalEmail'
+        });
+
+      // Send the email through SparkPost with the correct template
+      const sparkPostRes = yield EmailSender(EmailToSend);
+
+      // Create record in Email Messages table for newly sent email
+      yield this.models.EmailMessage.query().createEmailMessage(
+        {
+          transmission_id: sparkPostRes.results.id,
+          playbook_id: playbookId,
+          user_id: userId,
+          company_id: this.state.user.companyId,
+          sent: true,
+          sent_at: parseInt(moment().format('x')),
+          scheduled_for: parseInt(moment().format('x'))
+        }
+      );
+
+      const result = yield this.models.Playbook.query().getPlaybookById(playbookId);
+
+      this.status = 200;
+      this.body = {
+        result: result[0],
+        message: `Email has been resent to ${username}`
       };
     },
 

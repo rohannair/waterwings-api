@@ -11,7 +11,7 @@
     "db:create_migration": "sh ./scripts/create_migration.sh",
     "db:migrate": "export PGPASSWORD=password; ./migrations/migrations.sh localhost quartermasterdb root",
     "seed:company": "export PGPASSWORD=password; psql -h localhost -d quartermasterdb -U root -f ./seeds/companySeed.sql",
-    "db:drop": "export PGPASSWORD=password; ./dropTable.sh localhost quartermasterdb root",
+    "db:drop": "export PGPASSWORD=password; sh ./scripts/dropTable.sh localhost quartermasterdb root",
     "db:recreate": "npm run db:drop; npm run db:migrate; npm run seed:company",
     "start": "NODE_ENV=production node ./app/index.js | ./node_modules/.bin/bunyan -o short",
     "dev": "NODE_ENV=development DEBUG=koa:* ./node_modules/.bin/nodemon ./app/index.js | ./node_modules/.bin/bunyan -o short",
@@ -33,8 +33,10 @@
     "co-multipart": "^2.0.0",
     "dotenv": "^2.0.0",
     "forever": "^0.15.2",
+    "fs-readfile-promise": "3.0.0",
     "googleapis": "^9.0.0",
     "isomorphic-fetch": "2.2.1",
+    "jimp": "0.2.24",
     "jsonwebtoken": "^6.2.0",
     "knex": "^0.9.0",
     "koa": "^1.1.2",
@@ -53,6 +55,7 @@
     "pg": "^4.4.3",
     "ramda": "^0.21.0",
     "redis": "2.6.2",
+    "sanitize-filename": "1.6.0",
     "sparkpost": "^1.3.5"
   },
   "devDependencies": {

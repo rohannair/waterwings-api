@@ -52,17 +52,17 @@ app.use(function* (next) {
 // Rate Limiter
 // Duration: length of limit in milliseconds
 // Max: max # of requests within duration
-app.use(ratelimit({
-  db: redis(),
-  duration: process.env.RATE_LIMIT_DURATION,
-  max: process.env.RATE_LIMIT_MAX,
-  id: (ctx) => ctx.ip,
-  headers: {
-    remaining: 'X-Rate-Limit-Remaining',
-    reset: 'X-Rate-Limit-Reset',
-    total: 'X-Rate-Limit-Total'
-  }
-}));
+// app.use(ratelimit({
+//   db: redis(),
+//   duration: process.env.RATE_LIMIT_DURATION,
+//   max: process.env.RATE_LIMIT_MAX,
+//   id: (ctx) => ctx.ip,
+//   headers: {
+//     remaining: 'X-Rate-Limit-Remaining',
+//     reset: 'X-Rate-Limit-Reset',
+//     total: 'X-Rate-Limit-Total'
+//   }
+// }));
 
 // Central Error Handling
 app.use(function* (next) {
@@ -70,7 +70,8 @@ app.use(function* (next) {
     yield* next;
   }
   catch(err) {
-    this.log.info('ERROR: ' + err.systemError );
+    this.log.error('ERROR: ' + err.message );
+    this.log.error(err.stack);
     this.status = err.status || 500;
     this.body = {
       message: err.message || 'Internal Server Error'
@@ -86,6 +87,7 @@ app.use(function* (next) {
     User: require('./models/User').bindKnex(this.db),
     Role: require('./models/Role').bindKnex(this.db),
     Playbook: require('./models/Playbook').bindKnex(this.db),
+    PlaybookJoin: require('./models/PlaybookJoin').bindKnex(this.db),
     EmailMessage: require('./models/EmailMessage').bindKnex(this.db)
   };
   yield* next;

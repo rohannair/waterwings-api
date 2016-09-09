@@ -18,7 +18,7 @@ const usersController = () => {
     POST: function* () {
       const hash = yield encrypt.encryptPassword(this.request.body.password);
       this.request.body.password = hash
-      const newUser = yield this.models.User.query().postUser(Object.assign(this.request.body, {company_id: this.state.user.companyId}));
+      const newUser = yield this.models.User.query().postUser(Object.assign(this.request.body, { company_id: this.state.user.companyId }));
       const result = yield this.models.User.query().getUserById(newUser.id);
 
       // If the newly created user is an admin then we send out an admin welcome email
