@@ -41,6 +41,9 @@ if( process.env.NODE_ENV === 'test' ) {
   process.env.SLACK_TEST_USER_TOKEN='xoxp-22280619940-31391246176-56700747925-c3478db1c1'
 }
 
+// Start of Tests
+
+
 // Load Api in supertest
 const app = require('./index.js');
 const request = require('supertest')(app.listen());
@@ -52,7 +55,7 @@ const request = require('supertest')(app.listen());
 
 
 // I should also just generate a real token to start
-// TODO: find a way to gen a real token 
+// TODO: find a way to gen a real token
 const token = ''
 
 
@@ -75,8 +78,6 @@ test.cb('API Welcome Message', t => {
     });
 
 });
-
-
 
 // Test to login in as a user with an incorrect token
 
