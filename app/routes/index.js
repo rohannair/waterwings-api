@@ -52,6 +52,8 @@ module.exports = function configure(router) {
   .post('/playbooks/assign', middleware.tokenCheck, middleware.adminCheck,playbooksJoinsController.POST)
   .post('/playbooks/assign/delete', middleware.tokenCheck, middleware.adminCheck,playbooksJoinsController.DELETE)
 
+  .post('/playbooks/slack', playbooksController.CREATE_SLACK)
+
   // Users
   .post('/users/resetPassword/:userId', usersController.RESET_PASSWORD)
   .get('/callback/auth/google', loginController.GOOGLE_AUTH_CODE)

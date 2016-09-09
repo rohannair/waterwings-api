@@ -73,6 +73,26 @@ const playbooksController = () => {
     },
 
     SUBMIT: function* () {
+
+      // Need to check for the bio card here
+      // console.log(this.request.body.submitted_doc);
+      // Need to check that the bio information is contained in the submitted card and then extract it and but it into the database
+
+
+      // First step is to extract profile information from user's bio card
+      const bioCardIndex =  Object.keys(this.request.body.submitted_doc).filter((val, ind) => this.request.body.submitted_doc[val].type === 'bio');
+      if(bioCardIndex) {
+        //  Extract data from bio card
+        const bioCard = this.request.body.submitted_doc[bioCardIndex].body.options;
+        //  Pull information out of card
+        const { bio, profile_image } = bioCard;
+        const playbook = yield this.models.Playbook.query().getPlaybookById(this.params.id);
+
+        //  Update user's bio and profile image
+        yield this.models.User.query().putUser({ bio, profile_img: profile_image }, playbook[0].assigned);
+     }
+
+
       const numSubmittedSlides = Object.keys(this.request.body.submitted_doc).filter((val, ind) => this.request.body.submitted_doc[val].submitted === true ).length;
       const percent_submitted =  Math.round((numSubmittedSlides / Object.keys(this.request.body.submitted_doc).length) * 100) / 100;
       yield this.models.Playbook.query().submitPlaybook(Object.assign(this.request.body, { percent_submitted }), this.params.id);
@@ -122,6 +142,21 @@ const playbooksController = () => {
         result: result[0],
         message: 'Successfully inserted a new slide.'
       };
+    },
+
+    CREATE_SLACK: function* () {
+      // Recieve message from slack bot 
+      const { userName, message } = this.request.body;
+      console.log(`User name: ${userName}`);
+      console.log(`Message: ${message}`); 
+
+      // TODO: Need to determine where the message will be sent to
+
+      // Send Message back to slack bot
+      this.status = 200;
+      this.body = {
+        message: 'Recieved the info at the main api'
+      }
     }
 
   };

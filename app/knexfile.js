@@ -10,7 +10,7 @@ module.exports = function () {
         password : process.env.DB_PASSWORD,
         database : process.env.DB_NAME,
         charset  : 'utf8',
-        ssl : process.env.NODE_ENV === 'production'
+        ssl : true //process.env.NODE_ENV === 'production'
       },
       pool: {
         min: 0,

@@ -202,3 +202,15 @@ The format of the POST request is
 This endpoint does not require a token or any Authorization.
 
 This endpoint will add the company to the database, add the subdomain to cloudflare, and add a Domain name to heroku.
+
+### Slackbot
+
+This command will migrate the pg database
+```
+export PGPASSWORD=yjH49A5cBsbIywaEiaw7iql3K-; ./migrations/migrations.sh ec2-54-225-120-137.compute-1.amazonaws.com d9s9rrnjofj1gp shktxjhrevadev
+```
+
+This command with seed the pg database
+```
+export PGPASSWORD=yjH49A5cBsbIywaEiaw7iql3K-; psql -h ec2-54-225-120-137.compute-1.amazonaws.com -d d9s9rrnjofj1gp -U shktxjhrevadev -f ./seeds/companySeed.sql
+```

@@ -145,7 +145,7 @@ MyQueryBuilder.prototype.getAll = function (companyId, offset = 0, limit = 1000)
 MyQueryBuilder.prototype.getUserById = function (userId) {
     return this
       .select(
-        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'users.is_admin', 'users.google_account_linked', 'r.name as rolename', 'c.id as companyId', 'c.name as companyName', 'c.subdomain as companyDomain'
+        'users.id', 'users.username', 'users.first_name as firstName', 'users.last_name as lastName', 'bio', 'profile_img', 'users.is_admin', 'users.google_account_linked', 'r.name as rolename', 'c.id as companyId', 'c.name as companyName', 'c.subdomain as companyDomain'
       )
       .leftJoin('roles as r', 'users.role_id', 'r.id')
       .leftJoin('companies as c', 'users.company_id', 'c.id')
